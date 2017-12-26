@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="androidalertview-0.1.4">
+    <CLASSES>
+      <root url="jar://E:/androidsdk/androidsdk23/platform-tools/.android/build-cache/f0c7331d61d719047455799b0a0026db075628d8/output/jars/classes.jar!/" />
+      <root url="file://E:/androidsdk/androidsdk23/platform-tools/.android/build-cache/f0c7331d61d719047455799b0a0026db075628d8/output/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.hxh.component.ui/androidalertview/0.1.4/b2d8ec65c3d6c906b3bcf3af06911ae723717d62/androidalertview-0.1.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

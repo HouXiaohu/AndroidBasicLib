@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="fragmentation-swipeback-1.0.8">
+    <CLASSES>
+      <root url="jar://E:/androidsdk/androidsdk23/platform-tools/.android/build-cache/eb62cc6970194d446619c6b00978c5427811858c/output/jars/classes.jar!/" />
+      <root url="file://E:/androidsdk/androidsdk23/platform-tools/.android/build-cache/eb62cc6970194d446619c6b00978c5427811858c/output/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/me.yokeyword/fragmentation-swipeback/1.0.8/b0950097e090575aede4db078fdc1bacb1f9bd65/fragmentation-swipeback-1.0.8-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

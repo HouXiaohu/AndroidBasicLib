@@ -1,0 +1,169 @@
+apply plugin: 'com.android.library'
+apply plugin: 'android-aspectjx'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+version = "1.0.1"//定义版本标识
+
+
+
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [moduleName: project.getName()]
+            }
+        }
+
+    }
+
+
+    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+
+    //谁用了butterknife 谁去写这句代码，一般来说，butterknife应该写在主 module 中
+    compile rootProject.ext.requiredDependencies["butterknife"]
+
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:support-v4:25.3.1'
+
+    //开始引入基础包
+//    compile rootProject.ext.requiredDependencies["appcompat_v7"]
+//    compile rootProject.ext.requiredDependencies["support_v4"]
+//    compile rootProject.ext.requiredDependencies["recyclerview_v7"]
+
+    //需要引入的
+    compile rootProject.ext.requiredDependencies["okhttp"]
+    compile rootProject.ext.requiredDependencies["okio"]
+    compile rootProject.ext.requiredDependencies["retrofit"]
+    compile rootProject.ext.requiredDependencies["retrofitConvertGson"]
+    compile rootProject.ext.requiredDependencies["retrofitConvertJackson"]
+    compile rootProject.ext.requiredDependencies["retrofitConvertString"]
+    compile rootProject.ext.requiredDependencies["okhttpInterceptro"]
+    compile rootProject.ext.requiredDependencies["rxjava"]
+    compile rootProject.ext.requiredDependencies["rxandroid"]
+    compile rootProject.ext.requiredDependencies["rxjavaRetrofiAdapter"]
+    compile rootProject.ext.requiredDependencies["glide"]
+    compile rootProject.ext.requiredDependencies["autoLayout"]
+    compile rootProject.ext.requiredDependencies["fragmention"]
+    compile rootProject.ext.requiredDependencies["fragmenton_swipeback"]
+    compile rootProject.ext.requiredDependencies["design"]
+    //仿Ios的 Alert
+    compile rootProject.ext.requiredDependencies["alertview"]
+    compile rootProject.ext.requiredDependencies["gson"]
+    compile rootProject.ext.requiredDependencies["imageloader"]
+    //fastjson
+    compile rootProject.ext.requiredDependencies["fastjson"]
+    compile rootProject.ext.requiredDependencies["photoView"]
+    compile rootProject.ext.requiredDependencies["pdf_viewer"]
+    //MRecyeclview基础
+    compile rootProject.ext.requiredDependencies["xrecycleview"]
+    //对时间的封装
+    compile rootProject.ext.requiredDependencies["joda-time"]
+    //对OKHttp的封装
+    compile rootProject.ext.requiredDependencies["okhttputils"]
+    //ARouter
+    compile rootProject.ext.requiredDependencies["arouter"]
+
+    compile rootProject.ext.requiredDependencies["aspectjrt"]
+
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    //greendao
+
+    compile ('com.github.gzu-liyujiang.AndroidPicker:WheelPicker:1.5.5') {
+        //不引用如下包
+        exclude module: 'support-v4'
+    }
+}
+
+
+
+def siteUrl = 'https://github.com/HouXiaohu/androidbasiclib'                        // #CONFIG# // project homepage
+def gitUrl = 'https://github.com/HouXiaohu/androidbasiclib.git'                     // #CONFIG# // project git
+group = "com.hxh.component"
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                // Add your description here
+                description 'A tool library'
+                name 'androidBasicLib'  // 可默认，项目描述
+                url siteUrl
+                // Set your license
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer { //  可默认，开发者信息
+                        id 'YOUR_ID'
+                        name 'YOUR NAME'
+                        email 'YOUR EMAIL'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+}
+
+task androidJavadocsJar(type: Jar) {
+    classifier = 'javadoc'
+    from androidJavadocs.destinationDir
+}
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+
+artifacts {
+    archives androidSourcesJar
+    archives androidJavadocsJar
+
+}
+Properties properties = new Properties()
+// 加载本地配置
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+//这个是和你bintray上面创建的package(项目)是对应的
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    pkg {
+        repo = "maven"  //发布到Bintray的那个仓库里，默认账户有四个库，我们这里上传到maven库
+        name = "AndroidBasicLib"  //需更改，这个名字就是你在Bintray上创建Package的名字，这里会查询，如果此包不存在就会创建一个。
+        userOrg = 'houdahu'    //组织名称 organization
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
+}
+
