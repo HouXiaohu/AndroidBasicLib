@@ -42,13 +42,14 @@
         android:layout_width="wrap_content"
         android:layout_height="45px"
         android:gravity="right|center"
-
+        android:singleLine="true"
+        android:ellipsize="end"
         android:textColor="@color/black"
         android:background="@color/transparent"
         android:id="@+id/btn_rightview"
         android:textSize="28px"
         android:minWidth="60px"
-
+        android:layout_toRightOf="@id/tv_title"
 
         android:paddingRight="22px"
         android:layout_alignParentRight="true"
