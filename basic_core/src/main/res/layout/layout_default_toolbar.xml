@@ -38,6 +38,7 @@
     </com.hxh.component.basicore.CommonConponet.DefaultBackButton>>
 
     <!-- 默认的右边按钮 -->
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="45px"
@@ -49,13 +50,15 @@
         android:id="@+id/btn_rightview"
         android:textSize="28px"
         android:minWidth="60px"
-        android:layout_toRightOf="@id/tv_title"
+
 
         android:paddingRight="22px"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
 
         />
+
+
 
 
     <!-- 默认的图标 -->

@@ -39,18 +39,22 @@ public class NetProvider {
     private boolean isDynamicHttpUrl;
     private DynamicMutilHttpBaseUrl mDynamicMutilHttpBaseUrl;
     private String[] BASEURL_CONFIG = {"NORMAL", "FIXED", "DYNAMIC"};
-
+    private long configWriteTimeOut;
+    private boolean isEnableErrorRetry=true;
 
     public NetProvider(
             boolean isEnableCookie, long configReadTimeOut, long configConnectTimeOut,
             Authenticator configRESTFULTokenInterceptor, Interceptor configTokenInterceptor,
             RequestCallBackHandler configRequestCallBack, Converter.Factory configConverterFactory,
-            String cachePath,long maxSize,Interceptor configLogTnterceptor, IApiError apiErrorClasszz)
+            String cachePath,long maxSize,Interceptor configLogTnterceptor
+            , IApiError apiErrorClasszz,long configWriteTimeOut,boolean isEnableConnectTimeOut)
     {
         this.configReadTimeOut = configReadTimeOut;
         this.configConnectTimeOut = configConnectTimeOut;
         this.isEnableCookie = isEnableCookie;
 
+        this.configWriteTimeOut = configWriteTimeOut;
+        this.isEnableErrorRetry =isEnableConnectTimeOut;
 
         this.configRESTFULTokenInterceptor = configRESTFULTokenInterceptor;
         this.configTokenInterceptor = configTokenInterceptor;
@@ -70,8 +74,10 @@ public class NetProvider {
     public static class Builder
     {
 
-        private long configReadTimeOut =30; //默认15 秒
-        private long configConnectTimeOut =30;//默认15 秒
+        private long configReadTimeOut =30; //默认30 秒
+        private long configConnectTimeOut =30;//默认30 秒
+        private long configWriteTimeOut = 30;//默认30 秒
+        private boolean isEnableErrorRetry  = true;
         private boolean isEnableCookie = true;
         private String cachePath;//缓存地址
         private long cacheSize; //最大缓存大小
@@ -94,6 +100,16 @@ public class NetProvider {
 
         public Builder configConnectTimeOut(long configConnectTimeOut) {
             this.configConnectTimeOut = configConnectTimeOut;
+            return this;
+        }
+
+        public Builder configWriteTimeOut(long configWriteTimeOut) {
+            this.configWriteTimeOut = configWriteTimeOut;
+            return this;
+        }
+
+        public Builder configEnableConnectTimeOutRetry(boolean isEnable) {
+            this.isEnableErrorRetry = isEnable;
             return this;
         }
 
@@ -190,7 +206,9 @@ public class NetProvider {
         public NetProvider build()
         {
             NetProvider provider =  new NetProvider(isEnableCookie,configReadTimeOut,configConnectTimeOut,
-                    configRESTFULTokenInterceptor,configTokenInterceptor,configRequestCallBack,configConverterFactory,cachePath,cacheSize,configLogTnterceptor,mApiErrorClasszz);
+                    configRESTFULTokenInterceptor,configTokenInterceptor,configRequestCallBack,configConverterFactory,cachePath,cacheSize,configLogTnterceptor
+                    ,mApiErrorClasszz
+            ,configWriteTimeOut,isEnableErrorRetry);
 
             provider.setBaseUrl(baseUrl);
             if (isDynamisHttpUrl) {
@@ -254,6 +272,22 @@ public class NetProvider {
 
     public void setConfigRequestCallBack(RequestCallBackHandler configRequestCallBack) {
         this.configRequestCallBack = configRequestCallBack;
+    }
+
+    public long getConfigWriteTimeOut() {
+        return configWriteTimeOut;
+    }
+
+    public void setConfigWriteTimeOut(long configWriteTimeOut) {
+        this.configWriteTimeOut = configWriteTimeOut;
+    }
+
+    public boolean isEnableErrorRetry() {
+        return isEnableErrorRetry;
+    }
+
+    public void setEnableErrorRetry(boolean enableErrorRetry) {
+        isEnableErrorRetry = enableErrorRetry;
     }
 
     public Converter.Factory getConfigConverterFactory() {
