@@ -62,7 +62,7 @@ public class ToolBarDelegate {
     private LinearLayout linear_actionbar_right;
     private ImageView actionbar_rightview_img;
     private ActionBarConfig.BackViewConfig mBackViewConfig;
-
+    private  OnToolbarClickListener clicklistener;
     private DefaultBackButton btn_defaultBackView;
     private int mCurrentClickRightButtonsPosition = 0;
     private View view_splitline;
@@ -128,7 +128,7 @@ public class ToolBarDelegate {
         if (null == mActionbarconfig) {
             return;
         }
-        OnToolbarClickListener clicklistener = new OnToolbarClickListener();
+        clicklistener = new OnToolbarClickListener();
         ActionBarProvider actionBarProvider = CoreLib.getInstance().getAppComponent().globalActionBarProvider();
         //region 左边布局
         if (mActionbarconfig.isEnable_backview()) {
@@ -229,49 +229,11 @@ public class ToolBarDelegate {
         //region 右边
         if (mActionbarconfig.isEnable_rightview()) {
             if (1234 != mActionbarconfig.getRight_buttonImgResId()) {
-                linear_actionbar_right.setVisibility(View.VISIBLE);
-                actionbar_rightview_img.setVisibility(View.VISIBLE);
-                actionbar_rightview_img.setImageBitmap( Utils.BitmapUtils.getBitmap(mActionbarconfig.getRight_buttonImgResId(),38,38));
-                btn_rightButton.setVisibility(View.GONE);
-                linear_actionbar_right.setOnClickListener(clicklistener);
-                btn_rightButton = null;
+                setActionBarRight(mActionbarconfig.getRight_buttonImgResId());
             } else if (null != mActionbarconfig.getRight_buttontitle()) {
-                linear_actionbar_right.setVisibility(View.GONE);
-                actionbar_rightview_img.setVisibility(View.GONE);
-                btn_rightButton.setVisibility(View.VISIBLE);
-                btn_rightButton.setText(mActionbarconfig.getRight_buttontitle());
-                int titleColor = 0;
-                try {
-                    titleColor = ContextCompat.getColor(rootView.getContext(), mActionbarconfig.getRight_buttontitleColor());
-                } catch (Exception e) {
-                    titleColor = mActionbarconfig.getRight_buttontitleColor();
-                }
-                btn_rightButton.setTextColor(titleColor);
-                btn_rightButton.setOnClickListener(clicklistener);
-                linear_actionbar_right = null;
-                actionbar_rightview_img = null;
+                setActionBarRight(mActionbarconfig.getRight_buttontitle(),mActionbarconfig.getRight_buttontitleColor());
             } else if (null != mActionbarconfig.getRight_imgResIds()) {
-                linear_actionbar_right.setVisibility(View.VISIBLE);
-                actionbar_rightview_img.setVisibility(View.GONE);
-                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(48, 48);
-                param.rightMargin = 20;
-                param.gravity = Gravity.CENTER_VERTICAL;
-                for (int i = 0; i < mActionbarconfig.getRight_imgResIds().length; i++) {
-
-                    int resid = mActionbarconfig.getRight_imgResIds()[i];
-                    ImageView imageView = new ImageView(rootView.getContext());
-                    imageView.setLayoutParams(param);
-
-                    imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                    imageView.setImageResource(resid);
-
-
-                    imageView.setOnClickListener(new OnRightImgesClicListener(i));
-                    linear_actionbar_right.addView(imageView);
-                }
-                actionbar_rightview_img = null;
-                btn_rightButton = null;
-
+                setActionBarRight(mActionbarconfig.getRight_imgResIds());
             }
         }
         //endregion
@@ -368,6 +330,66 @@ public class ToolBarDelegate {
                 mActionbarconfig.getListener().onRightButtonsClick(this.position);
             }
         }
+    }
+
+
+    private void setActionBarRight(int resid)
+    {
+        linear_actionbar_right.setVisibility(View.VISIBLE);
+        actionbar_rightview_img.setVisibility(View.VISIBLE);
+        actionbar_rightview_img.setImageBitmap( Utils.BitmapUtils.getBitmap(resid,38,38));
+        btn_rightButton.setVisibility(View.GONE);
+        linear_actionbar_right.setOnClickListener(clicklistener);
+      //  btn_rightButton = null;
+    }
+    private void setActionBarRight(Drawable resid)
+    {
+        linear_actionbar_right.setVisibility(View.VISIBLE);
+        actionbar_rightview_img.setVisibility(View.VISIBLE);
+        actionbar_rightview_img.setImageDrawable(resid);
+        btn_rightButton.setVisibility(View.GONE);
+        linear_actionbar_right.setOnClickListener(clicklistener);
+    //    btn_rightButton = null;
+    }
+    private void setActionBarRight(int[] resids)
+    {
+        linear_actionbar_right.setVisibility(View.VISIBLE);
+        actionbar_rightview_img.setVisibility(View.GONE);
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(48, 48);
+        param.rightMargin = 20;
+        param.gravity = Gravity.CENTER_VERTICAL;
+        for (int i = 0; i < resids.length; i++) {
+
+            int resid = resids[i];
+            ImageView imageView = new ImageView(rootView.getContext());
+            imageView.setLayoutParams(param);
+
+            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            imageView.setImageResource(resid);
+
+
+            imageView.setOnClickListener(new OnRightImgesClicListener(i));
+            linear_actionbar_right.addView(imageView);
+        }
+//        actionbar_rightview_img = null;
+//        btn_rightButton = null;
+    }
+    private void setActionBarRight(String title,int titlecolor)
+    {
+        linear_actionbar_right.setVisibility(View.GONE);
+        actionbar_rightview_img.setVisibility(View.GONE);
+        btn_rightButton.setVisibility(View.VISIBLE);
+        btn_rightButton.setText(title);
+        int titleColor = 0;
+        try {
+            titleColor = ContextCompat.getColor(rootView.getContext(), titlecolor);
+        } catch (Exception e) {
+            titleColor = titlecolor;
+        }
+        btn_rightButton.setTextColor(titleColor);
+        btn_rightButton.setOnClickListener(clicklistener);
+//        linear_actionbar_right = null;
+//        actionbar_rightview_img = null;
     }
 
     public void settingBackViewGravity(View view) {
@@ -492,17 +514,20 @@ public class ToolBarDelegate {
 
     @Safe
     public void setActionbar_rightText(String text) {
-        btn_rightButton.setText(text);
+        setActionBarRight(text,mActionbarconfig.getRight_buttontitleColor());
+      //  btn_rightButton.setText(text);
     }
 
     @Safe
     public void setActionbar_rightImg(int resId) {
-        actionbar_rightview_img.setImageResource(resId);
+        setActionBarRight(resId);
+        //actionbar_rightview_img.setImageResource(resId);
     }
 
     @Safe
     public void setActionbar_rightImg(Drawable drawable) {
-        actionbar_rightview_img.setImageDrawable(drawable);
+        setActionBarRight(drawable);
+        //actionbar_rightview_img.setImageDrawable(drawable);
     }
 
     public void setActionBarConfig(ActionBarConfig config)

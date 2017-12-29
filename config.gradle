@@ -8,7 +8,7 @@ ext {
             versionName         : "1.1.2",
             supportSdk          : "25.3.1",
             //okhttp,retrofit
-            okhttpVersion       : "2.4.0",
+            okhttpVersion       : "3.5.0",
             okioVersion         : "1.5.0",
             retrofitVersion     : "2.0.2",
             okhttpInterceptro   : "3.4.1",
@@ -68,7 +68,7 @@ ext {
 
 
             //okhttp 和 retrofit
-            "okhttp"                : "com.squareup.okhttp:okhttp:${android["okhttpVersion"]}",
+            "okhttp"                : "com.squareup.okhttp3:okhttp:${android["okhttpVersion"]}",
             "okio"                  : "com.squareup.okio:okio:${android["okioVersion"]}",
             "retrofit"              : "com.squareup.retrofit2:retrofit:${android["retrofitVersion"]}",
             "retrofitConvertGson"   : "com.squareup.retrofit2:converter-gson:${android["retrofitVersion"]}",

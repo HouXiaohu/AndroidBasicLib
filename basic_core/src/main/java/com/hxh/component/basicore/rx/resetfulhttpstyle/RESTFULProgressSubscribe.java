@@ -5,16 +5,11 @@ import android.content.Context;
 import com.hxh.component.basicore.CoreLib;
 import com.hxh.component.basicore.ui.loading.LoadingDialog;
 import com.hxh.component.basicore.util.AppManager;
-import com.hxh.component.basicore.util.Log;
 import com.hxh.component.basicore.util.Utils;
-import com.squareup.okhttp.internal.http.HttpConnection;
 
 import java.lang.ref.WeakReference;
 import java.net.ConnectException;
 
-import okhttp3.internal.http.RealResponseBody;
-import retrofit2.Response;
-import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscriber;
 
 

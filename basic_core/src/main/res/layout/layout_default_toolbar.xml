@@ -50,7 +50,7 @@
         android:id="@+id/btn_rightview"
         android:textSize="28px"
         android:minWidth="60px"
-
+        android:layout_toRightOf="@id/tv_title"
 
         android:paddingRight="22px"
         android:layout_alignParentRight="true"
