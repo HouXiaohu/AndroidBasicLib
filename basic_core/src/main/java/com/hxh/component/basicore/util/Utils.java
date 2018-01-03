@@ -1,6 +1,5 @@
 package com.hxh.component.basicore.util;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -57,11 +56,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.hxh.component.basicore.util.aspj.annotation.Safe;
 import com.hxh.component.basicore.Config;
 import com.hxh.component.basicore.R;
-import com.hxh.component.basicore.imageLoader.ImageFactory;
 import com.hxh.component.basicore.imageLoader.IImageLoader;
+import com.hxh.component.basicore.imageLoader.ImageFactory;
+import com.hxh.component.basicore.util.aspj.annotation.Safe;
 import com.hxh.component.basicore.util.aspj.util.AspjUtils;
 import com.hxh.component.ui.alertview.AlertView;
 import com.hxh.component.ui.alertview.OnItemClickListener;
@@ -286,7 +285,6 @@ public class Utils {
          * @param uri     The Uri to query.
          * @author paulburke
          */
-        @TargetApi(Build.VERSION_CODES.KITKAT)
         public static String getPath(final Context context, final Uri uri) {
 
             final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
@@ -584,6 +582,13 @@ public class Utils {
             // 如果存在，是目录则返回true，是文件则返回false，不存在则返回是否创建成功
             return file != null && (file.exists() ? file.isDirectory() : file.mkdirs());
         }
+
+
+        public static String getFileProviderAuthorities()
+        {
+            return mContext.getApplicationInfo().packageName+".fileprovider";
+        }
+
     }
 
     /**
@@ -625,6 +630,16 @@ public class Utils {
         }
 
         public static boolean installNormal( String filePath) {
+            return  installNormal( FileUtil.getFileProviderAuthorities(), filePath);
+        }
+        /**
+         * 用于AndroidN 的File://   访问问题
+         *
+         * @time 2018/1/2 18:26
+         *
+         * @author
+         */
+        public static boolean installNormal( String fileProviderAuthorities,String filePath) {
             Intent i = new Intent(Intent.ACTION_VIEW);
             File file = new File(filePath);
             if (null == file || !file.exists() || !file.isFile() || file.length() <= 0) {
@@ -632,7 +647,7 @@ public class Utils {
             }
             Uri uri;
             if (Build.VERSION.SDK_INT >= 24) {
-                uri = FileProvider.getUriForFile(mContext, "workai.empassist.com.rixinshe.fileprovider", file);
+                uri = FileProvider.getUriForFile(mContext,fileProviderAuthorities, file);
             } else {
                 uri = Uri.fromFile(file);
             }
@@ -2585,10 +2600,21 @@ public class Utils {
          * @return
          */
         public static Intent getSystem_CameraIntent(File saveFilePath) {
+
+
+            return getSystem_CameraIntent(FileUtil.getFileProviderAuthorities(),saveFilePath);
+        }
+
+        /**
+         * 得到相机意图
+         *
+         * @param saveFilePath
+         * @return
+         */
+        public static Intent getSystem_CameraIntent(String authiProviderPath,File saveFilePath) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, getUriForFile(mContext, saveFilePath));
-
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, getUriForFile(mContext,authiProviderPath, saveFilePath));
 
             return intent;
         }
@@ -2607,12 +2633,17 @@ public class Utils {
 
 
         private static Uri getUriForFile(Context context, File file) {
+            return getUriForFile(context, FileUtil.getFileProviderAuthorities(),file);
+        }
+
+
+        private static Uri getUriForFile(Context context,String fileProviderAuthorities, File file) {
             if (context == null || file == null) {
                 throw new NullPointerException();
             }
             Uri uri;
             if (Build.VERSION.SDK_INT >= 24) {
-                uri = FileProvider.getUriForFile(context.getApplicationContext(), "workai.empassist.com.rixinshe.fileprovider", file);
+                uri = FileProvider.getUriForFile(context.getApplicationContext(),fileProviderAuthorities, file);
             } else {
                 uri = Uri.fromFile(file);
             }

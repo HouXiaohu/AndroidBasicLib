@@ -427,8 +427,8 @@ public class ToolBarDelegate {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             int action = event.getAction();
-            if (action == MotionEvent.ACTION_UP) {
-                if (v.getId() == R.id.btn_defaultback) {
+            if (action == MotionEvent.ACTION_UP ) {
+                if (v.getId() == R.id.btn_defaultback ||v.getId() == R.id.actionbar_leftview) {
                     v.setAlpha(1f);
                     if (null != mActionbarconfig.getListener()) {
                         mActionbarconfig.getListener().onLeftClick();
@@ -439,7 +439,7 @@ public class ToolBarDelegate {
 
             }
             if (action == MotionEvent.ACTION_DOWN) {
-                if (v.getId() == R.id.btn_defaultback) {
+                if (v.getId() == R.id.btn_defaultback ||v.getId() == R.id.actionbar_leftview) {
                     v.setAlpha(0.5f);
                 }
             }

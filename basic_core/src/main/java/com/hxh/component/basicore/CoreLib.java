@@ -112,6 +112,7 @@ public class CoreLib {
         }
 
 
+
         private boolean isEnableUMengUserrecording;
         private boolean isEnableUMengAcountStatistics;
 
