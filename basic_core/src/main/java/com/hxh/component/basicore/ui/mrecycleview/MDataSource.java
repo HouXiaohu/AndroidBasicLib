@@ -600,8 +600,26 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack{
         return datas;
     }
 
+    private boolean isResetPaginationBuilder = false;
+    public void resetPaginationBuilder()
+    {
+        if(null != mPaginBuilder)
+        {
+            if(null != mParams)
+            {
+                this.mPaginBuilder.setPageIndex(0);
+                isResetPaginationBuilder = true;
+            }
+        }
+    }
+
     private void initFetch() {
         boolean isShouDongConfigPaginBuilder = false;
+        if(isResetPaginationBuilder)
+        {
+            this.mParams.remove(mPaginBuilder.getPageIndexFieldName());
+        }
+        isResetPaginationBuilder = false;
         //看是否支持分页加载
         if (mView.isEnableLoadAndRefresh()) {
             if (null == mPaginBuilder) {

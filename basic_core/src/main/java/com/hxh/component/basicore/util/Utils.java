@@ -101,6 +101,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.AbstractList;
@@ -3320,6 +3321,12 @@ public class Utils {
         public static float keepPrecision_noUp(float number, int precision) {
             BigDecimal bg = new BigDecimal(number);
             return bg.setScale(precision, BigDecimal.ROUND_UNNECESSARY).floatValue();
+        }
+
+        public static String showTwoPrecision_noUp(double number)
+        {
+            DecimalFormat df = new DecimalFormat("##############0.00");
+            return df.format(number);
         }
 
     }

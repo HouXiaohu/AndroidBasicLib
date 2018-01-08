@@ -15,11 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.hxh.component.basicore.util.aspj.annotation.Safe;
 import com.hxh.component.basicore.Base.topbar.ActionBarConfig;
 import com.hxh.component.basicore.Base.topbar.ActionBarProvider;
 import com.hxh.component.basicore.CommonConponet.DefaultBackButton;
@@ -27,6 +27,7 @@ import com.hxh.component.basicore.CoreLib;
 import com.hxh.component.basicore.R;
 import com.hxh.component.basicore.util.AppManager;
 import com.hxh.component.basicore.util.Utils;
+import com.hxh.component.basicore.util.aspj.annotation.Safe;
 import com.zhy.autolayout.AutoRelativeLayout;
 
 /**
@@ -64,6 +65,7 @@ public class ToolBarDelegate {
     private ActionBarConfig.BackViewConfig mBackViewConfig;
     private  OnToolbarClickListener clicklistener;
     private DefaultBackButton btn_defaultBackView;
+    private ImageButton btn_defaultBackView_actionbar_leftview;
     private int mCurrentClickRightButtonsPosition = 0;
     private View view_splitline;
     //region 关联ToolBar到View上
@@ -117,6 +119,7 @@ public class ToolBarDelegate {
         layoutrootView = LayoutInflater.from(Utils.getApplicationContext()).inflate(R.layout.layout_default_toolbar, null);
         rootView = (AutoRelativeLayout) layoutrootView.findViewById(R.id.frame_toolbar);
         btn_defaultBackView = (DefaultBackButton) rootView.findViewById(R.id.btn_defaultback);
+        btn_defaultBackView_actionbar_leftview = (ImageButton) btn_defaultBackView.findViewById(R.id.actionbar_leftview);
         actionbar_rightview_img = (ImageView) rootView.findViewById(R.id.actionbar_rightview_img);
         linear_actionbar_right = (LinearLayout) rootView.findViewById(R.id.linear_actionbar_right);
         tv_title = (TextView) rootView.findViewById(R.id.tv_title);
@@ -169,6 +172,7 @@ public class ToolBarDelegate {
                         btn_defaultBackView.setBacViewTitleMaxNumber();
                     }
                     btn_defaultBackView.setBackView(bacimg, bactitle, backviewColor);
+                    btn_defaultBackView_actionbar_leftview.setOnTouchListener(clicklistener);
                     btn_defaultBackView.setOnTouchListener(clicklistener);
                 }
 
@@ -178,6 +182,7 @@ public class ToolBarDelegate {
 
             //region 使用全局BackView（由GlobalActionBarConfig 提供）
             else {
+                btn_defaultBackView_actionbar_leftview.setOnTouchListener(clicklistener);
                 btn_defaultBackView.setOnTouchListener(clicklistener);
                 //region 如果用户指定了BackColor，那么改BackImg和BackTitle
                 if (1234 != mActionbarconfig.getBackViewColor()) {
