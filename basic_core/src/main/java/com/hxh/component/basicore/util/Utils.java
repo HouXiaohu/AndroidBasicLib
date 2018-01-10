@@ -2572,16 +2572,7 @@ public class Utils {
             return new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber));
         }
 
-        /**
-         * 得到相机意图
-         *
-         * @param
-         * @return
-         */
-        public static Intent getSystem_CameraIntent() {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            return intent;
-        }
+
 
         /**
          * 得到相机意图
@@ -2593,6 +2584,8 @@ public class Utils {
 
             return getSystem_CameraIntent(new File(saveFilePath));
         }
+
+
 
         /**
          * 得到相机意图
@@ -3364,26 +3357,57 @@ public class Utils {
             return showDefaulStyleDialog(null, message, cancel, determine,null, AlertView.Style.Alert, lis,true);
         }
 
+        /**
+         * @param message   提示的文本
+         * @param cancel    返回的文本
+         * @param determine 确定的文本
+         * @param lis       按钮监听
+         * @return
+         */
+        public static AlertView showDefaulStyleDialog(String message, String cancel, String determine, OnItemClickListener lis,boolean isCanceable) {
+            return showDefaulStyleDialog(null, message, cancel, determine,null, AlertView.Style.Alert, lis,isCanceable);
+        }
+
         public static AlertView showDefaulStyleDialog(String[] other, OnItemClickListener lis) {
             return showDefaulStyleDialog(null, null, "返回",null,other, AlertView.Style.ActionSheet, lis,true);
         }
+        public static AlertView showDefaulStyleDialog(String[] other, OnItemClickListener lis,boolean isCanceable) {
+            return showDefaulStyleDialog(null, null, "返回",null,other, AlertView.Style.ActionSheet, lis,isCanceable);
+        }
+
         public static AlertView showDefaulStyleDialog(String title,String[] other, OnItemClickListener lis) {
             return showDefaulStyleDialog(title, null, "返回",null,other, AlertView.Style.ActionSheet, lis,true);
         }
+
+        public static AlertView showDefaulStyleDialog(String title,String[] other, OnItemClickListener lis,boolean isCanceable) {
+            return showDefaulStyleDialog(title, null, "返回",null,other, AlertView.Style.ActionSheet, lis,isCanceable);
+        }
+
         public static AlertView showDefaulStyleDialog(String message,String cancel,String[] other, OnItemClickListener lis) {
             return showDefaulStyleDialog(null, message, cancel,null,other, AlertView.Style.ActionSheet, lis,true);
+        }
+
+        public static AlertView showDefaulStyleDialog(String message,String cancel,String[] other, OnItemClickListener lis,boolean isCanceable) {
+            return showDefaulStyleDialog(null, message, cancel,null,other, AlertView.Style.ActionSheet, lis,isCanceable);
         }
 
 
         public static AlertView showDefaulStyleDialog(String message, OnItemClickListener lis) {
             return showDefaulStyleDialog(null, message, "返回", "确定",null, AlertView.Style.Alert, lis,true);
         }
+
+
+
         public static AlertView showDefaulStyleDialog(String message,boolean iscanceable, OnItemClickListener lis) {
             return showDefaulStyleDialog(null, message, "返回", "确定", null, AlertView.Style.Alert,lis,iscanceable);
         }
 
         public static AlertView showDefaulStyleDialog(String message, String determine, OnItemClickListener lis) {
             return showDefaulStyleDialog(null, message, null, determine,null, AlertView.Style.Alert, lis,true);
+        }
+
+        public static AlertView showDefaulStyleDialog(String message, String determine, OnItemClickListener lis,boolean isCanceable) {
+            return showDefaulStyleDialog(null, message, null, determine,null, AlertView.Style.Alert, lis,isCanceable);
         }
 
         public static AlertView showDefaulStyleDialog(String title, String message, String cancel, String determine, String[]others, AlertView.Style style,OnItemClickListener lis, boolean iscanceable) {
