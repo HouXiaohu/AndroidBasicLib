@@ -646,15 +646,19 @@ public class Utils {
             if (null == file || !file.exists() || !file.isFile() || file.length() <= 0) {
                 return false;
             }
+
             Uri uri;
             if (Build.VERSION.SDK_INT >= 24) {
-                uri = FileProvider.getUriForFile(mContext,fileProviderAuthorities, file);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                uri = FileProvider.getUriForFile(mContext, fileProviderAuthorities, file);
+                i.setDataAndType(uri, "application/vnd.android.package-archive");
             } else {
                 uri = Uri.fromFile(file);
+                i.setDataAndType(Uri.parse("file://"+filePath), Config.INSTALL_APP_SCHEMA);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             }
 
-            i.setDataAndType(uri, Config.INSTALL_APP_SCHEMA);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mContext.startActivity(i);
             return true;
         }
