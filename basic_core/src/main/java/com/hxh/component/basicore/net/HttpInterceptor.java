@@ -112,13 +112,30 @@ public class HttpInterceptor {
         };
     }
 
+    static  int retrynum = 0;
+    public static Interceptor buildErrorRetryInterceptor(final int maxNum)
+    {
+        return new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request request =chain.request();
+                Response response = chain.proceed(request);
+                while (!response.isSuccessful() && retrynum < maxNum)
+                {
+                    ++retrynum;
+                    response = chain.proceed(request);
+                }
+                return response;
+            }
+        };
+
+    }
+
+
     public interface TokenCallBack
     {
         String getToken();
     }
-
-
-
 
 
 }

@@ -275,6 +275,10 @@ public class BaseAPI {
          */
         if (provider.isEnableErrorRetry()) builder.retryOnConnectionFailure(true);
         else builder.retryOnConnectionFailure(false);
+        if(provider.getErrorRetryCount()!=-1 && provider.getErrorRetryCount()>0)
+        {
+            builder.addInterceptor(HttpInterceptor.buildErrorRetryInterceptor(provider.getErrorRetryCount()));
+        }
 
 
         //看看是否配置有cookie

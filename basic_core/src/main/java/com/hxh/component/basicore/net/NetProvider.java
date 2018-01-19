@@ -41,14 +41,16 @@ public class NetProvider {
     private String[] BASEURL_CONFIG = {"NORMAL", "FIXED", "DYNAMIC"};
     private long configWriteTimeOut;
     private boolean isEnableErrorRetry=true;
-
+    private int errorRetryCount;
     public NetProvider(
             boolean isEnableCookie, long configReadTimeOut, long configConnectTimeOut,
             Authenticator configRESTFULTokenInterceptor, Interceptor configTokenInterceptor,
             RequestCallBackHandler configRequestCallBack, Converter.Factory configConverterFactory,
             String cachePath,long maxSize,Interceptor configLogTnterceptor
-            , IApiError apiErrorClasszz,long configWriteTimeOut,boolean isEnableConnectTimeOut)
+            , IApiError apiErrorClasszz,long configWriteTimeOut,boolean isEnableConnectTimeOut,
+            int errorRetryCount)
     {
+        this.errorRetryCount = errorRetryCount;
         this.configReadTimeOut = configReadTimeOut;
         this.configConnectTimeOut = configConnectTimeOut;
         this.isEnableCookie = isEnableCookie;
@@ -78,6 +80,7 @@ public class NetProvider {
         private long configConnectTimeOut =30;//默认30 秒
         private long configWriteTimeOut = 30;//默认30 秒
         private boolean isEnableErrorRetry  = true;
+        private int errorRetryCount=-1;
         private boolean isEnableCookie = true;
         private String cachePath;//缓存地址
         private long cacheSize; //最大缓存大小
@@ -110,6 +113,17 @@ public class NetProvider {
 
         public Builder configEnableConnectTimeOutRetry(boolean isEnable) {
             this.isEnableErrorRetry = isEnable;
+            return this;
+        }
+        /**
+         * 当遇到请求出错时候（不包括连接错误），重试次数
+         *
+         * @time 2018/1/19 15:41
+         *
+         * @author
+         */
+        public Builder configEnableApiErrorIsRetryCount(int errorcount) {
+            this.errorRetryCount = errorcount;
             return this;
         }
 
@@ -208,7 +222,7 @@ public class NetProvider {
             NetProvider provider =  new NetProvider(isEnableCookie,configReadTimeOut,configConnectTimeOut,
                     configRESTFULTokenInterceptor,configTokenInterceptor,configRequestCallBack,configConverterFactory,cachePath,cacheSize,configLogTnterceptor
                     ,mApiErrorClasszz
-            ,configWriteTimeOut,isEnableErrorRetry);
+            ,configWriteTimeOut,isEnableErrorRetry,errorRetryCount);
 
             provider.setBaseUrl(baseUrl);
             if (isDynamisHttpUrl) {
@@ -226,6 +240,16 @@ public class NetProvider {
 
 
     //region getter setter
+
+
+    public int getErrorRetryCount() {
+        return errorRetryCount;
+    }
+
+    public void setErrorRetryCount(int errorRetryCount) {
+        this.errorRetryCount = errorRetryCount;
+    }
+
     public long getConfigReadTimeOut() {
         return configReadTimeOut;
     }
@@ -265,6 +289,8 @@ public class NetProvider {
     public void setConfigTokenInterceptor(Interceptor configTokenInterceptor) {
         this.configTokenInterceptor = configTokenInterceptor;
     }
+
+
 
     public RequestCallBackHandler getConfigRequestCallBack() {
         return configRequestCallBack;

@@ -15,11 +15,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
 import com.hxh.component.basicore.R;
-import com.hxh.component.basicore.imageLoader.ImageFactory;
 import com.hxh.component.basicore.imageLoader.IImageLoader;
-import com.hxh.component.basicore.util.AppManager;
+import com.hxh.component.basicore.imageLoader.ImageFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +96,6 @@ public class BannerImg extends FrameLayout {
             dotViewsList = new ArrayList<ImageView>();
             imageUris = new ArrayList<String>();
             imageUris_int   = new ArrayList<Integer>();
-
             LayoutInflater.from(context).inflate(R.layout.layout_bannerimg, this, true);
             mLinearLayout = (LinearLayout) findViewById(R.id.dotsImg);
             mViewPager = (ViewPager) findViewById(R.id.imagePager);
@@ -126,7 +123,7 @@ public class BannerImg extends FrameLayout {
             ImageView imageView = new ImageView(getContext());
             imageView.setScaleType(scaleType);//铺满屏幕
             imageViewsList.add(imageView);
-            ImageFactory.getLoader().loadFormNet(imageView,imageuris.get(i),new IImageLoader.Options(errorResId));
+            ImageFactory.getLoader().loadFormNet(imageView,imageuris.get(i),new IImageLoader.Options(errorResId,errorResId));
 
             ImageView viewDot = new ImageView(getContext());
             RelativeLayout.LayoutParams params =  new RelativeLayout.LayoutParams(20,20);
@@ -149,7 +146,6 @@ public class BannerImg extends FrameLayout {
                 }
             });
         }
-        mViewPager.setOffscreenPageLimit(3);
         mViewPager.setFocusable(true);
         mViewPager.setAdapter(new MyPagerAdapter());
         mViewPager.setOnPageChangeListener(new MyPageChangeListener());
@@ -162,10 +158,17 @@ public class BannerImg extends FrameLayout {
         setImageUris(imageUris);
     }
 
+
+
     public void setImageUris_Resource(List<Integer> imageuris) {
         for (int i = 0; i < imageuris.size(); i++) {
             imageUris_int.add(imageuris.get(i));
         }
+        showBanner();
+
+    }
+    private void showBanner()
+    {
         for (int i = 0; i < imageUris_int.size(); i++) {
             ImageView imageView = new ImageView(getContext());
             RelativeLayout.LayoutParams layoutParams= new RelativeLayout.LayoutParams(15,15);
@@ -173,12 +176,7 @@ public class BannerImg extends FrameLayout {
             imageView.setLayoutParams(layoutParams);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);//铺满屏幕
             imageViewsList.add(imageView);
-
-            Glide.with(AppManager.getCurrentActivity())
-                    .load(imageUris_int.get(i))
-                    .asBitmap()
-                    .into(imageView);
-            //ImageFactory.getLoader().loadResource(imageView,imageUris_int.get(i),mOptions);
+            ImageFactory.getLoader().loadResource(imageView,imageUris_int.get(i),mOptions);
 
             ImageView viewDot = new ImageView(getContext());
             LinearLayout.LayoutParams params =  new LinearLayout.LayoutParams(20,20);
@@ -205,15 +203,13 @@ public class BannerImg extends FrameLayout {
         mViewPager.setFocusable(true);
         mViewPager.setAdapter(new MyPagerAdapter());
         mViewPager.setOnPageChangeListener(new MyPageChangeListener());
-
     }
 
 
     public void setImageUris_Resource(Integer img) {
         imageUris_int.add(img);
-        setImageUris_Resource(imageUris_int);
+        showBanner();
     }
-
 
 
     public void setOnClickListener(OnImageClickListener lis)
@@ -224,7 +220,7 @@ public class BannerImg extends FrameLayout {
 
     public interface OnImageClickListener
     {
-       void onClick(int position);
+        void onClick(int position);
     }
 
 

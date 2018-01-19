@@ -385,7 +385,7 @@ public class IAdapterDelegate<T,H extends RecyclerView.ViewHolder> implements IA
         {
             int oldsize = mDatas.size();
             mDatas.addAll(datas);
-            mAdapter.  notifyItemRangeInserted(oldsize,datas.size());
+            mAdapter.notifyItemRangeInserted(oldsize+1,datas.size());
         }
     }
 
