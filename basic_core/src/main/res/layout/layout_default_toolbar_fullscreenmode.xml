@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frame_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:gravity="right"
+
+        android:textColor="@color/black"
+        android:visibility="gone"
+        android:textSize="34px"
+        />
+
+    <!-- 默认的BackVIew -->
+    <ImageButton
+        android:id="@+id/leftview_ib_back"
+        android:layout_width="19dp"
+        android:layout_height="19dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20px"
+        android:background="@color/transparent"
+        android:clickable="true"
+
+        android:duplicateParentState="true"
+        android:scaleType="centerInside"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"
+
+        />
+
+    <TextView
+        android:id="@+id/leftview_ib_back_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+
+        android:layout_marginTop="4px"
+        android:layout_toRightOf="@id/leftview_ib_back"
+        android:clickable="true"
+        android:duplicateParentState="true"
+        android:textColor="@color/grav_3"
+        android:textSize="29px"
+
+
+
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+
+
+        android:visibility="gone"
+        />
+
+
+    <!-- 右边 -->
+    <!-- 默认的右边按钮 -->
+    <Button
+        android:id="@+id/btn_rightview"
+        android:layout_width="wrap_content"
+        android:layout_height="45px"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:layout_toRightOf="@id/tv_title"
+        android:background="@color/transparent"
+        android:ellipsize="end"
+        android:gravity="right|center"
+        android:minWidth="60px"
+        android:paddingRight="22px"
+        android:singleLine="true"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:textSize="28px"
+        />
+
+    <!-- 默认的图标 -->
+    <LinearLayout
+        android:id="@+id/rightview_lingroup"
+
+        android:layout_width="260px"
+        android:layout_height="match_parent"
+
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10px"
+        android:layout_marginRight="20px"
+        android:layout_marginTop="10px"
+        android:gravity="right"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/rightview_iv_img"
+        android:layout_width="48px"
+        android:layout_height="48px"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="20px"
+        android:layout_marginTop="10px"
+        android:adjustViewBounds="true"
+        android:gravity="right"
+        android:maxHeight="48px"
+        android:maxWidth="48px"
+
+        android:visibility="gone"
+        android:scaleType="centerInside"
+
+        />
+
+    <View
+        android:id="@+id/view_splitline"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:alpha="0.2"
+
+        android:background="#999999"
+        />
+
+</com.zhy.autolayout.AutoRelativeLayout>

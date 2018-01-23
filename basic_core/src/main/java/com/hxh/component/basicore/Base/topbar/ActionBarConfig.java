@@ -22,13 +22,15 @@ public class ActionBarConfig {
     private OnClickLinstener listener;
     private boolean enable_splitline ;
     private Drawable backgroundDrawable;
-
+    private boolean backviewIsReveser;
     public ActionBarConfig(String titleText,String right_buttontitle,BackViewConfig backViewConfig,
                            boolean enable_backview, boolean enable_rightview,int right_buttonImgResId,
                            int[] right_imgResIds,int backViewColor,int right_buttontitleColor,
                            int titleColor,int backgroundColor,OnClickLinstener lis,boolean enable_splitline,
-                           Drawable backgroundDrawable)
+                           Drawable backgroundDrawable,
+                           boolean backviewIsReveser)
     {
+        this.backviewIsReveser = backviewIsReveser;
         this.titleColor = titleColor;
         this.titleText = titleText;
         this.backViewConfig = backViewConfig;
@@ -52,6 +54,7 @@ public class ActionBarConfig {
         private int backViewColor = 1234, right_buttontitleColor = Color.WHITE, titleColor=1234, backgroundColor=1234;
 
         private Drawable backgroundDrawable;
+        private boolean backviewIsReveser;//是否反转按钮和文字的位置
         private boolean enable_backview = false;
         private boolean enable_rightview = false;
         private String right_buttontitle;
@@ -97,10 +100,7 @@ public class ActionBarConfig {
         }
 
 
-        public ActionBarConfig build() {
-            return new ActionBarConfig(titleText,right_buttontitle,backViewConfig,enable_backview,enable_rightview,
-                    right_buttonImgResId,right_imgResIds,backViewColor,right_buttontitleColor,titleColor,backgroundColor,listener,enable_splitline,backgroundDrawable);
-        }
+
 
         //region BackView
         /**
@@ -128,7 +128,6 @@ public class ActionBarConfig {
         }
 
 
-
         /**
          * 使用默认的BackView（颜色及图标由初始化配置提供）
          * @return
@@ -138,6 +137,18 @@ public class ActionBarConfig {
             this.enable_backview = true;
             return this;
         }
+
+        /**
+         * 使用默认的BackView（颜色及图标由初始化配置提供）
+         * @return
+         */
+        public Builder enableBackView(boolean isInRever)
+        {
+            this.backviewIsReveser = isInRever;
+            this.enable_backview = true;
+            return this;
+        }
+
         //endregion
 
 
@@ -175,6 +186,11 @@ public class ActionBarConfig {
 
         //endregion
 
+        public ActionBarConfig build() {
+            return new ActionBarConfig(titleText,right_buttontitle,backViewConfig,enable_backview,enable_rightview,
+                    right_buttonImgResId,right_imgResIds,backViewColor,right_buttontitleColor,titleColor,backgroundColor,listener,enable_splitline,backgroundDrawable
+            ,backviewIsReveser);
+        }
     }
 
 
@@ -289,6 +305,9 @@ public class ActionBarConfig {
         return backgroundDrawable;
     }
 
+    public boolean isBackviewIsReveser() {
+        return backviewIsReveser;
+    }
 
     //endregion
 

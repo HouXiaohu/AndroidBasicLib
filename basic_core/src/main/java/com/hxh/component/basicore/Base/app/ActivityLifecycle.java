@@ -3,7 +3,6 @@ package com.hxh.component.basicore.Base.app;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.hxh.component.basicore.CoreLib;
 import com.hxh.component.basicore.util.AppManager;
@@ -62,8 +61,12 @@ public class ActivityLifecycle implements Application.ActivityLifecycleCallbacks
 
     private void checkIsEnableImmeriveMode(Activity activity)
     {
-        if (CoreLib.getInstance().getAppComponent().globalActionBarProvider().isEnableImmeriveMode()) {
-            Utils.SystemUtil.enableImmersiveMode(activity);
+        if(null != CoreLib.getInstance().getAppComponent().globalActionBarProvider())
+        {
+            if (CoreLib.getInstance().getAppComponent().globalActionBarProvider().isEnableImmeriveMode()) {
+                Utils.SystemUtil.enableImmersiveMode(activity);
+            }
         }
+
     }
 }

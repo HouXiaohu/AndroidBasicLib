@@ -1,24 +1,21 @@
 package com.hxh.component.basicore.Base;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.hxh.component.basicore.Base.delegate.interfaces.IToolBarRelated;
-import com.hxh.component.basicore.Base.delegate.FragmentDelegate;
 import com.hxh.component.basicore.Base.delegate.ToolBarDelegate;
+import com.hxh.component.basicore.Base.delegate.ToolBarDelegate_FullScreenMode;
+import com.hxh.component.basicore.Base.delegate.interfaces.IToolBarRelated;
 import com.hxh.component.basicore.Base.topbar.ActionBarConfig;
 import com.hxh.component.basicore.Base.view.EmptyFragment;
-import com.hxh.component.basicore.mvp.view.IView;
+import com.hxh.component.basicore.CoreLib;
 import com.hxh.component.basicore.mvp.persenter.IPresenter;
 
 /**
@@ -30,15 +27,22 @@ public abstract class TopBarBaseLazyFragment<P extends IPresenter>
         implements
         IToolBarRelated {
 
-    private ToolBarDelegate mToolBarDelegate ;
+    private IToolBarRelated mToolBarDelegate ;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater,container,savedInstanceState);
-        mToolBarDelegate = new ToolBarDelegate(setActionBarConfig());
-        mToolBarDelegate.init();
-        mToolBarDelegate.fetchToView(getView(),this);
+        if (CoreLib.getInstance().getAppComponent().globalActionBarProvider().isEnableImmeriveMode()) {
+            this.mToolBarDelegate = new ToolBarDelegate_FullScreenMode(setActionBarConfig());
+            ((ToolBarDelegate_FullScreenMode) this.mToolBarDelegate).init();
+            ((ToolBarDelegate_FullScreenMode) this.mToolBarDelegate).fetchToView(getView(),this);
+        }else
+        {
+            this.mToolBarDelegate = new ToolBarDelegate(setActionBarConfig());
+            ((ToolBarDelegate) this.mToolBarDelegate).init();
+            ((ToolBarDelegate) this.mToolBarDelegate).fetchToView(getView(),this);
+        }
         return getView();
     }
 
@@ -53,13 +57,13 @@ public abstract class TopBarBaseLazyFragment<P extends IPresenter>
     }
 
     @Override
-    public void setActionBar_title(TextView tv_title) {
-        mToolBarDelegate.setActionbar_title(tv_title);
+    public void setActionBar_Title(TextView tv_title) {
+        mToolBarDelegate.setActionBar_Title(tv_title);
     }
 
     @Override
     public ActionBarConfig getActionBarConfig() {
-        return mToolBarDelegate.getmActionbarconfig();
+        return mToolBarDelegate.getActionBarConfig();
     }
 
     @Override
@@ -74,7 +78,7 @@ public abstract class TopBarBaseLazyFragment<P extends IPresenter>
     }
 
     @Override
-    public ImageView getActionbar_rightview_img() {
+    public ImageView getActionbar_rightImageView() {
         return mToolBarDelegate.getActionbar_rightImageView();
     }
 
@@ -83,13 +87,9 @@ public abstract class TopBarBaseLazyFragment<P extends IPresenter>
         return mToolBarDelegate.getActionbar_title();
     }
 
-    @Override
-    public void setBackViewConfig_title(String title) {
-        mToolBarDelegate.setBackViewTitle(title);
-    }
 
     @Override
-    public View getActionbar_rightview() {
+    public View getActionbar_rightView() {
         return mToolBarDelegate.getActionbar_rightView();
     }
     @Override
@@ -116,7 +116,6 @@ public abstract class TopBarBaseLazyFragment<P extends IPresenter>
     public void setActionbar_rightImg(Drawable drawable) {
         mToolBarDelegate.setActionbar_rightImg(drawable);
     }
-
 
     //endregion
 

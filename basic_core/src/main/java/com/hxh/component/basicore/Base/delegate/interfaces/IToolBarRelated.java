@@ -1,9 +1,9 @@
 package com.hxh.component.basicore.Base.delegate.interfaces;
 
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,6 +14,9 @@ import com.hxh.component.basicore.Base.topbar.ActionBarConfig;
  * ToolBar相关功能
  */
 public interface IToolBarRelated {
+
+
+
 
     ActionBarConfig getActionBarConfig();
 
@@ -38,9 +41,7 @@ public interface IToolBarRelated {
 
     void setActionbar_rightImg(Drawable drawable);
 
-    void setActionBar_title(TextView tv_title);
-
-    void setBackViewTitle(String title);
+    void setActionBar_Title(TextView tv_title);
 
 
     void setActionBarConfig(ActionBarConfig config);
@@ -51,12 +52,12 @@ public interface IToolBarRelated {
      */
     LinearLayout getActionbar_rightImageViewButtons();
 
-    ImageView getActionbar_rightview_img();
+    ImageView getActionbar_rightImageView();
 
-    View getActionbar_rightview();
+    View getActionbar_rightView();
 
     TextView getActionbar_title();
 
-    void setBackViewConfig_title(String title);
+    void setBackViewTitle(String title);
 
 }

@@ -8,12 +8,13 @@
     android:background="@color/work_bg_ee"
     tools:context="com.hxh.component.basicore.Base.TopBarBaseActivity">
 
-
+    <!--contentInsetLeft 和 contentInsetStart 需要添加，不然会导致toolbar左右两边有黑边 -->
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="90px"
+
         android:id="@+id/toolbar"
         android:visibility="gone"
+        android:layout_height="?attr/actionBarSize"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
         >

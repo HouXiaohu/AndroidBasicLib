@@ -1,42 +1,17 @@
 package daily_wagepro.xiaoai.com.daily_wagepro;
 
 import android.Manifest;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.hxh.component.basicore.ui.mrecycleview.EmptyViewConfig;
-import com.hxh.component.basicore.ui.mrecycleview.MDataSource;
-import com.hxh.component.basicore.ui.mrecycleview.MRecycleView;
+import com.hxh.component.basicore.mvp.persenter.IPresenter;
+import com.hxh.component.basicore.mvp.view.BaseActivity;
 import com.hxh.component.basicore.util.aspj.annotation.PermissionCheck;
 
-import java.util.ArrayList;
-import java.util.List;
+public class MainActivity extends BaseActivity {
 
-public class MainActivity extends AppCompatActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initdata();
-    }
 
-    private void initdata() {
-        MRecycleView recycleview = (MRecycleView) findViewById(R.id.recycleview);
 
-        final List<String> str  = new ArrayList<>();
-        recycleview.setAdapter(new Adap1(this))
-                .getDataRepositoryBuilder()
-                .setNoDataStateWhenRequest(new EmptyViewConfig.Build()
-                        .enableRefreshWhenClickOtherPlace()
-                        .build(), new MDataSource.NoDataCallback() {
-                    @Override
-                    public void onNoData() {
-                        str.add("12312");
-                    }
-                })
-                .fetch(str);
-    }
 
     @PermissionCheck(permissions = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -51,4 +26,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
     }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    public void initData(Bundle saveInstanceState) {
+        loadRootFragment(R.id.frame_main,Framement.newInstance());
+    }
+
+    @Override
+    public IPresenter newP() {
+        return null;
+    }
+
+
 }

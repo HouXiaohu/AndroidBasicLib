@@ -19,6 +19,8 @@ public class PermissionsChecker {
     {
         this.context = Utils.getApplicationContext();
     }
+
+
     /**
      * true 代表没获取
      * 

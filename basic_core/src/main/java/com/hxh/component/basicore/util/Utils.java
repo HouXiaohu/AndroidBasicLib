@@ -1,7 +1,10 @@
 package com.hxh.component.basicore.util;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.app.PendingIntent;
 import android.content.ContentUris;
 import android.content.Context;
@@ -36,11 +39,13 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.Process;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IntDef;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -60,6 +65,7 @@ import com.hxh.component.basicore.Config;
 import com.hxh.component.basicore.R;
 import com.hxh.component.basicore.imageLoader.IImageLoader;
 import com.hxh.component.basicore.imageLoader.ImageFactory;
+import com.hxh.component.basicore.permissions.PermissionsChecker;
 import com.hxh.component.basicore.util.aspj.annotation.Safe;
 import com.hxh.component.basicore.util.aspj.util.AspjUtils;
 import com.hxh.component.ui.alertview.AlertView;
@@ -171,20 +177,42 @@ public class Utils {
 
     public static class SystemUtil {
         /**
+         * 判断是否在主进程
+         *
+         * @time 2018/1/20 14:30
+         * @author
+         */
+        public static boolean isMainProcess(Context context) {
+            if (context instanceof Application) {
+                ActivityManager am = ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE));
+                List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
+                String mainProcessName = context.getPackageName();
+                int myPid = Process.myPid();
+                for (ActivityManager.RunningAppProcessInfo info : processInfos) {
+                    if (info.pid == myPid && mainProcessName.equals(info.processName)) {
+                        return true;
+                    }
+                }
+                return false;
+            } else {
+                throw new IllegalStateException("context must is ApplicationContext!!");
+            }
+        }
+
+        /**
          * 开启沉浸式模式(竖屏)
          *
          * @param activity
          */
         public static void enableImmersiveMode(AppCompatActivity activity) {
-            //            if (Build.VERSION.SDK_INT >= 21) {
-            //                View decorView = activity.getWindow().getDecorView();
-            //                                int option = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            //                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            //                                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-            //                                decorView.setSystemUiVisibility(option);
-            //                activity.getWindow().setNavigationBarColor(Color.TRANSPARENT);
-            //                activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
-            //            }
+            if (Build.VERSION.SDK_INT >= 21) {
+                View decorView = activity.getWindow().getDecorView();
+                int option = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+                decorView.setSystemUiVisibility(option);
+                activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+            }
         }
 
 
@@ -194,15 +222,15 @@ public class Utils {
          * @param activity
          */
         public static void enableImmersiveMode(Activity activity) {
-            //            if (Build.VERSION.SDK_INT >= 21) {
-            //                View decorView = activity.getWindow().getDecorView();
-            //                                int option = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            //                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            //                                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-            //                                decorView.setSystemUiVisibility(option);
-            //                activity.getWindow().setNavigationBarColor(Color.TRANSPARENT);
-            //                activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
-            //            }
+            if (Build.VERSION.SDK_INT >= 21) {
+                View decorView = activity.getWindow().getDecorView();
+                int option = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+                decorView.setSystemUiVisibility(option);
+
+                activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+            }
         }
 
         /**
@@ -585,9 +613,8 @@ public class Utils {
         }
 
 
-        public static String getFileProviderAuthorities()
-        {
-            return mContext.getApplicationInfo().packageName+".fileprovider";
+        public static String getFileProviderAuthorities() {
+            return mContext.getApplicationInfo().packageName + ".fileprovider";
         }
 
     }
@@ -600,8 +627,7 @@ public class Utils {
         /**
          * 得到版本代号
          *
-
-         * @return
+         * @return 版本号
          */
         public static int getVersionCode() {
             PackageManager pm = mContext.getPackageManager();
@@ -616,8 +642,8 @@ public class Utils {
 
         /**
          * 得到版本名称
-
-         * @return
+         *
+         * @return 版本名称
          */
         public static String getVersionName() {
             PackageManager pm = mContext.getPackageManager();
@@ -630,32 +656,31 @@ public class Utils {
             return pinfo.versionName;
         }
 
-        public static boolean installNormal( String filePath) {
-            return  installNormal( FileUtil.getFileProviderAuthorities(), filePath);
+        public static boolean installNormal(String filePath) {
+            return installNormal(FileUtil.getFileProviderAuthorities(), filePath);
         }
+
         /**
          * 用于AndroidN 的File://   访问问题
          *
-         * @time 2018/1/2 18:26
-         *
+         * @time 2018/1/20 15:45
          * @author
          */
-        public static boolean installNormal( String fileProviderAuthorities,String filePath) {
+        public static boolean installNormal(String fileProviderAuthorities, String filePath) {
             Intent i = new Intent(Intent.ACTION_VIEW);
             File file = new File(filePath);
             if (null == file || !file.exists() || !file.isFile() || file.length() <= 0) {
                 return false;
             }
 
-            Uri uri;
+            Uri uri = null;
             if (Build.VERSION.SDK_INT >= 24) {
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 uri = FileProvider.getUriForFile(mContext, fileProviderAuthorities, file);
                 i.setDataAndType(uri, "application/vnd.android.package-archive");
             } else {
-                uri = Uri.fromFile(file);
-                i.setDataAndType(Uri.parse("file://"+filePath), Config.INSTALL_APP_SCHEMA);
+                i.setDataAndType(uri, Config.INSTALL_APP_SCHEMA);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             }
 
@@ -733,23 +758,23 @@ public class Utils {
         private static android.widget.Toast mToast;
 
         public static void toast(String message) {
-            show(message, android.widget.Toast.LENGTH_SHORT,-1);
+            show(message, android.widget.Toast.LENGTH_SHORT, -1);
         }
 
         public static void toast(int resId) {
-            show(mContext.getResources().getString(resId), android.widget.Toast.LENGTH_SHORT,-1);
+            show(mContext.getResources().getString(resId), android.widget.Toast.LENGTH_SHORT, -1);
         }
 
         public static void toast(String message, int gravity) {
-            show(message, android.widget.Toast.LENGTH_SHORT,gravity);
+            show(message, android.widget.Toast.LENGTH_SHORT, gravity);
         }
 
 
         public static void toast_long(String message) {
-            show(message, android.widget.Toast.LENGTH_LONG,-1);
+            show(message, android.widget.Toast.LENGTH_LONG, -1);
         }
 
-        private static void show(String message, int duration,int gravity) {
+        private static void show(String message, int duration, int gravity) {
             if (null == mToast) {
                 mToast = android.widget.Toast.makeText(Utils.getApplicationContext(), message, duration);
             } else {
@@ -757,8 +782,7 @@ public class Utils {
                 mToast.setDuration(duration);
             }
 
-            if(-1 != gravity)
-            {
+            if (-1 != gravity) {
                 mToast.setGravity(gravity, 0, 0);
             }
 
@@ -866,12 +890,11 @@ public class Utils {
             return false;
         }
 
-        public static boolean isEmpty(TextView tv,String msg) {
+        public static boolean isEmpty(TextView tv, String msg) {
             if (null != tv && tv.getText().toString().trim().contains("请选择")) {
                 Toast.toast(tv.getText().toString());
                 return true;
-            }else if(null != tv&& isEmpty( tv.getText().toString()))
-            {
+            } else if (null != tv && isEmpty(tv.getText().toString())) {
                 Toast.toast(msg);
                 return true;
             }
@@ -1632,21 +1655,18 @@ public class Utils {
             return date2TimeStamp(getNowDate(YYYY_MM_DD_HH_MM_SS), YYYY_MM_DD_HH_MM_SS);
 
         }
+
         /**
-         * 
-         * 
          * @time 2017/11/30 18:28
-         * 
-         * @author 
+         * @author
          */
-        public static String getRubbingToTime( String timeString) {
-            if(Long.valueOf(timeString)<=Long.parseLong("-62135596800"))
-            {
+        public static String getRubbingToTime(String timeString) {
+            if (Long.valueOf(timeString) <= Long.parseLong("-62135596800")) {
                 return "";
             }
 
 
-            return timeStamp2Date(timeString,YYYY_MM_DD);
+            return timeStamp2Date(timeString, YYYY_MM_DD);
         }
 
 
@@ -2577,7 +2597,6 @@ public class Utils {
         }
 
 
-
         /**
          * 得到相机意图
          *
@@ -2590,7 +2609,6 @@ public class Utils {
         }
 
 
-
         /**
          * 得到相机意图
          *
@@ -2600,7 +2618,7 @@ public class Utils {
         public static Intent getSystem_CameraIntent(File saveFilePath) {
 
 
-            return getSystem_CameraIntent(FileUtil.getFileProviderAuthorities(),saveFilePath);
+            return getSystem_CameraIntent(FileUtil.getFileProviderAuthorities(), saveFilePath);
         }
 
         /**
@@ -2609,10 +2627,10 @@ public class Utils {
          * @param saveFilePath
          * @return
          */
-        public static Intent getSystem_CameraIntent(String authiProviderPath,File saveFilePath) {
+        public static Intent getSystem_CameraIntent(String authiProviderPath, File saveFilePath) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, getUriForFile(mContext,authiProviderPath, saveFilePath));
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, getUriForFile(mContext, authiProviderPath, saveFilePath));
 
             return intent;
         }
@@ -2631,17 +2649,17 @@ public class Utils {
 
 
         private static Uri getUriForFile(Context context, File file) {
-            return getUriForFile(context, FileUtil.getFileProviderAuthorities(),file);
+            return getUriForFile(context, FileUtil.getFileProviderAuthorities(), file);
         }
 
 
-        private static Uri getUriForFile(Context context,String fileProviderAuthorities, File file) {
+        private static Uri getUriForFile(Context context, String fileProviderAuthorities, File file) {
             if (context == null || file == null) {
                 throw new NullPointerException();
             }
             Uri uri;
             if (Build.VERSION.SDK_INT >= 24) {
-                uri = FileProvider.getUriForFile(context.getApplicationContext(),fileProviderAuthorities, file);
+                uri = FileProvider.getUriForFile(context.getApplicationContext(), fileProviderAuthorities, file);
             } else {
                 uri = Uri.fromFile(file);
             }
@@ -2652,10 +2670,9 @@ public class Utils {
     public static class BitmapUtils {
         /**
          * 缩放图片
-         * 
+         *
          * @time 2017/12/7 9:39
-         * 
-         * @author 
+         * @author
          */
         public static Bitmap scaleImage(Bitmap bm, int newWidth, int newHeight) {
             if (bm == null) {
@@ -2676,7 +2693,6 @@ public class Utils {
         }
 
 
-
         public static Bitmap decode(byte[] bytes) {
             return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         }
@@ -2684,8 +2700,8 @@ public class Utils {
         /**
          * 将一个BitMap中的一种颜色@param replaceThisColor 替换为 透明色
          *
-         * @time 2017/12/7 9:40
          * @param replaceThisColor 要匹配的颜色
+         * @time 2017/12/7 9:40
          * @author
          */
         public static Bitmap createTransparentBitmapFromBitmap(Bitmap bitmap,
@@ -2768,7 +2784,8 @@ public class Utils {
 
         /**
          * 图片转圆角
-         * @param  pixels 角度
+         *
+         * @param pixels 角度
          * @return 转圆角的bitmap
          */
         public static Bitmap toRoundCorner(Bitmap bitmap, int pixels) {
@@ -2875,7 +2892,6 @@ public class Utils {
             byte[] bytes = input2Byte(is);
             return getBitmap(bytes, 0, maxWidth, maxHeight);
         }
-
 
 
         /**
@@ -2996,7 +3012,7 @@ public class Utils {
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 byte[] b = new byte[1024];
                 int len;
-                while ((len = is.read(b, 0,1024)) != -1) {
+                while ((len = is.read(b, 0, 1024)) != -1) {
                     os.write(b, 0, len);
                 }
                 return os.toByteArray();
@@ -3013,7 +3029,6 @@ public class Utils {
 
             }
         }
-
 
 
     }
@@ -3275,7 +3290,7 @@ public class Utils {
          * <b>注意：</b>如果精度要求比较精确请使用 keepPrecision(String number, int precision)方法
          *
          * @param
-         * @param precision     小数精确度总位数,如2表示两位小数
+         * @param precision 小数精确度总位数,如2表示两位小数
          * @return 返回数字格式化后的字符串表示形式(注意返回的字符串未使用科学计数法)
          */
         public static String keepPrecision(Number number, int precision) {
@@ -3320,8 +3335,14 @@ public class Utils {
             return bg.setScale(precision, BigDecimal.ROUND_UNNECESSARY).floatValue();
         }
 
-        public static String showTwoPrecision_noUp(double number)
-        {
+
+        public static float keepPrecision_noUp(double number) {
+            BigDecimal bg = new BigDecimal(number);
+            return bg.floatValue();
+        }
+
+
+        public static String showTwoPrecision_noUp(double number) {
             DecimalFormat df = new DecimalFormat("##############0.00");
             return df.format(number);
         }
@@ -3333,7 +3354,7 @@ public class Utils {
 
         public static AlertView showDeleteDialog(String msg, OnItemClickListener lis) {
 
-            return showDefaulStyleDialog(null, Text.isEmpty(msg) ? "确认删除吗？" : msg, "取消", "确认",null, AlertView.Style.Alert, lis,true);
+            return showDefaulStyleDialog(null, Text.isEmpty(msg) ? "确认删除吗？" : msg, "取消", "确认", null, AlertView.Style.Alert, lis, true);
         }
 
         public static AlertDialog showDeleteDialog(View view) {
@@ -3343,8 +3364,7 @@ public class Utils {
                     .create();
         }
 
-        public static AlertView showDefaulStyleDialog(View view,boolean isCanceble)
-        {
+        public static AlertView showDefaulStyleDialog(View view, boolean isCanceble) {
             AlertView al = new AlertView(view);
             al.setCancelable(isCanceble);
             return al;
@@ -3358,7 +3378,7 @@ public class Utils {
          * @return
          */
         public static AlertView showDefaulStyleDialog(String message, String cancel, String determine, OnItemClickListener lis) {
-            return showDefaulStyleDialog(null, message, cancel, determine,null, AlertView.Style.Alert, lis,true);
+            return showDefaulStyleDialog(null, message, cancel, determine, null, AlertView.Style.Alert, lis, true);
         }
 
         /**
@@ -3368,53 +3388,53 @@ public class Utils {
          * @param lis       按钮监听
          * @return
          */
-        public static AlertView showDefaulStyleDialog(String message, String cancel, String determine, OnItemClickListener lis,boolean isCanceable) {
-            return showDefaulStyleDialog(null, message, cancel, determine,null, AlertView.Style.Alert, lis,isCanceable);
+        public static AlertView showDefaulStyleDialog(String message, String cancel, String determine, OnItemClickListener lis, boolean isCanceable) {
+            return showDefaulStyleDialog(null, message, cancel, determine, null, AlertView.Style.Alert, lis, isCanceable);
         }
 
         public static AlertView showDefaulStyleDialog(String[] other, OnItemClickListener lis) {
-            return showDefaulStyleDialog(null, null, "返回",null,other, AlertView.Style.ActionSheet, lis,true);
-        }
-        public static AlertView showDefaulStyleDialog(String[] other, OnItemClickListener lis,boolean isCanceable) {
-            return showDefaulStyleDialog(null, null, "返回",null,other, AlertView.Style.ActionSheet, lis,isCanceable);
+            return showDefaulStyleDialog(null, null, "返回", null, other, AlertView.Style.ActionSheet, lis, true);
         }
 
-        public static AlertView showDefaulStyleDialog(String title,String[] other, OnItemClickListener lis) {
-            return showDefaulStyleDialog(title, null, "返回",null,other, AlertView.Style.ActionSheet, lis,true);
+        public static AlertView showDefaulStyleDialog(String[] other, OnItemClickListener lis, boolean isCanceable) {
+            return showDefaulStyleDialog(null, null, "返回", null, other, AlertView.Style.ActionSheet, lis, isCanceable);
         }
 
-        public static AlertView showDefaulStyleDialog(String title,String[] other, OnItemClickListener lis,boolean isCanceable) {
-            return showDefaulStyleDialog(title, null, "返回",null,other, AlertView.Style.ActionSheet, lis,isCanceable);
+        public static AlertView showDefaulStyleDialog(String title, String[] other, OnItemClickListener lis) {
+            return showDefaulStyleDialog(title, null, "返回", null, other, AlertView.Style.ActionSheet, lis, true);
         }
 
-        public static AlertView showDefaulStyleDialog(String message,String cancel,String[] other, OnItemClickListener lis) {
-            return showDefaulStyleDialog(null, message, cancel,null,other, AlertView.Style.ActionSheet, lis,true);
+        public static AlertView showDefaulStyleDialog(String title, String[] other, OnItemClickListener lis, boolean isCanceable) {
+            return showDefaulStyleDialog(title, null, "返回", null, other, AlertView.Style.ActionSheet, lis, isCanceable);
         }
 
-        public static AlertView showDefaulStyleDialog(String message,String cancel,String[] other, OnItemClickListener lis,boolean isCanceable) {
-            return showDefaulStyleDialog(null, message, cancel,null,other, AlertView.Style.ActionSheet, lis,isCanceable);
+        public static AlertView showDefaulStyleDialog(String message, String cancel, String[] other, OnItemClickListener lis) {
+            return showDefaulStyleDialog(null, message, cancel, null, other, AlertView.Style.ActionSheet, lis, true);
+        }
+
+        public static AlertView showDefaulStyleDialog(String message, String cancel, String[] other, OnItemClickListener lis, boolean isCanceable) {
+            return showDefaulStyleDialog(null, message, cancel, null, other, AlertView.Style.ActionSheet, lis, isCanceable);
         }
 
 
         public static AlertView showDefaulStyleDialog(String message, OnItemClickListener lis) {
-            return showDefaulStyleDialog(null, message, "返回", "确定",null, AlertView.Style.Alert, lis,true);
+            return showDefaulStyleDialog(null, message, "返回", "确定", null, AlertView.Style.Alert, lis, true);
         }
 
 
-
-        public static AlertView showDefaulStyleDialog(String message,boolean iscanceable, OnItemClickListener lis) {
-            return showDefaulStyleDialog(null, message, "返回", "确定", null, AlertView.Style.Alert,lis,iscanceable);
+        public static AlertView showDefaulStyleDialog(String message, boolean iscanceable, OnItemClickListener lis) {
+            return showDefaulStyleDialog(null, message, "返回", "确定", null, AlertView.Style.Alert, lis, iscanceable);
         }
 
         public static AlertView showDefaulStyleDialog(String message, String determine, OnItemClickListener lis) {
-            return showDefaulStyleDialog(null, message, null, determine,null, AlertView.Style.Alert, lis,true);
+            return showDefaulStyleDialog(null, message, null, determine, null, AlertView.Style.Alert, lis, true);
         }
 
-        public static AlertView showDefaulStyleDialog(String message, String determine, OnItemClickListener lis,boolean isCanceable) {
-            return showDefaulStyleDialog(null, message, null, determine,null, AlertView.Style.Alert, lis,isCanceable);
+        public static AlertView showDefaulStyleDialog(String message, String determine, OnItemClickListener lis, boolean isCanceable) {
+            return showDefaulStyleDialog(null, message, null, determine, null, AlertView.Style.Alert, lis, isCanceable);
         }
 
-        public static AlertView showDefaulStyleDialog(String title, String message, String cancel, String determine, String[]others, AlertView.Style style,OnItemClickListener lis, boolean iscanceable) {
+        public static AlertView showDefaulStyleDialog(String title, String message, String cancel, String determine, String[] others, AlertView.Style style, OnItemClickListener lis, boolean iscanceable) {
             AlertView.Builder builder = new AlertView.Builder(AppManager.getCurrentActivity())
                     .setTitle(title)
                     .setMessage(message)
@@ -3422,16 +3442,14 @@ public class Utils {
                     .setConfirmText(determine)
                     .setOthers(others)
                     .setOnItemClickListenerTest(lis);
-            if(style == AlertView.Style.Alert)
-            {
-                builder.setStyle( AlertView.Style.Alert);
-            }else
-            {
-                builder.setStyle( AlertView.Style.ActionSheet);
+            if (style == AlertView.Style.Alert) {
+                builder.setStyle(AlertView.Style.Alert);
+            } else {
+                builder.setStyle(AlertView.Style.ActionSheet);
             }
 
 
-            return  builder.build().setCancelable(iscanceable);
+            return builder.build().setCancelable(iscanceable);
         }
 
         public static OptionPicker showDefaulStyleSingleSelectPicker(String[] datas, OptionPicker.OnOptionPickListener listener) {
@@ -3443,7 +3461,7 @@ public class Utils {
             return picker;
         }
 
-        public static OptionPicker showDefaulStyleSingleSelectPicker(String title,String[] datas, OptionPicker.OnOptionPickListener listener) {
+        public static OptionPicker showDefaulStyleSingleSelectPicker(String title, String[] datas, OptionPicker.OnOptionPickListener listener) {
             OptionPicker picker = new OptionPicker(AppManager.getCurrentActivity(), datas);
             picker.setSelectedIndex(0);
             picker.setTextSize(22);
@@ -3483,18 +3501,18 @@ public class Utils {
 
         public static AlertView showSelectPhotoModeAlert(OnItemClickListener lis) {
 
-            return showSelectPhotoModeAlert( AppManager.getCurrentActivity(),lis);
+            return showSelectPhotoModeAlert(AppManager.getCurrentActivity(), lis);
 
         }
 
         public static AlertView showSelectPhotoModeAlert(Context context, OnItemClickListener lis) {
-            return new AlertView.Builder( AppManager.getCurrentActivity())
+            return new AlertView.Builder(AppManager.getCurrentActivity())
                     .setCancelText("取消")
                     .setOthers(new String[]{"拍摄", "从手机相册选择"})
                     .setStyle(AlertView.Style.ActionSheet)
                     .setOnItemClickListenerTest(lis)
                     .build();
-           // return new AlertView(null, null, "取消", null, new String[]{"拍摄", "从手机相册选择"}, context, AlertView.Style.ActionSheet, lis);
+            // return new AlertView(null, null, "取消", null, new String[]{"拍摄", "从手机相册选择"}, context, AlertView.Style.ActionSheet, lis);
         }
 
 
@@ -3511,13 +3529,12 @@ public class Utils {
     public static class LocationUtil {
         public static LocationManager locationManager;
         public static String locationProvider;
+
         private static double latitude;
         private static double longitude;
 
         public static Double[] getLocaltion(LocationListener listener) {
-            final Double[] pro = new Double[2];
             LocationManager locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-
             Criteria criteria = new Criteria();
             criteria.setAccuracy(Criteria.ACCURACY_COARSE);//低精度，如果设置为高精度，依然获取不了location。
             criteria.setAltitudeRequired(false);//不要求海拔
@@ -3528,42 +3545,25 @@ public class Utils {
             //从可用的位置提供器中，匹配以上标准的最佳提供器
             locationProvider = locationManager.getBestProvider(criteria, true);
             Location location = null;
-            if(null == locationProvider)
-            {
-                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            }else
-            {
-                location = locationManager.getLastKnownLocation(locationProvider);
+
+            if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (null == locationProvider) {
+
+                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                } else {
+                    location = locationManager.getLastKnownLocation(locationProvider);
+                }
             }
 
-            if (location != null) {
-                pro[0] = location.getLongitude();
-                pro[1] = location.getLatitude();
-                //不为空,显示地理位置经纬度
-                if (pro[0] == null) {
-                    pro[0] = 0.0;
-                }
-
-                if (pro[1] == null) {
-                    pro[1] = 0.0;
-                }
-            } else {
-                pro[0] = 0.0;
-                pro[1] = 0.0;
-            }
-            LatLng la= new LatLng(pro[1],pro[0]);
-            LatLng la1= transformFromWGSToGCJ(la);
-            pro[0] = la1.longitude;
-            pro[1] = la1.latitude;
 
             //监视地理位置变化
             locationManager.requestLocationUpdates(locationProvider, 0, 0, listener);
 
-            return pro;
+            return convertToChinaLocation(location);
         }
 
         public static Double[] getLocaltion() {
-            final Double[] pro = new Double[2];
+
             LocationManager locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 
             Criteria criteria = new Criteria();
@@ -3576,14 +3576,21 @@ public class Utils {
             //从可用的位置提供器中，匹配以上标准的最佳提供器
             locationProvider = locationManager.getBestProvider(criteria, true);
             Location location = null;
-            if(null == locationProvider)
-            {
+            if (null == locationProvider) {
                 location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            }else
-            {
+            } else {
                 location = locationManager.getLastKnownLocation(locationProvider);
             }
 
+
+            //监视地理位置变化
+            //   locationManager.requestLocationUpdates(locationProvider, 0, 0, listener);
+
+            return convertToChinaLocation(location);
+        }
+
+        public static Double[] convertToChinaLocation(Location location) {
+            final Double[] pro = new Double[2];
             if (location != null) {
                 pro[0] = location.getLongitude();
                 pro[1] = location.getLatitude();
@@ -3600,13 +3607,10 @@ public class Utils {
                 pro[1] = 0.0;
             }
 
-            LatLng la= new LatLng(pro[1],pro[0]);
-            LatLng la1= transformFromWGSToGCJ(la);
+            LatLng la = new LatLng(pro[1], pro[0]);
+            LatLng la1 = transformFromWGSToGCJ(la);
             pro[0] = la1.longitude;
             pro[1] = la1.latitude;
-            //监视地理位置变化
-            //   locationManager.requestLocationUpdates(locationProvider, 0, 0, listener);
-
             return pro;
         }
 
@@ -3728,186 +3732,207 @@ public class Utils {
         }
 
 
-//        //region 别人的代码
-//        private static final long REFRESH_TIME = 5000L;
-//        private static final float METER_POSITION = 0.0f;
-//        private static ILocationListener mLocationListener;
-//        private static LocationListener listener = new MyLocationListener();
-//
-//         static class MyLocationListener implements LocationListener {
-//            @Override
-//            public void onLocationChanged(Location location) {//定位改变监听
-//                if (mLocationListener != null) {
-//                    mLocationListener.onSuccessLocation(location);
-//                }
-//            }
-//
-//            @Override
-//            public void onStatusChanged(String provider, int status, Bundle extras) {//定位状态监听
-//
-//            }
-//
-//            @Override
-//            public void onProviderEnabled(String provider) {//定位状态可用监听
-//
-//            }
-//
-//            @Override
-//            public void onProviderDisabled(String provider) {//定位状态不可用监听
-//
-//            }
-//        }
-//
-//        /**
-//         * GPS获取定位方式
-//         */
-//        public static Location getGPSLocation(@NonNull Context context) {
-//            Location location = null;
-//            LocationManager manager = getLocationManager(context);
-//            //高版本的权限检查
-//            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                return null;
-//            }
-//            if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {//是否支持GPS定位
-//                //获取最后的GPS定位信息，如果是第一次打开，一般会拿不到定位信息，一般可以请求监听，在有效的时间范围可以获取定位信息
-//                location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//            }
-//            return location;
-//        }
-//
-//        /**
-//         * network获取定位方式
-//         */
-//        public static Location getNetWorkLocation(Context context) {
-//            Location location = null;
-//            LocationManager manager = getLocationManager(context);
-//            //高版本的权限检查
-//            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                return null;
-//            }
-//            if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {//是否支持Network定位
-//                //获取最后的network定位信息
-//                location = manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-//            }
-//            return location;
-//        }
-//
-//        /**
-//         * 获取最好的定位方式
-//         */
-//        public static Location getBestLocation(Context context, Criteria criteria) {
-//            Location location;
-//            LocationManager manager = getLocationManager(context);
-//            if (criteria == null) {
-//                criteria = new Criteria();
-//            }
-//            String provider = manager.getBestProvider(criteria, true);
-//            if (TextUtils.isEmpty(provider)) {
-//                //如果找不到最适合的定位，使用network定位
-//                location = getNetWorkLocation(context);
-//            } else {
-//                //高版本的权限检查
-//                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-//                        && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                    return null;
-//                }
-//                //获取最适合的定位方式的最后的定位权限
-//                location = manager.getLastKnownLocation(provider);
-//            }
-//            return location;
-//        }
-//
-//        /**
-//         * 定位监听
-//         */
-//        public static void addLocationListener(Context context, String provider, ILocationListener locationListener) {
-//
-//            addLocationListener(context, provider, REFRESH_TIME, METER_POSITION, locationListener);
-//        }
-//
-//        /**
-//         * 定位监听
-//         */
-//        public static void addLocationListener(Context context, String provider, long time, float meter, ILocationListener locationListener) {
-//            if (locationListener != null) {
-//                mLocationListener = locationListener;
-//            }
-//            if (listener == null) {
-//                listener = new MyLocationListener();
-//            }
-//            LocationManager manager = getLocationManager(context);
-//            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-//                    && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                return;
-//            }
-//            manager.requestLocationUpdates(provider, time, meter, listener);
-//        }
-//
-//        /**
-//         * 取消定位监听
-//         */
-//        public static void unRegisterListener(Context context) {
-//            if (listener != null) {
-//                LocationManager manager = getLocationManager(context);
-//                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-//                        && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                    return;
-//                }
-//                //移除定位监听
-//                manager.removeUpdates(listener);
-//            }
-//        }
-//
-//        private static LocationManager getLocationManager(@NonNull Context context) {
-//            return (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-//        }
-//
-//        /**
-//         * 自定义接口
-//         */
-//        public interface ILocationListener {
-//            void onSuccessLocation(Location location);
-//        }
-//
-//
-//
-//        //endregion
+        //        //region 别人的代码
+        //        private static final long REFRESH_TIME = 5000L;
+        //        private static final float METER_POSITION = 0.0f;
+        //        private static ILocationListener mLocationListener;
+        //        private static LocationListener listener = new MyLocationListener();
+        //
+        //         static class MyLocationListener implements LocationListener {
+        //            @Override
+        //            public void onLocationChanged(Location location) {//定位改变监听
+        //                if (mLocationListener != null) {
+        //                    mLocationListener.onSuccessLocation(location);
+        //                }
+        //            }
+        //
+        //            @Override
+        //            public void onStatusChanged(String provider, int status, Bundle extras) {//定位状态监听
+        //
+        //            }
+        //
+        //            @Override
+        //            public void onProviderEnabled(String provider) {//定位状态可用监听
+        //
+        //            }
+        //
+        //            @Override
+        //            public void onProviderDisabled(String provider) {//定位状态不可用监听
+        //
+        //            }
+        //        }
+        //
+        //        /**
+        //         * GPS获取定位方式
+        //         */
+        //        public static Location getGPSLocation(@NonNull Context context) {
+        //            Location location = null;
+        //            LocationManager manager = getLocationManager(context);
+        //            //高版本的权限检查
+        //            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        //                return null;
+        //            }
+        //            if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {//是否支持GPS定位
+        //                //获取最后的GPS定位信息，如果是第一次打开，一般会拿不到定位信息，一般可以请求监听，在有效的时间范围可以获取定位信息
+        //                location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        //            }
+        //            return location;
+        //        }
+        //
+        //        /**
+        //         * network获取定位方式
+        //         */
+        //        public static Location getNetWorkLocation(Context context) {
+        //            Location location = null;
+        //            LocationManager manager = getLocationManager(context);
+        //            //高版本的权限检查
+        //            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        //                return null;
+        //            }
+        //            if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {//是否支持Network定位
+        //                //获取最后的network定位信息
+        //                location = manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        //            }
+        //            return location;
+        //        }
+        //
+        //        /**
+        //         * 获取最好的定位方式
+        //         */
+        //        public static Location getBestLocation(Context context, Criteria criteria) {
+        //            Location location;
+        //            LocationManager manager = getLocationManager(context);
+        //            if (criteria == null) {
+        //                criteria = new Criteria();
+        //            }
+        //            String provider = manager.getBestProvider(criteria, true);
+        //            if (TextUtils.isEmpty(provider)) {
+        //                //如果找不到最适合的定位，使用network定位
+        //                location = getNetWorkLocation(context);
+        //            } else {
+        //                //高版本的权限检查
+        //                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        //                        && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        //                    return null;
+        //                }
+        //                //获取最适合的定位方式的最后的定位权限
+        //                location = manager.getLastKnownLocation(provider);
+        //            }
+        //            return location;
+        //        }
+        //
+        //        /**
+        //         * 定位监听
+        //         */
+        //        public static void addLocationListener(Context context, String provider, ILocationListener locationListener) {
+        //
+        //            addLocationListener(context, provider, REFRESH_TIME, METER_POSITION, locationListener);
+        //        }
+        //
+        //        /**
+        //         * 定位监听
+        //         */
+        //        public static void addLocationListener(Context context, String provider, long time, float meter, ILocationListener locationListener) {
+        //            if (locationListener != null) {
+        //                mLocationListener = locationListener;
+        //            }
+        //            if (listener == null) {
+        //                listener = new MyLocationListener();
+        //            }
+        //            LocationManager manager = getLocationManager(context);
+        //            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        //                    && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        //                return;
+        //            }
+        //            manager.requestLocationUpdates(provider, time, meter, listener);
+        //        }
+        //
+        //        /**
+        //         * 取消定位监听
+        //         */
+        //        public static void unRegisterListener(Context context) {
+        //            if (listener != null) {
+        //                LocationManager manager = getLocationManager(context);
+        //                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        //                        && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        //                    return;
+        //                }
+        //                //移除定位监听
+        //                manager.removeUpdates(listener);
+        //            }
+        //        }
+        //
+        //        private static LocationManager getLocationManager(@NonNull Context context) {
+        //            return (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        //        }
+        //
+        //        /**
+        //         * 自定义接口
+        //         */
+        //        public interface ILocationListener {
+        //            void onSuccessLocation(Location location);
+        //        }
+        //
+        //
+        //
+        //        //endregion
     }
 
 
-    public static class ImageLoadUtils
-    {
+    public static class PermissChecker {
+        /**
+         * true 代表没获取
+         *
+         * @time 2017/12/21 11:46
+         * @author
+         */
+        public static boolean checkPermissions(String... pers) {
+            for (String item : pers) {
+                //检查权限是否获取
+                if (checkOnePermission(item)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /**
+         * 检查单个权限是否获取
+         *
+         * @param per
+         * @return true代表没获取
+         */
+        private static boolean checkOnePermission(String per) {
+            return ContextCompat.checkSelfPermission(mContext, per) == PackageManager.PERMISSION_DENIED;
+        }
+    }
+
+    public static class ImageLoadUtils {
         @Safe
         public static void loadimg(ImageView iv, String url) {
-            if(null != url )
-            {
-                if(url.contains("file://") || url.contains("sdcard"))
-                {
-                    ImageFactory.getLoader().loadFile(iv,new File(url), IImageLoader.Options.defaultOptions());
-                }else
-                {
-                    ImageFactory.getLoader().loadFormNet(iv,url,IImageLoader.Options.defaultOptions());
+            if (null != url) {
+                if (url.contains("file://") || url.contains("sdcard")) {
+                    ImageFactory.getLoader().loadFile(iv, new File(url), IImageLoader.Options.defaultOptions());
+                } else {
+                    ImageFactory.getLoader().loadFormNet(iv, url, IImageLoader.Options.defaultOptions());
                 }
             }
         }
 
         @Safe
         public static void loadimg(ImageView iv, int resid) {
-            ImageFactory.getLoader().loadResource(iv,resid,IImageLoader.Options.defaultOptions());
+            ImageFactory.getLoader().loadResource(iv, resid, IImageLoader.Options.defaultOptions());
         }
 
         @Safe
-        public static void loadimg(ImageView iv, String url,int errorResId) {
-            ImageFactory.getLoader().loadFormNet(iv,url,new IImageLoader.Options(errorResId));
+        public static void loadimg(ImageView iv, String url, int errorResId) {
+            ImageFactory.getLoader().loadFormNet(iv, url, new IImageLoader.Options(errorResId));
         }
 
     }
 
 
-
-
-    public static class FileCache
-    {
+    public static class FileCache {
         /**
          * Created by Tony Shen on 16/2/4.
          */
@@ -3918,20 +3943,20 @@ public class Utils {
 
         /**
          * 默认的缓存名称为Cache
+         *
          * @param context
          * @return
          */
         public static FileCache get() {
-            return get( "Cache");
+            return get("Cache");
         }
 
         /**
-         *
          * @param context
          * @param cacheName 缓存的名称
          * @return
          */
-        public static FileCache get( String cacheName) {
+        public static FileCache get(String cacheName) {
             File f = new File(mContext.getCacheDir(), cacheName);
             return get(f, MAX_SIZE, MAX_COUNT);
         }
@@ -4324,15 +4349,16 @@ public class Utils {
         /**
          * 获取可序列化的数据
          * MyClass myclass = cache.getObject(key, MyClass.CREATOR);
+         *
          * @param key
          * @param creator
          * @param <T>
          * @return
          */
-        public <T> T getObject(String key,Parcelable.Creator<T> creator) {
+        public <T> T getObject(String key, Parcelable.Creator<T> creator) {
             byte[] data = getBytes(key);
             if (data != null) {
-                return AspjUtils.ParcelableUtils.unmarshall(data,creator);
+                return AspjUtils.ParcelableUtils.unmarshall(data, creator);
             }
             return null;
         }
@@ -4562,7 +4588,7 @@ public class Utils {
                     String saveDate = new String(copyOfRange(data, 0, 13));
                     String deleteAfter = new String(copyOfRange(data, 14,
                             indexOf(data, mSeparator)));
-                    return new String[] { saveDate, deleteAfter };
+                    return new String[]{saveDate, deleteAfter};
                 }
                 return null;
             }

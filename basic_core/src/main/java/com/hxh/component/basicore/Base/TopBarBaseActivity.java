@@ -9,27 +9,37 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hxh.component.basicore.Base.delegate.ToolBarDelegate;
+import com.hxh.component.basicore.Base.delegate.ToolBarDelegate_FullScreenMode;
 import com.hxh.component.basicore.Base.delegate.interfaces.IToolBarRelated;
 import com.hxh.component.basicore.Base.topbar.ActionBarConfig;
 import com.hxh.component.basicore.Base.view.EmptyActivity;
+import com.hxh.component.basicore.CoreLib;
 import com.hxh.component.basicore.mvp.persenter.IPresenter;
-import com.hxh.component.basicore.mvp.view.IView;
 
 public abstract class TopBarBaseActivity<P extends IPresenter>
         extends EmptyActivity<P>
         implements IToolBarRelated {
 
 
-    private ToolBarDelegate mToolBarDelegate;
+    private IToolBarRelated mToolBarDelegate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        if (CoreLib.getInstance().getAppComponent().globalActionBarProvider().isEnableImmeriveMode()) {
+            this.mToolBarDelegate = new ToolBarDelegate_FullScreenMode(setActionBarConfig());
+            ((ToolBarDelegate_FullScreenMode) this.mToolBarDelegate).init();
+            ((ToolBarDelegate_FullScreenMode) this.mToolBarDelegate).fetchToView(getView(),this);
+        }else
+        {
+            this.mToolBarDelegate = new ToolBarDelegate(setActionBarConfig());
+            ((ToolBarDelegate) this.mToolBarDelegate).init();
+            ((ToolBarDelegate) this.mToolBarDelegate).fetchToView(getView(),this);
+        }
 
-        this.mToolBarDelegate = new ToolBarDelegate(setActionBarConfig());
-        this.mToolBarDelegate.init();
-        this.mToolBarDelegate.fetchToView(getView(),this);
+
+
     }
 
 
@@ -39,19 +49,20 @@ public abstract class TopBarBaseActivity<P extends IPresenter>
     //region ToolBar相关
 
 
+
     @Override
     public void setActionBarConfig(ActionBarConfig config) {
         mToolBarDelegate.setActionBarConfig(config);
     }
 
     @Override
-    public void setActionBar_title(TextView tv_title) {
-        mToolBarDelegate.setActionbar_title(tv_title);
+    public void setActionBar_Title(TextView tv_title) {
+        mToolBarDelegate.setActionBar_Title(tv_title);
     }
 
     @Override
     public ActionBarConfig getActionBarConfig() {
-        return mToolBarDelegate.getmActionbarconfig();
+        return mToolBarDelegate.getActionBarConfig();
     }
 
     @Override
@@ -66,7 +77,7 @@ public abstract class TopBarBaseActivity<P extends IPresenter>
     }
 
     @Override
-    public ImageView getActionbar_rightview_img() {
+    public ImageView getActionbar_rightImageView() {
         return mToolBarDelegate.getActionbar_rightImageView();
     }
 
@@ -77,7 +88,7 @@ public abstract class TopBarBaseActivity<P extends IPresenter>
 
 
     @Override
-    public View getActionbar_rightview() {
+    public View getActionbar_rightView() {
         return mToolBarDelegate.getActionbar_rightView();
     }
     @Override
@@ -103,10 +114,6 @@ public abstract class TopBarBaseActivity<P extends IPresenter>
     @Override
     public void setActionbar_rightImg(Drawable drawable) {
         mToolBarDelegate.setActionbar_rightImg(drawable);
-    }
-    @Override
-    public void setBackViewConfig_title(String title) {
-        mToolBarDelegate.setBackViewTitle(title);
     }
 
     //endregion

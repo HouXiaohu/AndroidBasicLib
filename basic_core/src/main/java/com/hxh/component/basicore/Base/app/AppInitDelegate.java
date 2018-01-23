@@ -50,7 +50,7 @@ public abstract class AppInitDelegate {
         return mBugManager;
     }
 
-    //region -----------------------你必须要实现的方法-----------------------
+    //region -----------------------你必须要实现的a方法-----------------------
 
 
     /**
@@ -193,9 +193,9 @@ public abstract class AppInitDelegate {
         mSaveData.put(key, value);
     }
 
-    public void save()
+    public void removeData(String key)
     {
-
+        if (mSaveData.containsKey(key)) mSaveData.remove(key);
     }
 
     public String getData(String key) {

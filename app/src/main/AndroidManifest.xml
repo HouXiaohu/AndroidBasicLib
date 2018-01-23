@@ -33,8 +33,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-
-        android:name="com.hxh.component.business.app.App"
+        android:name=".App"
         android:theme="@style/AppTheme">
         <meta-data android:name="design_width" android:value="768">
         </meta-data>

@@ -7,9 +7,10 @@
     android:layout_height="match_parent"
     tools:context="daily_wagepro.xiaoai.com.daily_wagepro.MainActivity">
 
-    <com.hxh.component.basicore.ui.mrecycleview.MRecycleView
-        android:layout_width="match_parent"
-        android:id="@+id/recycleview"
-        android:layout_height="match_parent"></com.hxh.component.basicore.ui.mrecycleview.MRecycleView>
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:id="@+id/frame_main"
+      ></FrameLayout>
 
 </RelativeLayout>
