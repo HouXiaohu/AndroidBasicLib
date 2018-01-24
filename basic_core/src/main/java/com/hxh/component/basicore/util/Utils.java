@@ -502,6 +502,25 @@ public class Utils {
         }
 
         /**
+         * 保存bitmap到应用内的cache文件夹下,并且输出一个File
+         *
+         * @param context context
+         * @param bitmap  bitmap
+         * @return File path
+         * @throws IOException
+         */
+        public static File saveBitmap(Context context, Bitmap bitmap,String path) throws IOException {
+            String destinationDirectoryPath = generatePictureName() + ".jpeg";
+            File file = new File(path+File.separator+destinationDirectoryPath);
+
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            fileOutputStream.close();
+            return file;
+        }
+
+
+        /**
          * 生成图片名,不带扩展名
          *
          * @return 图片名
@@ -3034,178 +3053,6 @@ public class Utils {
     }
 
 
-    public static class MyBankUtils {
-
-        //传入卡号 得到银行名称
-        public static String getNameOfBank(String idCard) {
-            int index = -1;
-
-            if (idCard == null || idCard.length() < 16 || idCard.length() > 19) {
-                return "";
-            }
-
-            //6位Bin号
-            String cardbin_6 = idCard.substring(0, 6);
-            for (int i = 0; i < MyBankConstan.bankBin.length; i++) {
-                if (cardbin_6.equals(MyBankConstan.bankBin[i])) {
-                    index = i;
-                }
-            }
-            if (index != -1) {
-                return MyBankConstan.bankName[index];
-            }
-
-            //8位Bin号
-            String cardbin_8 = idCard.substring(0, 8);
-            for (int i = 0; i < MyBankConstan.bankBin.length; i++) {
-                if (cardbin_8.equals(MyBankConstan.bankBin[i])) {
-                    index = i;
-                }
-            }
-            if (index != -1) {
-                return MyBankConstan.bankName[index];
-            }
-
-            return "";
-        }
-
-        /**
-         * 得到银行卡后四位
-         *
-         * @param cardNO
-         * @return
-         */
-        public static String getCardNoFourNum(String cardNO) {
-
-            cardNO = cardNO.trim().replace(" ", "");
-            cardNO = cardNO.substring(cardNO.length() - 4, cardNO.length());
-            return cardNO;
-        }
-
-        /**
-         * 以*代替银行卡前12位
-         *
-         * @param cardNO
-         * @return
-         */
-        public static String getCardNoOnlyShowFourNum(String cardNO) {
-            cardNO = cardNO.trim().replace(" ", "");
-            String founum = "";
-            for (int i = 0; i < cardNO.length() - 4; i++) {
-                founum += "*";
-            }
-
-            founum += cardNO.substring(cardNO.length() - 4, cardNO.length());
-            return founum;
-        }
-
-        public static String bankinfo_logo_json = "{\"上海农村商业银行\":\"bank_shrcb\",\n" +
-                "\"上海浦东发展银行\":\"bank_spdb\",\n" +
-                "\"上海银行\":\"bank_shbank\",\n" +
-                "\"上饶银行\":\"bank_srbank\",\n" +
-                "\"东莞银行\":\"bank_bod\",\n" +
-                "\"中信银行\":\"bank_citic\",\n" +
-                "\"中国光大银行\":\"bank_ceb\",\n" +
-                "\"中国农业银行\":\"bank_abc\",\n" +
-                "\"中国工商银行\":\"bank_icbc\",\n" +
-                "\"中国建设银行\":\"bank_ccb\",\n" +
-                "\"中国民生银行\":\"bank_cmbc\",\n" +
-                "\"中国邮政储蓄银行\":\"bank_psbc\",\n" +
-                "\"中国银行\":\"bank_boc\",\n" +
-                "\"乌鲁木齐市商业银行\":\"bank_urmqccb\",\n" +
-                "\"九江银行\":\"bank_jjbank\",\n" +
-                "\"交通银行\":\"bank_comm\",\n" +
-                "\"兴业银行\":\"bank_cib\",\n" +
-                "\"内蒙古银行\":\"bank_h3cb\",\n" +
-                "\"包商银行\":\"bank_bsb\",\n" +
-                "\"北京农村商业银行\":\"bank_bjrcb\",\n" +
-                "\"北京银行\":\"bank_bjbank\",\n" +
-                "\"华夏银行\":\"bank_hxbank\",\n" +
-                "\"南京银行\":\"bank_njcb\",\n" +
-                "\"南昌银行\":\"bank_ncb\",\n" +
-                "\"台州银行\":\"bank_tzcb\",\n" +
-                "\"哈尔滨银行\":\"bank_hrbank\",\n" +
-                "\"嘉兴银行\":\"bank_jxbank\",\n" +
-                "\"大连银行\":\"bank_dlb\",\n" +
-                "\"天津银行\":\"bank_tccb\",\n" +
-                "\"威海市商业银行\":\"bank_whccb\",\n" +
-                "\"宁夏银行\":\"bank_nxbank\",\n" +
-                "\"宁波银行\":\"bank_nbbank\",\n" +
-                "\"尧都农商行\":\"bank_ydrcb\",\n" +
-                "\"平安银行\":\"bank_spabank\",\n" +
-                "\"广东南粤银行\":\"bank_nybank\",\n" +
-                "\"广东发展银行\":\"bank_gdb\",\n" +
-                "\"广州银行\":\"bank_gcb\",\n" +
-                "\"徽商银行\":\"bank_hsbank\",\n" +
-                "\"恒丰银行\":\"bank_egbank\",\n" +
-                "\"成都农商银行\":\"bank_cdrcb\",\n" +
-                "\"成都银行\":\"bank_cdcb\",\n" +
-                "\"招商银行\":\"bank_cmb\",\n" +
-                "\"晋商银行\":\"bank_jsb\",\n" +
-                "\"杭州银行\":\"bank_hzcb\",\n" +
-                "\"汉口银行\":\"bank_hkb\",\n" +
-                "\"江苏江阴农村商业银行\":\"bank_jrcb\",\n" +
-                "\"江苏省农村信用联合社\":\"bank_jsrcu\",\n" +
-                "\"江苏银行\":\"bank_jsbank\",\n" +
-                "\"江西银行\":\"bank_nccb\",\n" +
-                "\"河北银行\":\"bank_bhb\",\n" +
-                "\"浙商银行\":\"bank_czbank\",\n" +
-                "\"渣打银行\":\"bank_scb\",\n" +
-                "\"渤海银行\":\"bank_bohaib\",\n" +
-                "\"温州银行\":\"bank_wzcb\",\n" +
-                "\"盛京银行\":\"bank_sjbank\",\n" +
-                "\"绍兴银行\":\"bank_sxcb\",\n" +
-                "\"网商银行\":\"bank_antbank\",\n" +
-                "\"苏州银行\":\"bank_bosz\",\n" +
-                "\"营口银行\":\"bank_boyk\",\n" +
-                "\"赣州银行\":\"bank_gzb\",\n" +
-                "\"邢台银行\":\"bank_xtb\",\n" +
-                "\"重庆农村商业银行\":\"bank_cqrc\",\n" +
-                "\"重庆银行\":\"bank_cqbank\",\n" +
-                "\"青海银行\":\"bank_boqh\",\n" +
-                "\"齐鲁银行\":\"bank_qlbank\"}";
-        public static String bankinfo_color_json = "{\"南京银行\":[\"#e75b65\",\"#e95882\"],\"华夏银行\":[\"#e75b65\",\"#e95882\"],\"交通银行\":[\"#4e81bd\",\"#3d5faa\"],\"杭州银行\":[\"#65b1f1\",\"#2b7dc9\"],\"重庆银行\":[\"#37c39c\",\"#37bdc0\"],\"中国银行\":[\"#e75b65\",\"#e95882\"],\"浦发银行\":[\"#4e81bd\",\"#3d5faa\"],\"上海银行\":[\"#4e81bd\",\"#3d5faa\"],\"邮政银行\":[\"#279759\",\"#258829\"],\"邮储银行\":[\"#279759\",\"#258829\"],\"工商银行\":[\"#e75b65\",\"#e95882\"],\"平安银行\":[\"#f68c2d\",\"#f5833e\"],\"兴业银行\":[\"#4e81bd\",\"#3d5faa\"],\"招商银行\":[\"#e75b65\",\"#e95882\"],\"中信银行\":[\"#4e81bd\",\"#3d5faa\"],\"江苏银行\":[\"#4e81bd\",\"#3d5faa\"],\"农业银行\":[\"#37c39c\",\"#37bdc0\"],\"广发银行\":[\"#e75b65\",\"#e95882\"],\"建设银行\":[\"#4e81bd\",\"#3d5faa\"],\"宁波银行\":[\"#f68c2d\",\"#f5833e\"],\"包商银行\":[\"#f68c2d\",\"#f5833e\"],\"光大银行\":[\"#7d4ab7\",\"#6343bf\"],\"北京银行\":[\"#e75b65\",\"#e95882\"],\"渤海银行\":[\"#4e81bd\",\"#3d5faa\"],\"恒生银行\":[\"#e75b65\",\"#e95882\"],\"华润银行\":[\"#e75b65\",\"#e95882\"],\"民生银行\":[\"#37c39c\",\"#37bdc0\"]}";
-        public static JSONObject bankinfo_color_jsonObj;
-        public static JSONObject bankinfo_info_jsonObj;
-        private static GradientDrawable drawable_color;
-
-        public static Drawable getBankColor(String cardName) {
-            int[] color;
-            try {
-                if (null == bankinfo_color_jsonObj) {
-                    bankinfo_color_jsonObj = new JSONObject(bankinfo_color_json);
-                }
-                JSONArray array = bankinfo_color_jsonObj.getJSONArray(cardName);
-                if (array == null || array.length() != 2) {
-                    color = new int[]{Color.parseColor("#3796e6"), Color.parseColor("3c75d4")};
-                } else {
-                    color = new int[]{Color.parseColor((String) array.get(0)), Color.parseColor((String) array.get(1))};
-                }
-            } catch (Exception e) {
-                color = new int[]{Color.parseColor("#6699FF"), Color.parseColor("#3366CC")};
-            }
-            drawable_color = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, color);
-            drawable_color.setStroke(1, Color.parseColor("#000000"));
-            drawable_color.setCornerRadius(5);
-            return drawable_color;
-        }
-
-        public static Drawable getBankLogo(String cardName) {
-            try {
-                if (null == bankinfo_info_jsonObj) {
-                    bankinfo_info_jsonObj = new JSONObject(bankinfo_logo_json);
-                }
-                String resname = bankinfo_info_jsonObj.getString(cardName);
-                int picid = mContext.getResources().getIdentifier(resname, "mipmap", mContext.getPackageName());
-                return mContext.getResources().getDrawable(picid);
-            } catch (Exception e) {
-                String resname = "bank_default";
-                int picid = mContext.getResources().getIdentifier(resname, "mipmap", mContext.getPackageName());
-                return mContext.getResources().getDrawable(picid);
-            }
-        }
-
-    }
 
     /**
      * 软键盘
@@ -3351,19 +3198,6 @@ public class Utils {
 
     public static class DialogUtils {
 
-
-        public static AlertView showDeleteDialog(String msg, OnItemClickListener lis) {
-
-            return showDefaulStyleDialog(null, Text.isEmpty(msg) ? "确认删除吗？" : msg, "取消", "确认", null, AlertView.Style.Alert, lis, true);
-        }
-
-        public static AlertDialog showDeleteDialog(View view) {
-
-            return new AlertDialog.Builder(mContext, R.style.default_dialog_theme)
-                    .setView(view)
-                    .create();
-        }
-
         public static AlertView showDefaulStyleDialog(View view, boolean isCanceble) {
             AlertView al = new AlertView(view);
             al.setCancelable(isCanceble);
@@ -3483,6 +3317,11 @@ public class Utils {
             return picker;
         }
 
+        public static AlertView showCustomStyleDialog(AlertView.Builder builder)
+        {
+            return new AlertView(builder);
+        }
+
         private static <T extends WheelPicker> T setDefaultStyle(T picker) {
             picker.setTextSize(22);
             picker.setTopLineColor(Utils.Resource.getColor(R.color.black));
@@ -3493,37 +3332,16 @@ public class Utils {
             picker.setPressedTextColor(Utils.Resource.getColor(R.color.black));
             return picker;
         }
+
+
+        public static AlertView showDefaulStyleSelectPhotoMode( OnItemClickListener lis) {
+
+            return showDefaulStyleDialog(new String[]{"拍摄", "从手机相册选择"},lis);
+        }
+
     }
 
 
-    public static class CameraUtils {
-        private static AlertView mAlertViewSelectPhoto;
-
-        public static AlertView showSelectPhotoModeAlert(OnItemClickListener lis) {
-
-            return showSelectPhotoModeAlert(AppManager.getCurrentActivity(), lis);
-
-        }
-
-        public static AlertView showSelectPhotoModeAlert(Context context, OnItemClickListener lis) {
-            return new AlertView.Builder(AppManager.getCurrentActivity())
-                    .setCancelText("取消")
-                    .setOthers(new String[]{"拍摄", "从手机相册选择"})
-                    .setStyle(AlertView.Style.ActionSheet)
-                    .setOnItemClickListenerTest(lis)
-                    .build();
-            // return new AlertView(null, null, "取消", null, new String[]{"拍摄", "从手机相册选择"}, context, AlertView.Style.ActionSheet, lis);
-        }
-
-
-        public static String getCameraPhotoSavePath(String basePath) {
-            if (!Text.isEmpty(basePath)) {
-                basePath = basePath + File.separator + Utils.FileUtil.generateJpgPictureName();
-                Utils.FileUtil.createOrExistsFile(basePath);
-            }
-            return basePath;
-        }
-    }
 
 
     public static class LocationUtil {
@@ -3615,10 +3433,6 @@ public class Utils {
         }
 
 
-        private static void setLocation(Double[] pro, Location locatio) {
-            pro[0] = locatio.getLongitude();
-            pro[1] = locatio.getLatitude();
-        }
 
         /**
          * 强制帮用户打开GPS
@@ -3732,150 +3546,6 @@ public class Utils {
         }
 
 
-        //        //region 别人的代码
-        //        private static final long REFRESH_TIME = 5000L;
-        //        private static final float METER_POSITION = 0.0f;
-        //        private static ILocationListener mLocationListener;
-        //        private static LocationListener listener = new MyLocationListener();
-        //
-        //         static class MyLocationListener implements LocationListener {
-        //            @Override
-        //            public void onLocationChanged(Location location) {//定位改变监听
-        //                if (mLocationListener != null) {
-        //                    mLocationListener.onSuccessLocation(location);
-        //                }
-        //            }
-        //
-        //            @Override
-        //            public void onStatusChanged(String provider, int status, Bundle extras) {//定位状态监听
-        //
-        //            }
-        //
-        //            @Override
-        //            public void onProviderEnabled(String provider) {//定位状态可用监听
-        //
-        //            }
-        //
-        //            @Override
-        //            public void onProviderDisabled(String provider) {//定位状态不可用监听
-        //
-        //            }
-        //        }
-        //
-        //        /**
-        //         * GPS获取定位方式
-        //         */
-        //        public static Location getGPSLocation(@NonNull Context context) {
-        //            Location location = null;
-        //            LocationManager manager = getLocationManager(context);
-        //            //高版本的权限检查
-        //            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-        //                return null;
-        //            }
-        //            if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {//是否支持GPS定位
-        //                //获取最后的GPS定位信息，如果是第一次打开，一般会拿不到定位信息，一般可以请求监听，在有效的时间范围可以获取定位信息
-        //                location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        //            }
-        //            return location;
-        //        }
-        //
-        //        /**
-        //         * network获取定位方式
-        //         */
-        //        public static Location getNetWorkLocation(Context context) {
-        //            Location location = null;
-        //            LocationManager manager = getLocationManager(context);
-        //            //高版本的权限检查
-        //            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-        //                return null;
-        //            }
-        //            if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {//是否支持Network定位
-        //                //获取最后的network定位信息
-        //                location = manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        //            }
-        //            return location;
-        //        }
-        //
-        //        /**
-        //         * 获取最好的定位方式
-        //         */
-        //        public static Location getBestLocation(Context context, Criteria criteria) {
-        //            Location location;
-        //            LocationManager manager = getLocationManager(context);
-        //            if (criteria == null) {
-        //                criteria = new Criteria();
-        //            }
-        //            String provider = manager.getBestProvider(criteria, true);
-        //            if (TextUtils.isEmpty(provider)) {
-        //                //如果找不到最适合的定位，使用network定位
-        //                location = getNetWorkLocation(context);
-        //            } else {
-        //                //高版本的权限检查
-        //                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        //                        && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-        //                    return null;
-        //                }
-        //                //获取最适合的定位方式的最后的定位权限
-        //                location = manager.getLastKnownLocation(provider);
-        //            }
-        //            return location;
-        //        }
-        //
-        //        /**
-        //         * 定位监听
-        //         */
-        //        public static void addLocationListener(Context context, String provider, ILocationListener locationListener) {
-        //
-        //            addLocationListener(context, provider, REFRESH_TIME, METER_POSITION, locationListener);
-        //        }
-        //
-        //        /**
-        //         * 定位监听
-        //         */
-        //        public static void addLocationListener(Context context, String provider, long time, float meter, ILocationListener locationListener) {
-        //            if (locationListener != null) {
-        //                mLocationListener = locationListener;
-        //            }
-        //            if (listener == null) {
-        //                listener = new MyLocationListener();
-        //            }
-        //            LocationManager manager = getLocationManager(context);
-        //            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        //                    && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-        //                return;
-        //            }
-        //            manager.requestLocationUpdates(provider, time, meter, listener);
-        //        }
-        //
-        //        /**
-        //         * 取消定位监听
-        //         */
-        //        public static void unRegisterListener(Context context) {
-        //            if (listener != null) {
-        //                LocationManager manager = getLocationManager(context);
-        //                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        //                        && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-        //                    return;
-        //                }
-        //                //移除定位监听
-        //                manager.removeUpdates(listener);
-        //            }
-        //        }
-        //
-        //        private static LocationManager getLocationManager(@NonNull Context context) {
-        //            return (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        //        }
-        //
-        //        /**
-        //         * 自定义接口
-        //         */
-        //        public interface ILocationListener {
-        //            void onSuccessLocation(Location location);
-        //        }
-        //
-        //
-        //
-        //        //endregion
     }
 
 
@@ -3929,6 +3599,8 @@ public class Utils {
             ImageFactory.getLoader().loadFormNet(iv, url, new IImageLoader.Options(errorResId));
         }
 
+
+
     }
 
 
@@ -3944,7 +3616,7 @@ public class Utils {
         /**
          * 默认的缓存名称为Cache
          *
-         * @param context
+         * @param
          * @return
          */
         public static FileCache get() {
@@ -3952,7 +3624,7 @@ public class Utils {
         }
 
         /**
-         * @param context
+         * @param
          * @param cacheName 缓存的名称
          * @return
          */

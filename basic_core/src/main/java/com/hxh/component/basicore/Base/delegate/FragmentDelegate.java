@@ -10,13 +10,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.hxh.component.basicore.R;
-import com.hxh.component.basicore.mvp.view.IView;
 import com.hxh.component.basicore.mvp.persenter.BasePresenter;
 import com.hxh.component.basicore.mvp.persenter.IPresenter;
+import com.hxh.component.basicore.mvp.view.IView;
 import com.hxh.component.basicore.util.AutoUtils;
-import com.hxh.component.basicore.util.ButterKnifeUtil;
-
-import butterknife.Unbinder;
 
 /**
  * 应该只专注于Fragment，如ToolBar应该交由ToolBarDelegate去做
@@ -34,7 +31,7 @@ public class FragmentDelegate<P extends IPresenter>
     private SparseArray<View> mViews; //View的缓存类
     private Context context;
     protected View rootView;//代表当前VIew
-    private Unbinder unbinder;//BUtterKnife 的解绑对象
+
 
     private boolean isLazyLoad;
     private Bundle savedInstanceState;
@@ -57,7 +54,7 @@ public class FragmentDelegate<P extends IPresenter>
                 frame_main = findViewBy(R.id.frame_main);
                 inflater.inflate(layoutid, frame_main);//将子布局加载到主布局中
                 //绑定UI
-                (fragment).bindUI(rootView);
+
                 AutoUtils.auto(rootView);
             } else {
                 //当重复加载时候，就从跟布局中删除这个布局
@@ -103,10 +100,7 @@ public class FragmentDelegate<P extends IPresenter>
     {
 
         rootView = null;
-        if(null != unbinder)
-        {
-            unbinder.unbind();
-        }
+
 
         if(null !=  getP())getP().DetachView();
         p = null;
@@ -160,15 +154,6 @@ public class FragmentDelegate<P extends IPresenter>
             mViews.put(resId,view);
         }
         return (V) view;
-    }
-
-    /**
-     * 这里使用Butterknife 进行View注入
-     * @param rootview
-     */
-
-    public void bindUI(View rootview) {
-        unbinder = ButterKnifeUtil.bind(this,rootview);
     }
 
 

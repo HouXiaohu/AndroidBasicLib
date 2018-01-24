@@ -7,16 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.hxh.component.basicore.CoreLib;
 import com.hxh.component.basicore.R;
-import com.hxh.component.basicore.mvp.view.IView;
 import com.hxh.component.basicore.mvp.persenter.BasePresenter;
 import com.hxh.component.basicore.mvp.persenter.IPresenter;
+import com.hxh.component.basicore.mvp.view.IView;
 import com.hxh.component.basicore.util.AutoUtils;
-import com.hxh.component.basicore.util.ButterKnifeUtil;
-import com.hxh.component.basicore.util.Utils;
-
-import butterknife.Unbinder;
 
 /**
  * Created by hxh on 2017/7/31.
@@ -34,7 +29,7 @@ public class ActivityDelegate<P extends IPresenter> {
     //存储当前的View
     private SparseArray<View> mViews;
     private P p;
-    private Unbinder unBinder;
+
 
 
 
@@ -48,7 +43,8 @@ public class ActivityDelegate<P extends IPresenter> {
             //如果开启toolbar
             LayoutInflater.from(((AppCompatActivity) mActivity)).inflate(mActivity.getLayoutId(), frame_main);
             ((AppCompatActivity) mActivity).setContentView(rootView);
-            bindUI(rootView);
+
+
             //AppManager.addActivity(this);
             AutoUtils.auto(((AppCompatActivity) mActivity));
             //设置不显示自带的title
@@ -61,11 +57,6 @@ public class ActivityDelegate<P extends IPresenter> {
 
 
 
-
-
-    public void bindUI(View rootview) {
-        unBinder = ButterKnifeUtil.bind(((AppCompatActivity) mActivity));
-    }
 
     public P getP()
     {
@@ -92,11 +83,7 @@ public class ActivityDelegate<P extends IPresenter> {
 
 
     public void onDestroy() {
-        if (null != unBinder)
-        {
-            unBinder.unbind();
-            unBinder = null;
-        }
+
         if(null !=p)  {
             p.DetachView();
             p = null;

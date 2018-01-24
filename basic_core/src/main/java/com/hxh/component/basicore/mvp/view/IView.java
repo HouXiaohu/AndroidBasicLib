@@ -10,11 +10,7 @@ import com.hxh.component.basicore.mvp.persenter.IPresenter;
  */
 public interface IView<P extends IPresenter> {
 
-    /**
-     * VIew初始化（你可以findVIewById，或者使用第三方注解框架：butterknife,xutils...）
-     * @param rootview
-     */
-    void bindUI(View rootview); //绑定UI
+
 
     int getLayoutId();
 

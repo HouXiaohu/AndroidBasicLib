@@ -1,5 +1,7 @@
 package com.hxh.component.basicore.util.convert;
 
+import java.util.List;
+
 /**
  * Created by hxh on 2017/12/21.
  */
@@ -26,6 +28,14 @@ public class JsonFactory implements IJson {
         checkisNUll();
 
         return iJson.toObj(json,classzz);
+    }
+
+    @Override
+    public <T> List<T> toArray(String json, Class<T> classzz)
+    {
+        checkisNUll();
+
+        return iJson.toArray(json,classzz);
     }
 
 

@@ -31,6 +31,8 @@ import com.hxh.component.basicore.R;
 import com.hxh.component.basicore.util.AppManager;
 import com.hxh.component.basicore.util.Utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -219,8 +221,12 @@ public class ImagePagerActivity extends Activity {
                             public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
                                 //得到bitmap
                                 tv_save_img.setVisibility(View.GONE);
-                                String paths = BitmapView.saveBitmap(bitmap, System.currentTimeMillis() + "");
-                                Utils.Toast.toast("图片已保存至" + paths + "文件夹");
+                                try {
+                                    File file = Utils.FileUtil.saveBitmap(Utils.getApplicationContext(),bitmap);
+                                    Utils.Toast.toast("图片已保存至" + file.getPath() + "文件夹");
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         });
                     }

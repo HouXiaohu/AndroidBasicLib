@@ -127,10 +127,6 @@ public abstract class EmptyFragment<P extends IPresenter> extends AppCompartAuto
         return mFragmentDelegate.findViewBy(resId);
     }
 
-    @Override
-    public void bindUI(View rootview) {
-        mFragmentDelegate.bindUI(rootview);
-    }
 
     //region 日志
     @Override

@@ -9,7 +9,7 @@ import android.widget.ScrollView;
 /**
  * 创建者：hxh
  * 时间：  2017/9/19
- * 描述：
+ * 描述：可监听Scrollview滚动
  */
 public class ObservableScrollView extends ScrollView{
 

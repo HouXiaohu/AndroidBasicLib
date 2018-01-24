@@ -1,18 +1,13 @@
 package com.hxh.component.basicore.Base.app;
 
 import android.app.Application;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Environment;
 import android.util.ArrayMap;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.android.arouter.utils.TextUtils;
-import com.hxh.component.basicore.Base.topbar.ActionBarProvider;
 import com.hxh.component.basicore.Config;
-import com.hxh.component.basicore.R;
 import com.hxh.component.basicore.util.BugManager;
 import com.hxh.component.basicore.util.Utils;
 import com.hxh.component.basicore.util.aspj.util.AspjManager;
@@ -21,9 +16,6 @@ import com.umeng.analytics.MobclickAgent;
 import java.io.File;
 
 import me.yokeyword.fragmentation.Fragmentation;
-import rx.Observable;
-import rx.functions.Action1;
-import rx.functions.Func1;
 
 /**
  * 标题: 系统初始化类
@@ -38,15 +30,15 @@ public abstract class AppInitDelegate {
         init();
     }
 
-    private AppDelegate appDelegate;
-    private Application mApplication;
-    private String mDatasDir;
-    private String mImagesDir;
-    private BugManager mBugManager;
-    private ArrayMap<String, String> mSaveData; //SaveData可以看做一个小型数据存储库
+    protected AppDelegate appDelegate;
+    protected Application mApplication;
+    protected String mDatasDir;
+    protected String mImagesDir;
+    protected BugManager mBugManager;
+    protected ArrayMap<String, String> mSaveData; //SaveData可以看做一个小型数据存储库
 
 
-    public final BugManager getBugManager() {
+    protected final BugManager getBugManager() {
         return mBugManager;
     }
 
@@ -69,31 +61,6 @@ public abstract class AppInitDelegate {
 
 
     //region -----------------------可选配置方法-----------------------
-
-    /**
-     * 初始化ActionBarProvider
-     */
-    public void initActionBarProvider() {
-        Observable
-                .just(R.mipmap.icon_back_white)
-                .map(new Func1<Integer, Bitmap>() {
-                    @Override
-                    public Bitmap call(Integer resid) {
-                        return BitmapFactory.decodeResource(mApplication.getResources(), resid);
-                    }
-                })
-                .subscribe(new Action1<Bitmap>() {
-                    @Override
-                    public void call(Bitmap bitmap) {
-                        appDelegate.registerActionBarProvider(new ActionBarProvider.Builder()
-                                .backColor(Color.parseColor("#ffffff"))
-                                .backImg(bitmap)
-                                .enableImmeriveMode()
-                                .build());
-                    }
-                });
-
-    }
 
 
     public void initSharpe() {
@@ -141,8 +108,8 @@ public abstract class AppInitDelegate {
         initSharpe();
         initCheckLoginAspj();
         initFragmention();
-        initActionBarProvider();
         initUMeng();
+
     }
 
     private void initFragmention() {

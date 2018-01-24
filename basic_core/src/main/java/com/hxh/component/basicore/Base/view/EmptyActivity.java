@@ -78,10 +78,6 @@ public abstract class EmptyActivity<P extends IPresenter>
     }
     //endregion
 
-    @Override
-    public void bindUI(View rootview) {
-        mDelegate.bindUI(rootview);
-    }
 
     public P getP()
     {

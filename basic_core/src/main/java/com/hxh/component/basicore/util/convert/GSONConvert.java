@@ -1,6 +1,10 @@
 package com.hxh.component.basicore.util.convert;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * Created by hxh on 2017/12/21.
@@ -19,6 +23,13 @@ public class GSONConvert implements IJson{
     public <T> T toObj(String json, Class<T> classzz) {
         checkIsNull();
         return gson.fromJson(json,classzz);
+    }
+
+    @Override
+    public <T> List<T> toArray(String json, Class<T> classzz) {
+        checkIsNull();
+        Type type = new TypeToken<List<T>>(){}.getType();
+        return gson.fromJson(json,type);
     }
 
     private void checkIsNull()

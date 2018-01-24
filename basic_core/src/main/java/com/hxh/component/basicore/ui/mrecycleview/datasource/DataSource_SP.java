@@ -1,8 +1,6 @@
 package com.hxh.component.basicore.ui.mrecycleview.datasource;
 
 import com.alibaba.fastjson.JSON;
-import com.google.gson.reflect.TypeToken;
-import com.hxh.component.basicore.util.Singleton;
 import com.hxh.component.basicore.util.Utils;
 
 import java.util.ArrayList;
@@ -54,12 +52,12 @@ public class DataSource_SP<E> implements IDataSource {
         }
 
         String datastr = Utils.SP.getString(param.get("classname").toString());
-        return Utils.Text.isEmpty(datastr)
-                ?
-                new ArrayList<E>()
-                :
-                ((List<E>) Singleton.defaultGson().fromJson(datastr, new TypeToken<List<E>>() {
-                }.getType()));
+//        return Utils.Text.isEmpty(datastr)
+//                ?
+//                new ArrayList<E>()
+//                :
+//                ((List<E>) JsonFactory.getInstance().toArray(datastr, E));
+        return null;
     }
 
     public Observable<List<E>> asObservable()
