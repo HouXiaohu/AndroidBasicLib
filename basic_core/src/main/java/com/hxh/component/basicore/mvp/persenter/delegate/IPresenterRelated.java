@@ -55,7 +55,7 @@ public interface IPresenterRelated {
      * @param body
      * @return
      */
-    boolean checResponseBodyContainErrorBody(Response body);
+    boolean checkResponseBodyContainErrorBody(Response body);
     String checkResponseBodyContainErrorBodyReturnErrorMessage(Response body);
     IApiError checkResponseBodyContainErrorBodyReturnErrorBody(Response body);
 

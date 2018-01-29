@@ -126,7 +126,7 @@ public class BannerImg extends FrameLayout {
             ImageFactory.getLoader().loadFormNet(imageView,imageuris.get(i),new IImageLoader.Options(errorResId,errorResId));
 
             ImageView viewDot = new ImageView(getContext());
-            RelativeLayout.LayoutParams params =  new RelativeLayout.LayoutParams(20,20);
+            RelativeLayout.LayoutParams params =  new RelativeLayout.LayoutParams(30,30);
             params.leftMargin =6;
             viewDot.setLayoutParams(params);
             if (i == 0) {
@@ -179,7 +179,7 @@ public class BannerImg extends FrameLayout {
             ImageFactory.getLoader().loadResource(imageView,imageUris_int.get(i),mOptions);
 
             ImageView viewDot = new ImageView(getContext());
-            LinearLayout.LayoutParams params =  new LinearLayout.LayoutParams(20,20);
+            RelativeLayout.LayoutParams params =  new RelativeLayout.LayoutParams(30,30);
             params.leftMargin =6;
             viewDot.setLayoutParams(params);
             if (i == 0) {

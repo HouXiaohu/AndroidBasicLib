@@ -17,7 +17,11 @@ import retrofit2.Converter;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by hxh on 2017/5/7.
+ * 标题: NetProvider.java
+ * 作者: hxh
+ * 日期: 2018/1/26 15:15
+ * 描述:
+ *
  */
 public class NetProvider {
 
@@ -90,33 +94,63 @@ public class NetProvider {
         private Interceptor configLogTnterceptor;
         private IApiError mApiErrorClasszz;
         private Converter.Factory configConverterFactory = GsonConverterFactory.create();
+
         private String baseUrl="";
         private FixedMutilHttpBaseUrl mFixedMutilHttpCallBack;
         private ArrayMap<Object,String> mFixedBaseUrls;
 
         private boolean isDynamisHttpUrl;
-
+        /**
+         * 配置读取超时时间(毫秒)
+         *
+         * @time 2018/1/26 14:33
+         *
+         * @author
+         */
         public Builder configReadTimeOut(long configReadTimeOut) {
             this.configReadTimeOut = configReadTimeOut;
             return this;
         }
-
+        /**
+         * 配置连接超时时间(毫秒)
+         *
+         * @time 2018/1/26 14:34
+         *
+         * @author
+         */
         public Builder configConnectTimeOut(long configConnectTimeOut) {
             this.configConnectTimeOut = configConnectTimeOut;
             return this;
         }
 
+        /**
+         * 配置读取超时时间(毫秒)
+         *
+         * @time 2018/1/26 14:35
+         *
+         * @author
+         */
         public Builder configWriteTimeOut(long configWriteTimeOut) {
             this.configWriteTimeOut = configWriteTimeOut;
             return this;
         }
-
+        
+        
+        /**
+         * 配置是否在连接超时时候自动重试
+         * 
+         * @time 2018/1/26 14:35
+         * 
+         * @author 
+         */
         public Builder configEnableConnectTimeOutRetry(boolean isEnable) {
             this.isEnableErrorRetry = isEnable;
             return this;
         }
+
+
         /**
-         * 当遇到请求出错时候（不包括连接错误），重试次数
+         * 当遇到请求出错时候（不包括连接超时！！），重试次数
          *
          * @time 2018/1/19 15:41
          *
@@ -127,32 +161,78 @@ public class NetProvider {
             return this;
         }
 
+        /**
+         * 配置请求回调接口
+         *
+         * @time 2018/1/26 14:36
+         *
+         * @author
+         */
         public Builder configRequestCallBack(RequestCallBackHandler configRequestCallBack) {
             this.configRequestCallBack = configRequestCallBack;
             return this;
         }
 
+        /**
+         * 当接口返回401时候（用户认证失败），如果后台是REST风格的API，那么你可以使用此接口
+         *
+         * @time 2018/1/26 14:37
+         *
+         * @author
+         */
         public Builder configRESTFULTokenInterceptor(Authenticator configRESTFULTokenInterceptor) {
             this.configRESTFULTokenInterceptor = configRESTFULTokenInterceptor;
             return this;
         }
 
+
+        /**
+         *  配置token拦截器,你可以使用{@link HttpInterceptor} buildTokenInterceptor()
+         *
+         *
+         * @time 2018/1/26 15:13
+         *
+         * @author
+         */
         public Builder configTokenInterceptor(Interceptor configTokenInterceptor) {
             this.configTokenInterceptor = configTokenInterceptor;
-
             return this;
         }
 
+        /**
+         * 一般来说如果我们正常请求接口是不需要使用到cookie的
+         *
+         * @time 2018/1/26 15:40
+         *
+         * @author
+         */
+        @Deprecated
         public Builder isEnableCookie(boolean isEnableCookie) {
             this.isEnableCookie = isEnableCookie;
             return this;
         }
 
+        /**
+         * 设置使用什么类型的结果(json)转换器
+         * {@link ConverterFactory}
+         *
+         * @time 2018/1/26 15:40
+         *
+         * @author
+         */
         public Builder configConverterFactory(Converter.Factory configConverterFactory) {
             this.configConverterFactory = configConverterFactory;
             return this;
         }
-
+        
+        
+        /**
+         * 
+         * 
+         * @time 2018/1/26 16:18
+         * 
+         * @author 
+         */
         public Builder enableCache(String cachePath, long maxSize) {
             this.cachePath = cachePath;
             this.cacheSize = maxSize;
@@ -375,8 +455,14 @@ public class NetProvider {
 
     public String getBaseUrl()
     {
-        if (null != mBaseUrl && mBaseUrl.lastIndexOf("/") < 0) {
+        if (!Utils.Text.isEmpty(mBaseUrl) && mBaseUrl.lastIndexOf("/") < 0) {
             mBaseUrl += File.separator;
+        }else
+        {
+            mBaseUrl = Utils.Resource.getString("AUTH_ENDPOINT");
+            if (!Utils.Text.isEmpty(mBaseUrl) && mBaseUrl.lastIndexOf("/") < 0) {
+                mBaseUrl += File.separator;
+            }
         }
         return mBaseUrl;
     }
@@ -394,7 +480,6 @@ public class NetProvider {
         mDynamicMutilHttpBaseUrl.setHttpUrls(urls);
         mFixedBaseUrls = null;
     }
-
 
 
     public String getBaseUrl(String tagName) {

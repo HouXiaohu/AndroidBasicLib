@@ -1,46 +1,28 @@
 package com.hxh.component.basicore.util.convert;
 
-import java.util.List;
-
 /**
  * Created by hxh on 2017/12/21.
  */
 
-public class JsonFactory implements IJson {
-    private JsonFactory(){}
-    static JsonFactory factory;
-    public static JsonFactory getInstance()
+public class JsonFactory
+{
+    public static final String GSON = "gson";
+    public static final String FASTJSON = "json";
+
+    public static IJson getConvert(String type)
     {
-        if(null == factory)factory = new JsonFactory();
-        return factory;
-    }
+        switch (type)
+        {
+            case GSON:
+                return new GSONConvert();
 
-    IJson iJson;
+            case FASTJSON:
+                return new JSONConvert();
 
-    @Override
-    public String toJson(Object obj) {
-        checkisNUll();
-        return iJson.toJson(obj);
-    }
-
-    @Override
-    public <T> T toObj(String json, Class<T> classzz) {
-        checkisNUll();
-
-        return iJson.toObj(json,classzz);
-    }
-
-    @Override
-    public <T> List<T> toArray(String json, Class<T> classzz)
-    {
-        checkisNUll();
-
-        return iJson.toArray(json,classzz);
+        }
+        return new JSONConvert();
     }
 
 
-    private void checkisNUll()
-    {
-        if(null == iJson) iJson =new JSONConvert();
-    }
+
 }

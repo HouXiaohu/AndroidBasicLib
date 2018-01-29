@@ -17,7 +17,7 @@
 
         android:textColor="@color/black"
         android:visibility="gone"
-        android:textSize="34px"
+        android:textSize="18sp"
         />
 
     <!-- 默认的BackVIew -->
@@ -26,7 +26,7 @@
         android:layout_width="19dp"
         android:layout_height="19dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="20px"
+        android:layout_marginLeft="10dp"
         android:background="@color/transparent"
         android:clickable="true"
 
@@ -35,8 +35,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="10dp"
-        android:visibility="gone"
 
+        android:visibility="gone"
         />
 
     <TextView
@@ -45,21 +45,22 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
 
-        android:layout_marginTop="4px"
+
         android:layout_toRightOf="@id/leftview_ib_back"
         android:clickable="true"
         android:duplicateParentState="true"
         android:textColor="@color/grav_3"
-        android:textSize="29px"
+        android:textSize="14sp"
 
+        android:paddingRight="15dp"
 
-
+        android:visibility="gone"
         android:layout_marginLeft="5dp"
         android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"
 
 
-        android:visibility="gone"
+
         />
 
 
@@ -68,7 +69,7 @@
     <Button
         android:id="@+id/btn_rightview"
         android:layout_width="wrap_content"
-        android:layout_height="45px"
+        android:layout_height="20dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="10dp"
@@ -76,12 +77,12 @@
         android:background="@color/transparent"
         android:ellipsize="end"
         android:gravity="right|center"
-        android:minWidth="60px"
-        android:paddingRight="22px"
+        android:minWidth="60dp"
+        android:paddingRight="12dp"
         android:singleLine="true"
         android:visibility="gone"
         android:textColor="@color/black"
-        android:textSize="28px"
+        android:textSize="14sp"
         />
 
     <!-- 默认的图标 -->
@@ -106,8 +107,8 @@
 
     <ImageView
         android:id="@+id/rightview_iv_img"
-        android:layout_width="48px"
-        android:layout_height="48px"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="10dp"
@@ -115,10 +116,8 @@
         android:layout_marginTop="10px"
         android:adjustViewBounds="true"
         android:gravity="right"
-        android:maxHeight="48px"
-        android:maxWidth="48px"
 
-        android:visibility="gone"
+
         android:scaleType="centerInside"
 
         />

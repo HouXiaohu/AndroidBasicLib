@@ -143,7 +143,7 @@ public class BasePresenterRelated implements  IPresenterRelated{
     }
 
     @Override
-    public boolean checResponseBodyContainErrorBody(Response body) {
+    public boolean checkResponseBodyContainErrorBody(Response body) {
         return CoreLib.getInstance().getNetProvider().getApiErrorClasszz().checResponseBodyContainErrorBody(body);
     }
 

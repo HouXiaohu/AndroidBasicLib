@@ -539,10 +539,6 @@ public class ToolBarDelegate_FullScreenMode implements IToolBarRelated {
         int color = -1;
         try {
             color = ContextCompat.getColor(rootView.getContext(), resid);
-            if(-1 == color)
-            {
-               return  resid;
-            }
             return color;
         } catch (Exception e) {
             return resid;

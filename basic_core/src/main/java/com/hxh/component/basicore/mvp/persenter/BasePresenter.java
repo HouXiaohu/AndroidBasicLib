@@ -134,9 +134,11 @@ public abstract class BasePresenter<V extends IView> implements IPresenter<V>,IP
     }
 
     @Override
-    public boolean checResponseBodyContainErrorBody(Response body) {
-        return mDelegate.checResponseBodyContainErrorBody(body);
+    public boolean checkResponseBodyContainErrorBody(Response body) {
+        return mDelegate.checkResponseBodyContainErrorBody(body);
     }
+
+
 
     @Override
     public String checkResponseBodyContainErrorBodyReturnErrorMessage(Response body) {

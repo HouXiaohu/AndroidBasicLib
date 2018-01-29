@@ -3,7 +3,6 @@ package com.hxh.component.basicore.util;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.AlertDialog;
 import android.app.Application;
 import android.app.PendingIntent;
 import android.content.ContentUris;
@@ -27,7 +26,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -51,10 +49,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -65,7 +66,6 @@ import com.hxh.component.basicore.Config;
 import com.hxh.component.basicore.R;
 import com.hxh.component.basicore.imageLoader.IImageLoader;
 import com.hxh.component.basicore.imageLoader.ImageFactory;
-import com.hxh.component.basicore.permissions.PermissionsChecker;
 import com.hxh.component.basicore.util.aspj.annotation.Safe;
 import com.hxh.component.basicore.util.aspj.util.AspjUtils;
 import com.hxh.component.ui.alertview.AlertView;
@@ -104,6 +104,7 @@ import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -206,12 +207,16 @@ public class Utils {
          */
         public static void enableImmersiveMode(AppCompatActivity activity) {
             if (Build.VERSION.SDK_INT >= 21) {
-                View decorView = activity.getWindow().getDecorView();
-                int option = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-                decorView.setSystemUiVisibility(option);
-                activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+                Window window = activity.getWindow();
+                if(!isEMUI3_1())
+                {
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                }
+                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.setStatusBarColor(Color.TRANSPARENT);
+
             }
         }
 
@@ -223,15 +228,37 @@ public class Utils {
          */
         public static void enableImmersiveMode(Activity activity) {
             if (Build.VERSION.SDK_INT >= 21) {
-                View decorView = activity.getWindow().getDecorView();
-                int option = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-                decorView.setSystemUiVisibility(option);
-
-                activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+                Window window = activity.getWindow();
+                if(!isEMUI3_1())
+                {
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                }
+                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.setStatusBarColor(Color.TRANSPARENT);
             }
         }
+
+        public static boolean isEMUI3_1() {
+            if ("EmotionUI_3.1".equals(getEmuiVersion())) {
+                return true;
+            }
+            return false;
+        }
+
+        private static String getEmuiVersion(){
+            Class<?> classType = null;
+            try {
+                classType = Class.forName("android.os.SystemProperties");
+                Method getMethod = classType.getDeclaredMethod("get", String.class);
+                return (String)getMethod.invoke(classType, "ro.build.version.emui");
+            } catch (Exception e){
+            }
+            return "";
+        }
+
+
 
         /**
          * 开启沉浸式模式(横屏)
@@ -246,7 +273,7 @@ public class Utils {
                 View decorView = activity.getWindow().getDecorView();
                 decorView.setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+
                                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                                 | View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -1486,6 +1513,12 @@ public class Utils {
     public static class Resource {
         public static String getString(int resid) {
             return mContext.getResources().getString(resid);
+        }
+
+        public static String getString(String resName)
+        {
+            int id = mContext.getResources().getIdentifier(resName,"string",mContext.getPackageName());
+            return mContext.getResources().getString(id);
         }
 
         public static Drawable getDrawable(int resid) {

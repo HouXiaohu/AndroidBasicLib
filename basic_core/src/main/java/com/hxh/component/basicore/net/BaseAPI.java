@@ -303,12 +303,15 @@ public class BaseAPI {
             }
         }
 
+
+
         //是否配置有 请求拦截器
         if (null != provider.getConfigRequestCallBack())
             builder.addInterceptor(new RequestInterceptor(provider.getConfigRequestCallBack()));
 
         if (provider.getCacheSize() > 0) {
             if (!Utils.Text.isEmpty(provider.getCachePath())) {
+
                 builder.cache(new Cache(new File(provider.getCachePath()), provider.getCacheSize()));
             } else {
                 File cacheFIle = new File(Utils.getApplicationContext().getCacheDir(), "httpResponse");
