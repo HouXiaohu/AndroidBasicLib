@@ -10,11 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hxh.component.basicore.Base.delegate.ActivityDelegate;
-import com.hxh.component.basicore.Base.delegate.LogDelegate;
 import com.hxh.component.basicore.Base.delegate.IntentDelegate;
+import com.hxh.component.basicore.Base.delegate.LogDelegate;
 import com.hxh.component.basicore.Base.delegate.ViewRelatedDelegate;
-import com.hxh.component.basicore.Base.delegate.interfaces.ILogRelated;
 import com.hxh.component.basicore.Base.delegate.interfaces.IIntentRelated;
+import com.hxh.component.basicore.Base.delegate.interfaces.ILogRelated;
 import com.hxh.component.basicore.Base.delegate.interfaces.IViewRelated;
 import com.hxh.component.basicore.mvp.persenter.IPresenter;
 import com.hxh.component.basicore.mvp.view.IView;

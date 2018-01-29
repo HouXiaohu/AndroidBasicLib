@@ -18,8 +18,17 @@ import com.hxh.component.basicore.Base.view.EmptyFragment;
 import com.hxh.component.basicore.CoreLib;
 import com.hxh.component.basicore.mvp.persenter.IPresenter;
 
+
 /**
- * 对外提供各种操作方法，内部统一交由对应的Delegate实现
+ * 标题: TopBarBaseLazyFragment.java
+ * 作者: hxh
+ * 日期: 2018/1/29 16:34
+ * 描述: 提供给你一个带toolbar的效果，为了解耦，现在的toolbar标签，由你自己写入你的布局中
+ * 示例：
+ *       <include layout="@layout/layout_toolbar_default"
+ *               android:id="@+id/toolbar"
+ *                  />
+ *
  */
 public abstract class TopBarBaseLazyFragment<P extends IPresenter>
         extends

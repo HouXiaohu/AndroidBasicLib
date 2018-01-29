@@ -5,9 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
 
-import com.hxh.component.basicore.R;
 import com.hxh.component.basicore.mvp.persenter.BasePresenter;
 import com.hxh.component.basicore.mvp.persenter.IPresenter;
 import com.hxh.component.basicore.mvp.view.IView;
@@ -24,7 +22,7 @@ public class ActivityDelegate<P extends IPresenter> {
     }
 
     private IView<P> mActivity;
-    private FrameLayout frame_main;
+
     private View rootView;
     //存储当前的View
     private SparseArray<View> mViews;
@@ -36,18 +34,15 @@ public class ActivityDelegate<P extends IPresenter> {
     public View onCreate(Bundle savedInstanceState) {
 
         mViews = new SparseArray<>();
-        rootView = LayoutInflater.from(((AppCompatActivity) mActivity)).inflate(R.layout.activity_top_bar_base,null);
-        frame_main = (FrameLayout) rootView.findViewById(R.id.frame_main);
+
         if(mActivity.getLayoutId() > 0)
         {
             //如果开启toolbar
-            LayoutInflater.from(((AppCompatActivity) mActivity)).inflate(mActivity.getLayoutId(), frame_main);
+            rootView = LayoutInflater.from(((AppCompatActivity) mActivity)).inflate(mActivity.getLayoutId(), null);
             ((AppCompatActivity) mActivity).setContentView(rootView);
-
-
             //AppManager.addActivity(this);
             AutoUtils.auto(((AppCompatActivity) mActivity));
-            //设置不显示自带的title
+
         }
 
         mActivity.initData(savedInstanceState);

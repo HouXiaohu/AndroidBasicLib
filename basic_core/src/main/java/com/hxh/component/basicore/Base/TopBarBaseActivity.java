@@ -16,6 +16,17 @@ import com.hxh.component.basicore.Base.view.EmptyActivity;
 import com.hxh.component.basicore.CoreLib;
 import com.hxh.component.basicore.mvp.persenter.IPresenter;
 
+/**
+ * 标题: TopBarBaseActivity.java
+ * 作者: hxh
+ * 日期: 2018/1/29 16:31
+ * 描述: 提供给你一个带toolbar的效果，为了解耦，现在的toolbar标签，由你自己写入你的布局中
+ * 示例：
+ *       <include layout="@layout/layout_toolbar_default"
+ *               android:id="@+id/toolbar"
+ *                  />
+ *
+ */
 public abstract class TopBarBaseActivity<P extends IPresenter>
         extends EmptyActivity<P>
         implements IToolBarRelated {

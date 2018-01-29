@@ -105,8 +105,10 @@ public class ToolBarDelegate_FullScreenMode implements IToolBarRelated {
     }
 
     private void fetchToolBar(View rootView) {
+
         toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
         if (null == toolbar) {
+
             throw new IllegalStateException("There is no id is 'toolbar' view in your layout");
         }
         toolbar.setBackgroundColor(Color.TRANSPARENT);
