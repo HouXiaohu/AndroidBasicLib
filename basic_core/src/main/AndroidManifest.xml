@@ -20,7 +20,7 @@
         />
         <activity android:name=".CommonConponet.PdfViewerActivity" />
         <activity android:name=".ui.QRCode.activity.CaptureActivity"/>
-
+        <activity android:name=".CommonConponet.ImagePagerActivity"/>
     </application>
 
 </manifest>

@@ -6,13 +6,17 @@ import android.os.Bundle;
 import com.hxh.component.basicore.Base.TopBarBaseLazyFragment;
 import com.hxh.component.basicore.Base.topbar.ActionBarConfig;
 import com.hxh.component.basicore.mvp.persenter.IPresenter;
+import com.hxh.component.basicore.ui.BannerImg;
 import com.hxh.component.basicore.util.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by hxh on 2018/1/23.
  */
 
-public class Framement extends TopBarBaseLazyFragment{
+public class Framement extends TopBarBaseLazyFragment {
     public static Framement newInstance() {
         
         Bundle args = new Bundle();
@@ -26,8 +30,17 @@ public class Framement extends TopBarBaseLazyFragment{
         return R.layout.layout_test;
     }
 
+
+    private BannerImg bannerimg;
     @Override
     public void initData(Bundle saveInstanceState) {
+        bannerimg = (BannerImg) findViewBy(R.id.bannerimg);
+        List<Integer> uris = new ArrayList<>();
+        uris.add(R.mipmap.minebg);
+        uris.add(R.mipmap.minebg);
+        uris.add(R.mipmap.minebg);
+        uris.add(R.mipmap.minebg);
+        bannerimg.setImageUris_Resource(uris);
 
     }
 

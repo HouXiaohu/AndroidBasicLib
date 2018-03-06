@@ -2,6 +2,7 @@ package com.hxh.component.basicore.ui.mrecycleview.datasource;
 
 import com.alibaba.fastjson.JSON;
 import com.hxh.component.basicore.util.Utils;
+import com.hxh.component.basicore.util.convert.JsonFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,4 +71,14 @@ public class DataSource_SP<E> implements IDataSource {
         });
     }
 
+    @Override
+    public void saveDatas(List datas) {
+        if (null != datas) {
+            String key1 = datas.get(0).getClass().getSimpleName();
+            //后添加
+            Utils
+                    .SP
+                    .updateString(key1, JsonFactory.getFastJsonConvert().toJson(datas));
+        }
+    }
 }

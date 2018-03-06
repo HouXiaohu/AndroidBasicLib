@@ -856,7 +856,7 @@ public class Utils {
         }
 
         public static boolean isEmpty(java.lang.String str) {
-            if (null == str || "".equals(str)) {
+            if (null == str || "".equals(str) || 0==str.length()) {
                 return true;
             }
 
@@ -967,9 +967,24 @@ public class Utils {
          * @return True if the new values were successfully written to persistent storage.
          */
         public static boolean putString(String key, String value) {
-            SharedPreferences settings = mContext.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = settings.edit();
+
+            SharedPreferences.Editor editor =  editor();
             editor.putString(key, value);
+            return editor.commit();
+        }
+
+        public static boolean updateString(String key,String value)
+        {
+            SharedPreferences.Editor editor =  editor();
+            editor.remove(key);
+            editor.putString(key, value);
+            return editor.commit();
+        }
+
+        public static boolean remove(String key)
+        {
+            SharedPreferences.Editor editor =  editor();
+            editor.remove(key);
             return editor.commit();
         }
 
@@ -3615,21 +3630,21 @@ public class Utils {
         public static void loadimg(ImageView iv, String url) {
             if (null != url) {
                 if (url.contains("file://") || url.contains("sdcard")) {
-                    ImageFactory.getLoader().loadFile(iv, new File(url), IImageLoader.Options.defaultOptions());
+                    ImageFactory.getGlideLoader().loadFile(iv, new File(url), IImageLoader.Options.defaultOptions());
                 } else {
-                    ImageFactory.getLoader().loadFormNet(iv, url, IImageLoader.Options.defaultOptions());
+                    ImageFactory.getGlideLoader().loadFormNet(iv, url, IImageLoader.Options.defaultOptions());
                 }
             }
         }
 
         @Safe
         public static void loadimg(ImageView iv, int resid) {
-            ImageFactory.getLoader().loadResource(iv, resid, IImageLoader.Options.defaultOptions());
+            ImageFactory.getGlideLoader().loadResource(iv, resid, IImageLoader.Options.defaultOptions());
         }
 
         @Safe
         public static void loadimg(ImageView iv, String url, int errorResId) {
-            ImageFactory.getLoader().loadFormNet(iv, url, new IImageLoader.Options(errorResId));
+            ImageFactory.getGlideLoader().loadFormNet(iv, url, new IImageLoader.Options(errorResId));
         }
 
 

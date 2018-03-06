@@ -1,159 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
-                android:background="#ffffff"
+              android:background="#ffffff"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
+   <include layout="@layout/layout_toolbar_default"
+            android:id="@+id/toolbar"
+       />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="247px"
-        android:scaleType="fitXY"
-        android:src="@mipmap/minebg"
-        />
-
-
-    <View
-        android:layout_width="130px"
-        android:layout_height="130px"
-        android:background="@drawable/shape_circle"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="130px"
-        />
-
-    <com.hxh.component.basicore.ui.CircleImageView
-        android:layout_width="126px"
-        android:layout_height="126px"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="130px"
-        android:id="@+id/iv_userimg"
-        android:src="@mipmap/user_default_img"
-        />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_marginTop="25px"
-        android:layout_below="@id/iv_userimg"
-        android:layout_height="300px">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="32px"
-            android:textColor="#333333"
-            android:text="123213912"
-            android:layout_centerHorizontal="true"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="28px"
-            android:textColor="#333333"
-            android:layout_marginTop="66px"
-            android:layout_marginLeft="152px"
-            android:text="垫款发车"
-            android:id="@+id/tv1"
-            />
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#999999"
-            android:alpha="0.1"
-            android:id="@+id/v1"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="66px"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="28px"
-            android:textColor="#333333"
-            android:layout_marginTop="66px"
-
-            android:text="库存融资"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="152px"
-            />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="40px"
-            android:text="¥888"
-            android:textColor="#1782E7"
-            android:layout_below="@id/tv1"
-            android:id="@+id/tv_souxinedu"
-            android:layout_marginLeft="82px"
-            android:layout_marginTop="30px"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="27px"
-            android:text="授信额度"
-            android:textColor="#333333"
-            android:id="@+id/tv3"
-            android:layout_marginTop="30px"
-            android:layout_marginLeft="69px"
-            android:layout_below="@id/tv_souxinedu"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="34px"
-            android:text="¥888"
-            android:layout_toRightOf="@id/tv_souxinedu"
-            android:textColor="#1782E7"
-            android:layout_below="@id/tv1"
-            android:layout_marginLeft="102px"
-            android:layout_marginTop="30px"
-            android:id="@+id/tv2"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="27px"
-            android:text="授信额度"
-            android:textColor="#333333"
-            android:layout_toRightOf="@id/tv3"
-            android:layout_marginTop="30px"
-            android:layout_marginLeft="72px"
-            android:layout_below="@id/tv_souxinedu"
-            />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="40px"
-            android:text="¥888"
-            android:textColor="#1782E7"
-            android:layout_below="@id/tv1"
-            android:id="@+id/tv_souxinedu1"
-            android:layout_toRightOf="@id/v1"
-            android:layout_marginLeft="52px"
-            android:layout_marginTop="30px"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="34px"
-            android:text="¥888"
-            android:layout_toRightOf="@id/tv_souxinedu1"
-            android:textColor="#1782E7"
-            android:layout_below="@id/tv1"
-            android:layout_marginLeft="102px"
-            android:layout_marginTop="30px"
-            />
-
-
-    </RelativeLayout>
-
-
-</RelativeLayout>
+   <com.hxh.component.basicore.ui.BannerImg
+       android:layout_width="match_parent"
+       android:layout_height="300px"
+       android:id="@+id/bannerimg"
+       ></com.hxh.component.basicore.ui.BannerImg>
+</LinearLayout>

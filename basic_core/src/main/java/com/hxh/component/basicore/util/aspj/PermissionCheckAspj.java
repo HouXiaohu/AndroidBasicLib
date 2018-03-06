@@ -6,9 +6,6 @@ import com.hxh.component.basicore.util.AppManager;
 import com.hxh.component.basicore.util.aspj.annotation.PermissionCheck;
 
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 
 
 /**
@@ -23,14 +20,14 @@ import org.aspectj.lang.annotation.Pointcut;
  * 2. Fragment 进行权限检查，因为Fragment也有onRequestPermissionsResult方法，但是把Fragment直接添加到Actvity，参考RxPermission
  * 3. BaseActivity进行封装，But，本项目是使用AOP来进行权限业务的横向插入
  */
-@Aspect
+//@Aspect
 public class PermissionCheckAspj {
     //@within(routerlib.hxh.com.corelib_annotation1.annotation.DataSave) || @annotation(ann)
 
     //private static final String method_piex1 = "@within(* com.hxh.component.basicore.util.aspj.PermissionCheck.*(..))";
     private static final String method_piex1 = "execution(@PermissionCheck * *.*(..))  && @annotation(ann)";
 
-    @Pointcut(method_piex1)
+    //@Pointcut(method_piex1)
     public void method_perpointcut(PermissionCheck ann) {
     }
 
@@ -38,7 +35,7 @@ public class PermissionCheckAspj {
     //execution(!synthetic * *(..)) &&
 
 
-    @Around("method_perpointcut(ann)")
+    //@Around("method_perpointcut(ann)")
     public Object around(final ProceedingJoinPoint joinPoint, final PermissionCheck ann) throws Throwable {
         com.hxh.component.basicore.util.Log.d("权限Aspj切入");
 

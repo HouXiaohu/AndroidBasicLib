@@ -18,7 +18,7 @@ import rx.functions.Action1;
  *
  * @param <D> 一个实体类型
  */
-public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack{
+public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack {
 
     /**
      * 当没有数据时候，清除数据，并且什么也不展示
@@ -35,18 +35,22 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack{
 
     /**
      * 当没有数据时候，什么也不做(真针对上拉加载)
-     *
      */
     public static int EMPTYNO_WHENNODATA = 0x4;
 
-    //    /**
-    //     * 当存在数据时候，进行覆盖数据，而不是刷新
-    //     * 场景如： 有3种类型的书籍，每种数据不一样，每次将数据进行覆盖
-    //     */
+    /**
+     * 当存在数据时候，进行覆盖数据，而不是刷新
+     * 场景如： 有3种类型的书籍，每种数据不一样，每次将数据进行覆盖
+     */
     public static int HAVEDATA_FORCEDCOVER = 0x4;
 
+    /**
+     * 当存在数据的时候，将数据添加至最前端
+     */
     public static int HAVEDATA_ADDTOFRONT = 0x5;
-
+    /**
+     * 当存在数据的时候，将数据添加至最末端
+     */
     public static int HAVEDATA_ADDTOEND = 0x6;
 
 
@@ -226,13 +230,14 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack{
     /**
      * 当没有数据时，页面将如何显示
      * 当无数据时，默认type为 {@link }
-     * @time 2017/11/9 15:27
      *
+     * @time 2017/11/9 15:27
      * @author
      */
     public MDataSource setNoDataStateWhenRequest(EmptyViewConfig config) {
         this.emptyViewConfig = config;
-        if(emptyViewConfig.isClickOtherRefresh())emptyViewConfig.setEmpViewClickOtherPlaceRefreshCallBack(this);
+        if (emptyViewConfig.isClickOtherRefresh())
+            emptyViewConfig.setEmpViewClickOtherPlaceRefreshCallBack(this);
         this.mNodataTypeWhenRequest = EMPTYVIEW_WHENNODATA;
         return this;
     }
@@ -240,13 +245,14 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack{
     /**
      * 当没有数据时，页面将如何显示
      * 当无数据时，默认type为 {@link }
-     * @time 2017/11/9 15:27
      *
+     * @time 2017/11/9 15:27
      * @author
      */
     public MDataSource setNoDataStateWhenRequest(EmptyViewConfig config, NoDataCallback callback) {
         this.emptyViewConfig = config;
-        if(emptyViewConfig.isClickOtherRefresh())emptyViewConfig.setEmpViewClickOtherPlaceRefreshCallBack(this);
+        if (emptyViewConfig.isClickOtherRefresh())
+            emptyViewConfig.setEmpViewClickOtherPlaceRefreshCallBack(this);
         this.mNoDataCallback = callback;
         this.mNodataTypeWhenRequest = EMPTYVIEW_WHENNODATA;
         return this;
@@ -338,17 +344,14 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack{
     }
 
     /**
-     *
-     * 
      * @time 2017/12/20 15:00
-     * 
-     * @author 
+     * @author
      */
     public void fetch(int nodataType) {
 
         isLoadLocalData = false;
 
-        loadData(nodataType,null);
+        loadData(nodataType, null);
     }
 
 
@@ -382,12 +385,13 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack{
     }
 
     private void loadData(List<D> list) {
-        loadData(mNodataTypeWhenRequest,list);
+        loadData(mNodataTypeWhenRequest, list);
     }
 
 
-    private void loadData(final int noDataType,List<D> list) {
-        //region 当没有放入网络提供者时候，进行本地数据加载
+    private void loadData(final int noDataType, List<D> list) {
+
+        //region 当没有放入接口提供者时候，进行本地数据加载
         if (null == mNetRepository) {
             if (null == list || 0 == list.size()) {
                 showViewWhenNoData(noDataType);
@@ -402,16 +406,13 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack{
         }
         //endregion
 
-
+        //region 当放入了接口提供者，并且List不为空，那么将其加入数据列表
         if (null != list && 0 != list.size()) {
             if (null != mNoDataCallback) {
                 mNoDataCallback.onHaveData();
             }
-
             isLoadLocalData = false;
-
             mView.setNetData(list);
-
             return;
         } else if (isLoadLocalData) {
             mView.setEmpty(emptyViewConfig);
@@ -424,36 +425,37 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack{
                 return;
             }
             getParam();
-            initFetch();
+            fetchPagingBuild();
 
             mNetRepository
                     .getData(this.mParams)
-                    .subscribe(new RESTFULProgressSubscribe<NetResultBean<D>>(true) {
+                    .subscribe(new RESTFULProgressSubscribe<AbsNetResultBean<D>>(true) {
                         @Override
                         public void _OnError(Throwable msg) {
                             getDbData(noDataType);
                         }
 
                         @Override
-                        public void _OnNet(NetResultBean<D> o) {
-                            if (null == o.items || 0 == o.items.size()) {
+                        public void _OnNet(AbsNetResultBean<D> o) {
+                            if (null == o.getItems() || 0 == o.getItems().size()) {
                                 showViewWhenNoData(noDataType);
                             } else {
                                 if (null != mNoDataCallback) {
                                     mNoDataCallback.onHaveData();
                                 }
                                 if (mHaveDataTypeWhenResponse == HAVEDATA_FORCEDCOVER && !isEnableInterceptor) {
-                                    mView.setLocalData(checkFixedData(o.items));
+                                    mView.setLocalData(checkFixedData(o.getItems()));
                                 } else {
                                     if (!isEnableInterceptor) {
-                                        mView.setNetData(checkIsNeedTranFromData(checkFixedData(o.items)));
+                                        mView.setNetData(checkIsNeedTranFromData(checkFixedData(o.getItems())));
                                     } else {
 
-                                        List<D> result = checkIsEnableInterceptor(checkIsNeedTranFromData(checkFixedData(o.items)));
-                                        if(null != result)
-                                        {
+                                        List<D> result = checkIsNeedTranFromData(checkFixedData(o.getItems()));
+                                        if (null != result) {
                                             mView.setNetData(result);
                                         }
+                                        checkIsEnableInterceptor(o);
+
                                     }
                                 }
 
@@ -482,12 +484,10 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack{
             mView.clearData();
             mView.setEmpty(emptyViewConfig);
             if (null != mNoDataCallback) mNoDataCallback.onNoData();
-        }else if(mNodataTypeWhenRequest == EMPTYNO_WHENNODATA && mView.isLoadMore())
-        {
+        } else if (mNodataTypeWhenRequest == EMPTYNO_WHENNODATA && mView.isLoadMore()) {
             mView.noevery();
             if (null != mNoDataCallback) mNoDataCallback.onNoData();
-        }else
-        {
+        } else {
             mView.clearData();
             mView.setEmpty(emptyViewConfig);
             if (null != mNoDataCallback) mNoDataCallback.onNoData();
@@ -496,10 +496,9 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack{
 
     /**
      * 重新对换下位置，现在是优先回调-》本地-》new
-     * 
+     *
      * @time 2017/11/13 20:32
-     * 
-     * @author 
+     * @author
      */
     public HashMap<String, Object> getParam() {
         if (null != mParamCallback) {
@@ -508,7 +507,7 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack{
             return this.mParams;
         } else if (null != mParams) {
             return mParams;
-        } else  {
+        } else {
             return mParams = new HashMap<>();
         }
     }
@@ -534,8 +533,7 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack{
                                     showViewWhenNoData(noDataType);
                                 }
                             });
-        }else
-        {
+        } else {
             showViewWhenNoData(noDataType);
         }
     }
@@ -578,90 +576,89 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack{
         return datas;
     }
 
-    private List<D> checkIsEnableInterceptor(List<D> datas) {
+    private List<D> checkIsEnableInterceptor(AbsNetResultBean<D> datas) {
         if (null != mResInterceptor) {
-
-            return mResInterceptor.setData(datas);
+            mResInterceptor.setData(datas);
+            return datas.getItems();
         } else if (null != mResInterceptorAsync) {
             mResInterceptorAsync
                     .setData(datas)
-                    .subscribe(new RESTFULProgressSubscribe<List<D>>() {
+                    .subscribe(new RESTFULProgressSubscribe<AbsNetResultBean<D>>() {
                         @Override
                         public void _OnError(Throwable msg) {
 
                         }
 
                         @Override
-                        public void _OnNet(List<D> ds) {
+                        public void _OnNet(AbsNetResultBean<D> ds) {
 
                         }
                     });
         }
-        return datas;
+        return datas.getItems();
     }
 
     private boolean isResetPaginationBuilder = false;
-    public void resetPaginationBuilder()
-    {
-        if(null != mPaginBuilder)
-        {
-            if(null != mParams)
-            {
+
+    public void resetPaginationBuilder() {
+        if (null != mPaginBuilder) {
+            if (null != mParams) {
                 this.mPaginBuilder.setPageIndex(0);
                 isResetPaginationBuilder = true;
             }
         }
     }
 
-    private void initFetch() {
-        boolean isShouDongConfigPaginBuilder = false;
-        if(isResetPaginationBuilder)
-        {
-            this.mParams.remove(mPaginBuilder.getPageIndexFieldName());
-        }
-        isResetPaginationBuilder = false;
-        //看是否支持分页加载
-        if (mView.isEnableLoadAndRefresh()) {
-            if (null == mPaginBuilder) {
-                throw new IllegalStateException("you open recycleview's refresh and loadmore,but you not setter refresh param!");
-            } else {
-                if (!this.mParams.containsKey(mPaginBuilder.getPageIndexFieldName())) {
-                    this.mParams.put(mPaginBuilder.getPageIndexFieldName(), mPaginBuilder.getPageIndex());
-                    isShouDongConfigPaginBuilder = true;
-                }
-                if (!this.mParams.containsKey(mPaginBuilder.getPageSizeFieldName())) {
-                    this.mParams.put(mPaginBuilder.getPageSizeFieldName(), mPaginBuilder.getPageSize());
-                    isShouDongConfigPaginBuilder = true;
-                }
-            }
-        }
-        if (null != mPaginBuilder) {
-            if (mView.isRefresh()) {
-                this.mParams.remove(PaginationBuilder.PAGEKEY);
-                this.mParams.put(PaginationBuilder.PAGEKEY, initPageIndex);
-            } else if (mView.isLoadMore() && isShouDongConfigPaginBuilder) {
-                this.mParams.remove(PaginationBuilder.PAGEKEY);
-                this.mParams.put(PaginationBuilder.PAGEKEY,( ++mPaginBuilder.pageIndex)*mPaginBuilder.pageSize);
-            }
-        }
+    private void fetchPagingBuild() {
 
-        //最后来个校验
-        checkParam();
-    }
-
-    private void checkParam()
-    {
         if(null != mPaginBuilder)
         {
+            boolean isShouDongConfigPaginBuilder = false;
+            this.mParams.remove(mPaginBuilder.getPageIndexFieldName());
+            this.mParams.remove(mPaginBuilder.getPageSizeFieldName());
+            isResetPaginationBuilder = false;
+            //看是否支持分页加载
+            if (mView.isEnableLoadAndRefresh()) {
+                if (null == mPaginBuilder) {
+                    throw new IllegalStateException("you open recycleview's refresh and loadmore,but you not setter refresh param!");
+                } else {
+                    if (!this.mParams.containsKey(mPaginBuilder.getPageIndexFieldName())) {
+                        this.mParams.put(mPaginBuilder.getPageIndexFieldName(), mPaginBuilder.getPageIndex());
+                        isShouDongConfigPaginBuilder = true;
+                    }
+                    if (!this.mParams.containsKey(mPaginBuilder.getPageSizeFieldName())) {
+                        this.mParams.put(mPaginBuilder.getPageSizeFieldName(), mPaginBuilder.getPageSize());
+                        isShouDongConfigPaginBuilder = true;
+                    }
+                }
+            }
+            if (null != mPaginBuilder) {
+                if (mView.isRefresh()) {
+                    this.mParams.remove(PaginationBuilder.PAGEKEY);
+                    this.mParams.put(PaginationBuilder.PAGEKEY, initPageIndex);
+                } else if (mView.isLoadMore() && isShouDongConfigPaginBuilder) {
+                    this.mParams.remove(PaginationBuilder.PAGEKEY);
+                    this.mParams.put(PaginationBuilder.PAGEKEY, (++mPaginBuilder.pageIndex) * mPaginBuilder.pageSize);
+                }
+            }
 
-            if(mPaginBuilder.pageIndex>0){
+            //最后来个校验
+            checkPagingBuildParam();
+        }
+
+
+    }
+
+    private void checkPagingBuildParam() {
+        if (null != mPaginBuilder) {
+
+            if (mPaginBuilder.pageIndex > 0) {
                 int size = (int) this.mParams.get(mPaginBuilder.getPageSizeFieldName());
-                int allsize =  mPaginBuilder.pageSize*mPaginBuilder.pageIndex;
-                if(size >= allsize)
-                {
+                int allsize = mPaginBuilder.pageSize * mPaginBuilder.pageIndex;
+                if (size >= allsize) {
                     this.mParams.remove(mPaginBuilder.getPageIndexFieldName());
 
-                    this.mParams.put(mPaginBuilder.getPageIndexFieldName(),allsize);
+                    this.mParams.put(mPaginBuilder.getPageIndexFieldName(), allsize);
 
                 }
             }

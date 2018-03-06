@@ -4,22 +4,34 @@ package com.hxh.component.basicore.imageLoader;
  * Created by hxh on 2017/4/6.
  */
 public class ImageFactory {
+    public static final String GLIDE_LOADER = "glide";
+    public static final String FERSCO = "fersco";
+    public static final String PICASSO = "picasso";
 
-    private static IImageLoader loader;
 
-    public static IImageLoader getLoader()
+    public static IImageLoader getLoader(String type)
     {
-        if(null == loader)
+        switch (type)
         {
-            synchronized (ImageFactory.class)
-            {
-                if(loader == null)
-                {
-                    loader = new GliderLoader();
-                }
-            }
+            case GLIDE_LOADER:
+
+                return GliderLoader.getInstance();
+            case FERSCO:
+
+                break;
+            case PICASSO:
+
+                break;
         }
-        return loader;
+
+
+        return GliderLoader.getInstance();
+    }
+
+
+    public static IImageLoader getGlideLoader()
+    {
+        return GliderLoader.getInstance();
     }
 
 }

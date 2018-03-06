@@ -11,15 +11,15 @@ import org.aspectj.lang.annotation.Pointcut;
 /**
  * Created by hxh on 2017/6/27.
  */
-
+@Aspect
 public class SafeAspj {
-    private static final String method_piex = "execution(@com.hxh.component.basicannotation.annotation.Safe * *(..))";
+    private static final String method_piex = "execution(@com.hxh.component.basicore.util.aspj.annotation.Safe * *(..))";
     private static final String filed_piex = "";
 
-   // @Pointcut(method_piex)
+    @Pointcut(method_piex)
     public void method_piex(){}
 
-   // @Around("execution(!synthetic * *(..)) && method_piex()")
+    @Around("execution(!synthetic * *(..)) && method_piex()")
     public Object addSoftCode(ProceedingJoinPoint point)
     {
         Object result = null;
@@ -28,9 +28,10 @@ public class SafeAspj {
             result = point.proceed();
         }catch (Exception e)
         {
-            Log.e("===================异常已上报==============");
+
             if(null != CoreLib.getInstance().getAppComponent().globalBugManager())
             {
+                Log.e("===================异常已上报==============");
                 CoreLib
                         .getInstance()
                         .getAppComponent()
@@ -41,6 +42,7 @@ public class SafeAspj {
         } catch (Throwable throwable) {
             if(null != CoreLib.getInstance().getAppComponent().globalBugManager())
             {
+                Log.e("===================异常已上报==============");
                 CoreLib
                         .getInstance()
                         .getAppComponent()

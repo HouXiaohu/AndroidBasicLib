@@ -9,6 +9,22 @@ import java.util.List;
  */
 
 public class JSONConvert implements IJson {
+    private static volatile JSONConvert singleton = null;
+
+    private JSONConvert() {
+    }
+    public static JSONConvert getInstance() {
+        if (singleton == null) {
+            synchronized (JSONConvert.class) {
+                if (singleton == null) {
+                    singleton = new JSONConvert();
+                }
+            }
+        }
+        return singleton;
+    }
+
+
     @Override
     public String toJson(Object obj) {
 

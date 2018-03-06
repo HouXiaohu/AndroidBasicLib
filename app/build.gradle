@@ -77,11 +77,12 @@ dependencies {
     compile project(':basic_core')
 
     //pagebottomtab
-
-
+    compile 'com.hxh.component:apiFactory-annotation:1.0.3'
+    annotationProcessor 'com.hxh.component:apiFactory-compile:1.0.3'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
 }
 
 //apply plugin: com.hxh.aspjplugin.AspectjPlugin

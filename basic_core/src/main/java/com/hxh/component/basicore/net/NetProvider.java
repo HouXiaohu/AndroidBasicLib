@@ -455,8 +455,11 @@ public class NetProvider {
 
     public String getBaseUrl()
     {
-        if (!Utils.Text.isEmpty(mBaseUrl) && mBaseUrl.lastIndexOf("/") < 0) {
-            mBaseUrl += File.separator;
+        if (!Utils.Text.isEmpty(mBaseUrl)) {
+            if (mBaseUrl.lastIndexOf("/") < 0)
+            {
+                mBaseUrl += File.separator;
+            }
         }else
         {
             mBaseUrl = Utils.Resource.getString("AUTH_ENDPOINT");

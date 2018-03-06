@@ -11,6 +11,23 @@ import java.util.List;
  */
 
 public class GSONConvert implements IJson{
+
+    private static volatile GSONConvert singleton = null;
+
+    private GSONConvert() {
+    }
+
+    public static GSONConvert getInstance() {
+        if (singleton == null) {
+            synchronized (GSONConvert.class) {
+                if (singleton == null) {
+                    singleton = new GSONConvert();
+                }
+            }
+        }
+        return singleton;
+    }
+
     Gson gson;
 
     @Override

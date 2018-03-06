@@ -1,6 +1,6 @@
 package com.hxh.component.basicore.ui.mrecycleview.callback;
 
-import java.util.List;
+import com.hxh.component.basicore.ui.mrecycleview.AbsNetResultBean;
 
 import rx.Observable;
 
@@ -9,6 +9,6 @@ import rx.Observable;
  */
 
 public interface MRecycleViewResponseInterceptorAsync<D> {
-    Observable<List<D>> setData(List<D> datas);
+    Observable<AbsNetResultBean<D>> setData(AbsNetResultBean<D> datas);
 
 }

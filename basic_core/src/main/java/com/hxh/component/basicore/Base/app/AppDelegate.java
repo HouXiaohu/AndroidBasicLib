@@ -5,12 +5,12 @@ import android.content.ComponentCallbacks2;
 import android.content.res.Configuration;
 
 import com.hxh.component.basicore.Base.topbar.ActionBarProvider;
-import com.hxh.component.basicore.util.BugManager;
 import com.hxh.component.basicore.CoreLib;
-import com.hxh.component.basicore.imageLoader.GliderLoader;
 import com.hxh.component.basicore.imageLoader.IImageLoader;
+import com.hxh.component.basicore.imageLoader.ImageFactory;
 import com.hxh.component.basicore.net.NetProvider;
 import com.hxh.component.basicore.net.RequestCallBackHandler;
+import com.hxh.component.basicore.util.BugManager;
 
 /**
  * 标题: Application 委托类
@@ -38,7 +38,7 @@ public class AppDelegate  implements IApp{
 
             @Override
             public IImageLoader globalImageLoader() {
-                return new GliderLoader();
+                return ImageFactory.getGlideLoader();
             }
 
             @Override

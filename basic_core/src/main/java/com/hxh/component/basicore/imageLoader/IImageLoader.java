@@ -15,9 +15,16 @@ public interface IImageLoader {
     void init(Context context);
     void loadFormNet(ImageView iv,String url,Options options);
     void loadFormNet(ImageView iv,String url,Options options,CallBack callback);
+    void loadFormNet(ImageView iv,String url,Options options,CallBack callback,boolean enableCache);
+    void loadFormNet(ImageView iv,String url,Options options,CallBack callback,String savePath,boolean enableCache);
+    void loadFormNet(ImageView iv,String url,Options options,CallBack callback,String savePath);
+    void loadFormNet(ImageView iv,String url,Options options,String savePath);
+    void loadFormNet(ImageView iv,String url,Options options,String savePath,boolean enableCache);
     void loadFormNet(ImageView iv,String url,Options options,boolean enableCache);
-
     void loadFormNet(ImageView iv,String url,boolean asgif);
+
+
+
     void loadResource(ImageView iv,int resId,boolean asgif);
 
     void loadResource(ImageView iv,int resId,Options options);
@@ -32,7 +39,7 @@ public interface IImageLoader {
 
     public interface CallBack
     {
-        void onSuccess();
+        void onSuccess(Object obj);
         void onError(String message);
     }
 
@@ -41,21 +48,45 @@ public interface IImageLoader {
         public int loadingResId = -1;
         public int loadErrorResId = -1;
         public ImageView.ScaleType scaleType = null;
-
+        public boolean isEnableAnimate = false;
         public static Options defaultOptions()
         {
-            return new Options(Config.LOADING_RESID,Config.LOADING_FAILD);
+            return new Options(Config.LOADING_RESID,Config.LOADING_FAILD,false);
         }
 
         public static Options defaultHeadimgOptions()
         {
-            return new Options(Config.DEFAULT_HEADIMG,Config.DEFAULT_HEADIMG);
+            return new Options(Config.DEFAULT_HEADIMG,Config.DEFAULT_HEADIMG,false);
         }
 
-        public Options(int loadingResId,int loadErrorResId)
+        public Options(int loadingResId,int loadErrorResId,boolean isEnableAnimate)
         {
             this.loadErrorResId = loadErrorResId;
             this.loadingResId = loadingResId;
+            this.isEnableAnimate = isEnableAnimate;
+        }
+
+        public Options(int loadingResId, int loadErrorResId) {
+            this.loadingResId = loadingResId;
+            this.loadErrorResId = loadErrorResId;
+        }
+
+        public Options(int loadErrorResId, boolean isEnableAnimate) {
+            this.loadErrorResId = loadErrorResId;
+            this.isEnableAnimate = isEnableAnimate;
+        }
+
+        public Options(int loadingResId, int loadErrorResId, ImageView.ScaleType scaleType, boolean isEnableAnimate) {
+            this.loadingResId = loadingResId;
+            this.loadErrorResId = loadErrorResId;
+            this.scaleType = scaleType;
+            this.isEnableAnimate = isEnableAnimate;
+        }
+
+        public Options(int loadingResId, int loadErrorResId, ImageView.ScaleType scaleType) {
+            this.loadingResId = loadingResId;
+            this.loadErrorResId = loadErrorResId;
+            this.scaleType = scaleType;
         }
 
         public Options(int loadErrorResId) {

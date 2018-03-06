@@ -1,99 +1,73 @@
 package com.hxh.component.basicore.util.aspj;
 
 
+import com.hxh.component.basicore.ui.mrecycleview.AbsNetResultBean;
+import com.hxh.component.basicore.ui.mrecycleview.datasource.DataSource_DB;
+import com.hxh.component.basicore.ui.mrecycleview.datasource.DataSource_SP;
+import com.hxh.component.basicore.ui.mrecycleview.datasource.IDataSource;
+import com.hxh.component.basicore.util.aspj.annotation.DataSave;
+import com.hxh.component.basicore.util.aspj.annotationenum.DataSourceType;
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+
+import java.util.List;
+
+import rx.Subscription;
+
 /**
  * 暂时采用Sp做存储，因为发现目前的ORM框架，对多模块支持都不太友善，在这个项目中，存在各式各样的问题
  */
-//@Aspect
+@Aspect
 public class DataSaveAspj {
     //应用了DataSave注解，并且有个参数为ann
-    public final String method_piex1 = "execution(@routerlib.hxh.com.corelib_annotation1.annotation.DataSave * *(..)) && @annotation(ann)";
+    public final String method_piex1 = "execution(@com.hxh.component.basicore.util.aspj.annotation.DataSave * *(..)) && @annotation(ann)";
     //上面的表达式并不是错误的，但是在你仔细检查表达式没发现问题的话，那么你可以这样描述你的表达式
-    public final String method_piex = "@within(routerlib.hxh.com.corelib_annotation1.annotation.DataSave) || @annotation(ann)";
+    // public final String method_piex = "@within(com.hxh.component.basicore.util.aspj.annotation.DataSave)";
 
-//    @Pointcut(method_piex)
-//    public void method_datasavepiex(DataSave ann)
-//    {}
+    @Pointcut(method_piex1)
+    public void method_datasavepiex(DataSave ann) {
+    }
 
-//
-//    @Around("execution(!synthetic * *(..)) && method_datasavepiex(ann)")
-//    public void dbsave(ProceedingJoinPoint point,final DataSave ann)
-//    {
-//        Log.d("--->切入");
-//        Subscription subscription = null;
-//        try
-//        {
-//            point.proceed();
-//
-//            subscription =
-//                    Observable
-//                            .from(point.getArgs())
-//                            .filter(new Func1<Object, Boolean>() {
-//                                @Override
-//                                public Boolean call(Object o) {
-//                                    return o instanceof List || o instanceof NetResultBean;
-//                                }
-//                            })
-//                            .subscribe(new Action1<Object>() {
-//
-//
-//                                @Override
-//                                public void call(Object o) {
-//                                    NetResultBean bean =  o instanceof NetResultBean ? ((NetResultBean) o) : null;
-//                                    //   NetResultBean bean = ((NetResultBean) o);
-//
-//                                    if(ann.value() ==  DataSourceType.SP)
-//                                    {
-//                                        if(null != bean)
-//                                        {
-//                                            String key1 = bean.items.get(0).getClass().getSimpleName();
-//                                            Log.d("存储网络数据"+key1);
-//                                            //先删除
-//                                            Utils.SP.editor()
-//                                                    .remove(key1)
-//                                                    .commit();
-//                                            //后添加
-//                                            Utils
-//                                                    .SP
-//                                                    .putString(key1, Singleton.defaultGson().toJson(bean.items));
-//
-//                                        }else if(null == bean)
-//                                        {
-//                                            List result = o instanceof List ? ((List) o) : null;
-//                                            if(null != result && result.size()>=1)
-//                                            {
-//                                                String key1 =  result.get(0).getClass().getSimpleName();
-//                                                Log.d("存储网络数据"+key1);
-//                                                //先删除
-//                                                Utils.SP.editor()
-//                                                        .remove(key1)
-//                                                        .commit();
-//                                                //后添加
-//                                                Utils
-//                                                        .SP
-//                                                        .putString(key1, Singleton.defaultGson().toJson(result));
-//                                            }
-//
-//                                        }
-//                                    }else if(ann.value() ==  DataSourceType.DB)
-//                                    {
-//
-//                                    }else
-//                                    {
-//
-//                                    }
-//                                }
-//                            });
-//
-//
-//        }catch (Exception e)
-//        {
-//        } catch (Throwable throwable) {
-//            throwable.printStackTrace();
-//        }finally {
-//            if (subscription != null) subscription.unsubscribe();
-//        }
-//
-//
-//    }
+
+    @Around("execution(!synthetic * *(..)) && method_datasavepiex(ann)")
+    public void dbsave(ProceedingJoinPoint point, final DataSave ann) {
+
+        Subscription subscription = null;
+        try {
+            point.proceed();
+            Object args = point.getArgs();
+            List beans = null;
+            if (args instanceof List) {
+                beans = (List) args;
+            } else if (args instanceof AbsNetResultBean) {
+                beans = ((AbsNetResultBean) args).getItems();
+            }
+            if(null != beans)
+            {
+                IDataSource datasource = null;
+                if (ann.value() == DataSourceType.SP) {
+                    datasource = new DataSource_SP<>();
+                    datasource.saveDatas(beans);
+
+                } else if (ann.value() == DataSourceType.DB)
+                {
+                    datasource = new DataSource_DB<>();
+                    datasource.saveDatas(beans);
+                } else {
+
+                }
+            }
+
+        } catch (Exception e) {
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        } finally {
+
+        }
+
+
+    }
 }

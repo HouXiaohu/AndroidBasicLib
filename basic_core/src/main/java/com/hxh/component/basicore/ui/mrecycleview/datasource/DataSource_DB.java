@@ -14,4 +14,9 @@ public class DataSource_DB<E> implements IDataSource {
 
         return null;
     }
+
+    @Override
+    public void saveDatas(List datas) {
+
+    }
 }

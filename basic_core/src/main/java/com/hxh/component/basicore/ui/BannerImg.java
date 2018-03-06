@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import com.hxh.component.basicore.R;
 import com.hxh.component.basicore.imageLoader.IImageLoader;
 import com.hxh.component.basicore.imageLoader.ImageFactory;
+import com.hxh.component.basicore.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,16 +124,21 @@ public class BannerImg extends FrameLayout {
             ImageView imageView = new ImageView(getContext());
             imageView.setScaleType(scaleType);//铺满屏幕
             imageViewsList.add(imageView);
-            ImageFactory.getLoader().loadFormNet(imageView,imageuris.get(i),new IImageLoader.Options(errorResId,errorResId));
+            ImageFactory.getGlideLoader().loadFormNet(imageView,imageuris.get(i),new IImageLoader.Options(errorResId,errorResId));
 
             ImageView viewDot = new ImageView(getContext());
-            RelativeLayout.LayoutParams params =  new RelativeLayout.LayoutParams(30,30);
+
+            int width = (int) Utils.Dimens.dpToPxInt(8);
+            int height = (int) Utils.Dimens.dpToPxInt(8);
+            RelativeLayout.LayoutParams params =  new RelativeLayout.LayoutParams(width,height);
             params.leftMargin =6;
+
             viewDot.setLayoutParams(params);
+
             if (i == 0) {
-                viewDot.setBackgroundResource(R.mipmap.dot_focus);
+                viewDot.setImageResource(R.mipmap.dot_focus);
             } else {
-                viewDot.setBackgroundResource(R.mipmap.dot);
+                viewDot.setImageResource(R.mipmap.dot);
             }
             dotViewsList.add(viewDot);
             mLinearLayout.addView(viewDot);
@@ -176,16 +182,19 @@ public class BannerImg extends FrameLayout {
             imageView.setLayoutParams(layoutParams);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);//铺满屏幕
             imageViewsList.add(imageView);
-            ImageFactory.getLoader().loadResource(imageView,imageUris_int.get(i),mOptions);
+            ImageFactory.getGlideLoader().loadResource(imageView,imageUris_int.get(i),mOptions);
 
             ImageView viewDot = new ImageView(getContext());
-            RelativeLayout.LayoutParams params =  new RelativeLayout.LayoutParams(30,30);
+            int width = (int) Utils.Dimens.dpToPxInt(8);
+            int height = (int) Utils.Dimens.dpToPxInt(8);
+            RelativeLayout.LayoutParams params =  new RelativeLayout.LayoutParams(width,height);
             params.leftMargin =6;
             viewDot.setLayoutParams(params);
+
             if (i == 0) {
-                viewDot.setBackgroundResource(R.mipmap.dot_focus);
+                viewDot.setImageResource(R.mipmap.dot_focus);
             } else {
-                viewDot.setBackgroundResource(R.mipmap.dot);
+                viewDot.setImageResource(R.mipmap.dot);
             }
             dotViewsList.add(viewDot);
 
@@ -242,9 +251,9 @@ public class BannerImg extends FrameLayout {
     private void setImageBackground(int selectItems) {
         for (int i = 0; i < dotViewsList.size(); i++) {
             if (i == selectItems) {
-                dotViewsList.get(i).setBackgroundResource(R.mipmap.dot_focus);
+                dotViewsList.get(i).setImageResource(R.mipmap.dot_focus);
             } else {
-                dotViewsList.get(i).setBackgroundResource(R.mipmap.dot);
+                dotViewsList.get(i).setImageResource(R.mipmap.dot);
             }
         }
     }

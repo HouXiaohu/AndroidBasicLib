@@ -45,6 +45,9 @@ public abstract class EmptyActivity<P extends IPresenter>
     private ViewRelatedDelegate mViewRelateDelegate;
     private IntentDelegate mParceableDelegate;
     private ActivityDelegate<P> mDelegate = new ActivityDelegate<>(this);
+
+
+
     private View rootView;
 
     //region 生命周期

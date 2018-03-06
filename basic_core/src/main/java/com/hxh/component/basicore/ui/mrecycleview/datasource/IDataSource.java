@@ -8,4 +8,5 @@ import java.util.List;
  */
 public interface IDataSource<E extends Object> {
     List<E> getDatas(HashMap<String,Object> param);
+    void saveDatas(List<E> datas);
 }

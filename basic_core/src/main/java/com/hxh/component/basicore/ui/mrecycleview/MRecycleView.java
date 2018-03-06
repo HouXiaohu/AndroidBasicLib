@@ -13,6 +13,8 @@ import com.hxh.component.basicore.Base.adapter.BaseRecyAdapter;
 import com.hxh.component.basicore.R;
 import com.hxh.component.basicore.recycle.RecycleViewDivider;
 import com.hxh.component.basicore.ui.EmptyView;
+import com.hxh.component.basicore.util.aspj.annotation.DataSave;
+import com.hxh.component.basicore.util.aspj.annotationenum.DataSourceType;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.List;
@@ -223,7 +225,7 @@ public class MRecycleView<D> extends FrameLayout{
 
 
 
-        //@DataSave(DataSourceType.SP)
+        @DataSave(DataSourceType.SP)
         @Override
         public void setNetData(List result) {
             if (recycleview.getVisibility() == GONE) recycleview.setVisibility(VISIBLE);

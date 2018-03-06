@@ -1,6 +1,6 @@
 package com.hxh.component.basicore.ui.mrecycleview.callback;
 
-import java.util.List;
+import com.hxh.component.basicore.ui.mrecycleview.AbsNetResultBean;
 
 /**
  * Created by hxh on 2017/10/19.
@@ -14,6 +14,6 @@ public interface MRecycleViewResponseInterceptor<D> {
      * 
      * @author 
      */
-    List<D> setData(List<D> datas);
+    AbsNetResultBean<D> setData(AbsNetResultBean<D> datas);
 
 }

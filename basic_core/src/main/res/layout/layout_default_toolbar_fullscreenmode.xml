@@ -17,7 +17,7 @@
 
         android:textColor="@color/black"
         android:visibility="gone"
-        android:textSize="18sp"
+        android:textSize="34px"
         />
 
     <!-- 默认的BackVIew -->
