@@ -87,15 +87,7 @@ public class FragmentDelegate<P extends IPresenter>
 
 
     public void onDetach() {
-        context = null;
-    }
-
-    public void onDestroy()
-    {
-
         rootView = null;
-
-
         if(null !=  getP())getP().DetachView();
         p = null;
         context = null;
@@ -104,6 +96,14 @@ public class FragmentDelegate<P extends IPresenter>
             mViews.clear();
             mViews = null;
         }
+    }
+
+    /**
+     * onDestory 什么也不做，按照声明周期来说，onDetach()是Fragment的最后一步，但是如果直接在onDestory()
+     * 中释放了view的话，那么就会造成，处于这俩之间的事件，调用getView(),getP()崩溃的情况
+     */
+    public void onDestroy()
+    {
 
     }
 

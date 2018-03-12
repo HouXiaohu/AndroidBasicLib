@@ -142,6 +142,8 @@ import cn.qqtheme.framework.picker.AddressPicker;
 import cn.qqtheme.framework.picker.OptionPicker;
 import cn.qqtheme.framework.picker.WheelPicker;
 
+import static android.R.attr.path;
+
 /**
  * Created by hxh on 2017/4/12.
  */
@@ -724,8 +726,9 @@ public class Utils {
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 uri = FileProvider.getUriForFile(mContext, fileProviderAuthorities, file);
-                i.setDataAndType(uri, "application/vnd.android.package-archive");
+                i.setDataAndType(uri,  Config.INSTALL_APP_SCHEMA);
             } else {
+                uri = Uri.fromFile(file);
                 i.setDataAndType(uri, Config.INSTALL_APP_SCHEMA);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             }
