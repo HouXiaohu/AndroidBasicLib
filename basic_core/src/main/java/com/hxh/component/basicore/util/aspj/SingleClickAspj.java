@@ -1,7 +1,7 @@
 package com.hxh.component.basicore.util.aspj;
 
 
-import com.hxh.component.basicore.util.AppManager;
+import com.hxh.component.basicore.Base.app.AppManager;
 import com.hxh.component.basicore.util.aspj.annotation.SingleClick;
 
 import org.aspectj.lang.ProceedingJoinPoint;

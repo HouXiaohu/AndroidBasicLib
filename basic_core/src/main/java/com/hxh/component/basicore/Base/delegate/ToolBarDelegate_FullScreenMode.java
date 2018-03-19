@@ -1,5 +1,7 @@
 package com.hxh.component.basicore.Base.delegate;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -28,7 +30,7 @@ import com.hxh.component.basicore.Base.topbar.ActionBarConfig;
 import com.hxh.component.basicore.Base.topbar.ActionBarProvider;
 import com.hxh.component.basicore.CoreLib;
 import com.hxh.component.basicore.R;
-import com.hxh.component.basicore.util.AppManager;
+import com.hxh.component.basicore.Base.app.AppManager;
 import com.hxh.component.basicore.util.Utils;
 import com.hxh.component.basicore.util.aspj.annotation.Safe;
 import com.zhy.autolayout.AutoRelativeLayout;
@@ -102,6 +104,18 @@ public class ToolBarDelegate_FullScreenMode implements IToolBarRelated {
         fetchToolBar(rootView);
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+
+    public void fetchToView(View rootView, Context context) {
+        fetchToolBar(rootView);
+        if(context instanceof Activity)
+        {
+            ((AppCompatActivity)context).setSupportActionBar(toolbar);
+            ((AppCompatActivity) context).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }else
+        {
+            throw new IllegalArgumentException("context can't convert ActivityContext");
+        }
     }
 
     private void fetchToolBar(View rootView) {

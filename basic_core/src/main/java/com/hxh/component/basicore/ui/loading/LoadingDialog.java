@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hxh.component.basicore.R;
-import com.hxh.component.basicore.util.AppManager;
+import com.hxh.component.basicore.Base.app.AppManager;
 
 /**
 * 创建者：hxh

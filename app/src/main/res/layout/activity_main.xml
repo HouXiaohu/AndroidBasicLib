@@ -14,13 +14,13 @@
 
 
 
-  <com.hxh.component.basicore.ui.mrecycleview.MRecycleView
+  <com.hxh.component.basicore.ui.recycleview.mrecycleview.MRecycleView
       android:layout_width="match_parent"
       android:id="@+id/recyclerview_main"
       android:layout_height="match_parent">
 
 
-  </com.hxh.component.basicore.ui.mrecycleview.MRecycleView>
+  </com.hxh.component.basicore.ui.recycleview.mrecycleview.MRecycleView>
 
 
 </LinearLayout>

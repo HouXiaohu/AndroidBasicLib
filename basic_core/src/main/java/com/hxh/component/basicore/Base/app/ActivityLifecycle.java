@@ -5,7 +5,6 @@ import android.app.Application;
 import android.os.Bundle;
 
 import com.hxh.component.basicore.CoreLib;
-import com.hxh.component.basicore.util.AppManager;
 import com.hxh.component.basicore.util.Utils;
 import com.umeng.analytics.MobclickAgent;
 

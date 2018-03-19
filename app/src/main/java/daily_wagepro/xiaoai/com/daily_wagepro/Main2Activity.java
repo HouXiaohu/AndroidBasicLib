@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.hxh.component.basicore.mvp.persenter.IPresenter;
-import com.hxh.component.basicore.mvp.view.BaseActivity;
+import com.hxh.component.basicore.component.mvp.persenter.IPresenter;
+import com.hxh.component.basicore.component.mvp.view.BaseActivity;
 import com.hxh.component.basicore.util.aspj.annotation.CheckLogin;
 import com.hxh.component.basicore.util.aspj.annotationenum.ShowType;
 

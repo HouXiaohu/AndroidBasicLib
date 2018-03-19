@@ -14,8 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hxh.component.basicore.R;
-import com.hxh.component.basicore.ui.mrecycleview.EmptyViewConfig;
-import com.hxh.component.basicore.ui.mrecycleview.callback.EmpViewClickOtherPlaceRefreshCallBack;
+import com.hxh.component.basicore.ui.recycleview.mrecycleview.EmptyViewConfig;
+import com.hxh.component.basicore.ui.recycleview.mrecycleview.callback.EmpViewClickOtherPlaceRefreshCallBack;
 import com.hxh.component.basicore.util.Utils;
 
 /**

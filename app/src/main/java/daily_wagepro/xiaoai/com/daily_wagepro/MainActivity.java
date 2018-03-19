@@ -5,8 +5,8 @@ import android.os.Bundle;
 
 import com.hxh.component.basicore.Base.TopBarBaseActivity;
 import com.hxh.component.basicore.Base.topbar.ActionBarConfig;
-import com.hxh.component.basicore.mvp.persenter.IPresenter;
-import com.hxh.component.basicore.ui.mrecycleview.MRecycleView;
+import com.hxh.component.basicore.component.mvp.persenter.IPresenter;
+import com.hxh.component.basicore.ui.recycleview.mrecycleview.MRecycleView;
 import com.hxh.component.basicore.util.Utils;
 import com.hxh.component.basicore.util.aspj.annotation.Safe;
 import com.hxh.component.basicore.util.aspj.util.AspjManager;

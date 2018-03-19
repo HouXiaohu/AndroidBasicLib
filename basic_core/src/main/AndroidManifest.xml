@@ -15,12 +15,11 @@
 
         <!-- <activity android:name=".ui.QRCode.activity.CaptureActivity"/> -->
 
-        <activity android:name=".permissions.PermissionActivityActivity"
+        <activity android:name=".util.permissions.PermissionActivityActivity"
             android:theme="@style/Transparent_activity_theme"
         />
         <activity android:name=".CommonConponet.PdfViewerActivity" />
         <activity android:name=".ui.QRCode.activity.CaptureActivity"/>
-        <activity android:name=".CommonConponet.ImagePagerActivity"/>
     </application>
 
 </manifest>

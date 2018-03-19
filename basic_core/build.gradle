@@ -2,7 +2,14 @@ apply plugin: 'com.android.library'
 apply plugin: 'android-aspectjx'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
-version = "1.0.10.6"//定义版本标识
+
+//老版本截止 2018/03/19
+//去除了很多没必要的东西
+//version = "1.0.10.7"//定义版本标识
+
+//暂时新的版本
+//增加了新的MVP架构模式
+version = "1.1"
 
 //version = "1.0.9.12"//定义版本标识
 
@@ -32,10 +39,6 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
-
-    //谁用了butterknife 谁去写这句代码，一般来说，butterknife应该写在主 module 中
-    compile rootProject.ext.requiredDependencies["butterknife"]
-
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
@@ -56,6 +59,8 @@ dependencies {
     compile rootProject.ext.requiredDependencies["rxjava"]
     compile rootProject.ext.requiredDependencies["rxandroid"]
     compile rootProject.ext.requiredDependencies["rxjavaRetrofiAdapter"]
+
+
     compile rootProject.ext.requiredDependencies["glide"]
     compile rootProject.ext.requiredDependencies["autoLayout"]
     compile rootProject.ext.requiredDependencies["fragmention"]
@@ -64,11 +69,12 @@ dependencies {
     //仿Ios的 Alert
     compile rootProject.ext.requiredDependencies["alertview"]
     compile rootProject.ext.requiredDependencies["gson"]
-    compile rootProject.ext.requiredDependencies["imageloader"]
+
+
     //fastjson
     compile rootProject.ext.requiredDependencies["fastjson"]
-    compile rootProject.ext.requiredDependencies["photoView"]
-    compile rootProject.ext.requiredDependencies["pdf_viewer"]
+
+
     //MRecyeclview基础
     compile rootProject.ext.requiredDependencies["xrecycleview"]
     //对时间的封装
@@ -83,10 +89,7 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     //greendao
 
-    compile ('com.github.gzu-liyujiang.AndroidPicker:WheelPicker:1.5.5') {
-        //不引用如下包
-        exclude module: 'support-v4'
-    }
+
 }
 
 
@@ -114,9 +117,9 @@ install {
                 }
                 developers {
                     developer { //  可默认，开发者信息
-                        id 'YOUR_ID'
-                        name 'YOUR NAME'
-                        email 'YOUR EMAIL'
+                        id 'houda'
+                        name 'houxiaohu'
+                        email '13261209796@163.com'
                     }
                 }
                 scm {

@@ -20,16 +20,12 @@ ext {
             glide               : "3.7.0",
             //autoLayout
             autoLayout          : "1.4.5",
-            //utils 集合
-            utils               : "1.3.5",
             //recycleview下拉刷新
             xrecycleview        : "1.3.2",
-            //导航栏
-            navigationtabstrip  : "1.0.4",
             //greenDao
             greendao            : "3.2.2",
             greendao_generator  : "3.0.0",
-            butterknife         : "8.5.1",
+
             fragmention         : "1.0.8",
             fragmenton_swipeback: "1.0.8",
             jodatimeVersion     : "2.9.3",
@@ -45,14 +41,12 @@ ext {
             arouter             : '1.2.1',
             arouter_compiler    : '1.1.2',
             constraintlayout    : '1.0.2',
-            androidPicer_WheelPicker:'1.5.5',
-            pdf_viewer          : '2.6.0',
 
-            photoView           : '1.3.0',  //展示图片
-            pager_tab_strip     : '2.1.0', //导航栏
-            pagerslidingtabstrip: '1.0.1',//导航栏
-            citypicker          : '2.1.2',//地址选择器
-            sublimepickerlibrary: "2.1.1",
+
+
+
+
+
             aspectjtools : "1.8.10",
             aspectjjrt :"1.8.10",
             alertview:"0.1.4"
@@ -83,10 +77,9 @@ ext {
 
             //默认引入Glide，适配采用autoLayout
             "glide"                 : "com.github.bumptech.glide:glide:${android["glide"]}",
-            "imageloader"           : "com.nostra13.universalimageloader:universal-image-loader:1.9.3",
+
             "autoLayout"            : "com.zhy:autolayout:${android["autoLayout"]}",
-            //注解
-            "butterknife"           : "com.jakewharton:butterknife:${android["butterknife"]}",
+
 
             //fragmetion
             "fragmention"           : "me.yokeyword:fragmentation:${android["fragmention"]}",
@@ -95,9 +88,8 @@ ext {
             "alertview"             : "com.hxh.component.ui:androidalertview:${android["alertview"]}",
             "gson"                  : "com.google.code.gson:gson:${android["gsonVersion"]}",
             "fastjson"              : "com.alibaba:fastjson:${android["fastjson"]}",
-            "pdf_viewer"            : "com.github.barteksc:android-pdf-viewer:${android["pdf_viewer"]}",
-            "photoView"             : "com.github.chrisbanes:PhotoView:${android["photoView"]}",
-            "androidPicer_WheelPicker": "com.github.gzu-liyujiang.AndroidPicker:WheelPicker:${android["androidPicer_WheelPicker"]}",
+
+
             "aspectjrt" :"org.aspectj:aspectjrt:${android["aspectjjrt"]}",
             "joda-time"             : "joda-time:joda-time:${android["jodatimeVersion"]}",
             "xrecycleview"          : "com.jcodecraeer:xrecyclerview:${android["xrecycleview"]}",
@@ -106,44 +98,5 @@ ext {
     ]
     //endregion
 
-    //region 不需要
-//    annotationCompiler= [
-//            "butterknife-compiler"  : "com.jakewharton:butterknife-compiler:${android["butterknife"]}",
-//            "arouter-compiler":"com.alibaba:arouter-compiler:${android["arouter_compiler"]}",
-//            "apifactory-compile":":basic_component_compile"
-//    ]
 
-
-//    dependencies = [
-//            "constraintlayout"      : "com.android.support.constraint:constraint-layout:${android["constraintlayout"]}",
-//            "preference-v14"        : "com.android.support:preference-v14:${android["supportSdk"]}",
-//            "customtabs"            : "com.android.support:customtabs:${android["supportSdk"]}",
-//            "palette-v7"            : "com.android.support:palette-v7:${android["supportSdk"]}",
-//            "percent"               : "com.android.support:percent:${android["supportSdk"]}",
-//
-//            "sublimepickerlibrary"  : "com.appeaser.sublimepickerlibrary:sublimepickerlibrary:${android["sublimepickerlibrary"]}",
-//
-//            "arecyclerview"         : "com.github.limedroid:ARecyclerView:v1.1.5",
-//
-//            "utils"                 : "com.blankj:utilcode:${android["utils"]}",
-//
-//
-//
-//            "navigationtabstrip"    : "com.github.devlight.navigationtabstrip:navigationtabstrip:${android["navigationtabstrip"]}",
-//
-//            "greendao"              : "org.greenrobot:greendao:${android["greendao"]}",
-//
-//            "multidex"              : "com.android.support:multidex:${android["multidexVersion"]}",
-//
-//            "bugly_sdk"             : "com.tencent.bugly:crashreport:${android["bugly_sdkVersion"]}",
-//            "bugly_ndk"             : "com.tencent.bugly:nativecrashreport:${android["bugly_ndkVersion"]}",
-//            "pager_bottom_tab_strip": "me.majiajie:pager-bottom-tab-strip:${android["pager_tab_strip"]}",
-//            "citypicker"            : "liji.library.dev:citypickerview:${android["citypicker"]}",
-//
-//
-//
-//            "pagerslidingtabstrip"  : "com.astuetz:pagerslidingtabstrip:${android["pagerslidingtabstrip"]}",
-//
-//    ]
-    //endregion
 }

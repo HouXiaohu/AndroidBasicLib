@@ -1,10 +1,10 @@
 package com.hxh.component.basicore.util.aspj;
 
 
-import com.hxh.component.basicore.ui.mrecycleview.AbsNetResultBean;
-import com.hxh.component.basicore.ui.mrecycleview.datasource.DataSource_DB;
-import com.hxh.component.basicore.ui.mrecycleview.datasource.DataSource_SP;
-import com.hxh.component.basicore.ui.mrecycleview.datasource.IDataSource;
+import com.hxh.component.basicore.ui.recycleview.mrecycleview.NetResultBean;
+import com.hxh.component.basicore.ui.recycleview.mrecycleview.datasource.DataSource_DB;
+import com.hxh.component.basicore.ui.recycleview.mrecycleview.datasource.DataSource_SP;
+import com.hxh.component.basicore.ui.recycleview.mrecycleview.datasource.IDataSource;
 import com.hxh.component.basicore.util.aspj.annotation.DataSave;
 import com.hxh.component.basicore.util.aspj.annotationenum.DataSourceType;
 
@@ -42,8 +42,8 @@ public class DataSaveAspj {
             List beans = null;
             if (args instanceof List) {
                 beans = (List) args;
-            } else if (args instanceof AbsNetResultBean) {
-                beans = ((AbsNetResultBean) args).getItems();
+            } else if (args instanceof NetResultBean) {
+                beans = ((NetResultBean) args).getItems();
             }
             if(null != beans)
             {

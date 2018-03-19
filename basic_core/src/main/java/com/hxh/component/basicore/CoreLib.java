@@ -7,8 +7,8 @@ import android.support.v4.util.ArrayMap;
 
 import com.hxh.component.basicore.Base.app.AppComponent;
 import com.hxh.component.basicore.Base.topbar.ActionBarProvider;
-import com.hxh.component.basicore.net.BaseAPI;
-import com.hxh.component.basicore.net.NetProvider;
+import com.hxh.component.basicore.component.net.BaseAPI;
+import com.hxh.component.basicore.component.net.NetProvider;
 import com.hxh.component.basicore.util.Log;
 import com.hxh.component.basicore.util.Utils;
 

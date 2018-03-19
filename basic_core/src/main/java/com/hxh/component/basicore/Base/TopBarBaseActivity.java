@@ -14,7 +14,7 @@ import com.hxh.component.basicore.Base.delegate.interfaces.IToolBarRelated;
 import com.hxh.component.basicore.Base.topbar.ActionBarConfig;
 import com.hxh.component.basicore.Base.view.EmptyActivity;
 import com.hxh.component.basicore.CoreLib;
-import com.hxh.component.basicore.mvp.persenter.IPresenter;
+import com.hxh.component.basicore.component.mvp.persenter.IPresenter;
 
 /**
  * 标题: TopBarBaseActivity.java

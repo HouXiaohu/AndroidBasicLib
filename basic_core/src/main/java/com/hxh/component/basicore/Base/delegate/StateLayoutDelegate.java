@@ -1,7 +1,7 @@
 package com.hxh.component.basicore.Base.delegate;
 
 import com.hxh.component.basicore.Base.delegate.interfaces.IStateLayoutRelated;
-import com.hxh.component.basicore.mvp.persenter.BasePresenter;
+import com.hxh.component.basicore.component.mvp.persenter.BasePresenter;
 
 /**
  * Created by hxh on 2018/2/28.

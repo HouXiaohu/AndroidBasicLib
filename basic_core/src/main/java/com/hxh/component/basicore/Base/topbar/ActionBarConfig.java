@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-import com.hxh.component.basicore.util.AppManager;
+import com.hxh.component.basicore.Base.app.AppManager;
 
 /**
  * ActionBar/toolbar 配置类

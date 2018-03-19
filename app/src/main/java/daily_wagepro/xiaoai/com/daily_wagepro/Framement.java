@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.hxh.component.basicore.Base.TopBarBaseLazyFragment;
 import com.hxh.component.basicore.Base.topbar.ActionBarConfig;
-import com.hxh.component.basicore.mvp.persenter.IPresenter;
+import com.hxh.component.basicore.component.mvp.persenter.IPresenter;
 import com.hxh.component.basicore.ui.BannerImg;
 import com.hxh.component.basicore.util.Utils;
 

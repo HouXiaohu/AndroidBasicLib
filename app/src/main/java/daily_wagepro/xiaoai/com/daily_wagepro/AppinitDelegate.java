@@ -5,7 +5,7 @@ import android.app.Application;
 import com.hxh.component.basicore.Base.app.AppDelegate;
 import com.hxh.component.basicore.Base.app.AppInitDelegate;
 import com.hxh.component.basicore.Base.topbar.ActionBarProvider;
-import com.hxh.component.basicore.util.BugManager;
+import com.hxh.component.basicore.Base.app.BugManager;
 import com.hxh.component.basicore.util.Utils;
 
 /**

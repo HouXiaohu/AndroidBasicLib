@@ -16,8 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.hxh.component.basicore.R;
-import com.hxh.component.basicore.imageLoader.IImageLoader;
-import com.hxh.component.basicore.imageLoader.ImageFactory;
+import com.hxh.component.basicore.component.imageLoader.IImageLoader;
+import com.hxh.component.basicore.component.imageLoader.ImageFactory;
 import com.hxh.component.basicore.util.Utils;
 
 import java.util.ArrayList;

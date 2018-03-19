@@ -6,9 +6,9 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.hxh.component.basicore.mvp.persenter.BasePresenter;
-import com.hxh.component.basicore.mvp.persenter.IPresenter;
-import com.hxh.component.basicore.mvp.view.IView;
+import com.hxh.component.basicore.component.mvp.persenter.BasePresenter;
+import com.hxh.component.basicore.component.mvp.persenter.IPresenter;
+import com.hxh.component.basicore.component.mvp.view.IView;
 import com.hxh.component.basicore.util.AutoUtils;
 
 /**

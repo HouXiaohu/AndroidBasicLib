@@ -49,7 +49,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -61,11 +60,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
+import com.hxh.component.basicore.Base.app.AppManager;
 import com.hxh.component.basicore.Config;
-import com.hxh.component.basicore.R;
-import com.hxh.component.basicore.imageLoader.IImageLoader;
-import com.hxh.component.basicore.imageLoader.ImageFactory;
+import com.hxh.component.basicore.component.imageLoader.IImageLoader;
+import com.hxh.component.basicore.component.imageLoader.ImageFactory;
 import com.hxh.component.basicore.util.aspj.annotation.Safe;
 import com.hxh.component.basicore.util.aspj.util.AspjUtils;
 import com.hxh.component.ui.alertview.AlertView;
@@ -136,13 +134,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import cn.qqtheme.framework.entity.Province;
-import cn.qqtheme.framework.picker.AddressPicker;
-import cn.qqtheme.framework.picker.OptionPicker;
-import cn.qqtheme.framework.picker.WheelPicker;
-
-import static android.R.attr.path;
 
 /**
  * Created by hxh on 2017/4/12.
@@ -3336,53 +3327,53 @@ public class Utils {
 
             return builder.build().setCancelable(iscanceable);
         }
-
-        public static OptionPicker showDefaulStyleSingleSelectPicker(String[] datas, OptionPicker.OnOptionPickListener listener) {
-            OptionPicker picker = new OptionPicker(AppManager.getCurrentActivity(), datas);
-            picker.setSelectedIndex(0);
-            picker.setTextSize(22);
-            picker = setDefaultStyle(picker);
-            picker.setOnOptionPickListener(listener);
-            return picker;
-        }
-
-        public static OptionPicker showDefaulStyleSingleSelectPicker(String title, String[] datas, OptionPicker.OnOptionPickListener listener) {
-            OptionPicker picker = new OptionPicker(AppManager.getCurrentActivity(), datas);
-            picker.setSelectedIndex(0);
-            picker.setTextSize(22);
-            picker.setTitleText(title);
-            picker = setDefaultStyle(picker);
-            picker.setOnOptionPickListener(listener);
-            return picker;
-        }
-
-        public static AddressPicker showDefaulStyleAddressPicker(AddressPicker.OnAddressPickListener lis) {
-            ArrayList<Province> data = new ArrayList<Province>();
-            String json = Resource.getAssestString("city.json");
-
-            data.addAll(JSON.parseArray(json, Province.class));
-            AddressPicker picker = new AddressPicker(AppManager.getCurrentActivity(), data);
-            picker.setHideProvince(false);
-            picker = setDefaultStyle(picker);
-            picker.setOnAddressPickListener(lis);
-            return picker;
-        }
+//
+//        public static OptionPicker showDefaulStyleSingleSelectPicker(String[] datas, OptionPicker.OnOptionPickListener listener) {
+//            OptionPicker picker = new OptionPicker(AppManager.getCurrentActivity(), datas);
+//            picker.setSelectedIndex(0);
+//            picker.setTextSize(22);
+//            picker = setDefaultStyle(picker);
+//            picker.setOnOptionPickListener(listener);
+//            return picker;
+//        }
+//
+//        public static OptionPicker showDefaulStyleSingleSelectPicker(String title, String[] datas, OptionPicker.OnOptionPickListener listener) {
+//            OptionPicker picker = new OptionPicker(AppManager.getCurrentActivity(), datas);
+//            picker.setSelectedIndex(0);
+//            picker.setTextSize(22);
+//            picker.setTitleText(title);
+//            picker = setDefaultStyle(picker);
+//            picker.setOnOptionPickListener(listener);
+//            return picker;
+//        }
+//
+//        public static AddressPicker showDefaulStyleAddressPicker(AddressPicker.OnAddressPickListener lis) {
+//            ArrayList<Province> data = new ArrayList<Province>();
+//            String json = Resource.getAssestString("city.json");
+//
+//            data.addAll(JSON.parseArray(json, Province.class));
+//            AddressPicker picker = new AddressPicker(AppManager.getCurrentActivity(), data);
+//            picker.setHideProvince(false);
+//            picker = setDefaultStyle(picker);
+//            picker.setOnAddressPickListener(lis);
+//            return picker;
+//        }
 
         public static AlertView showCustomStyleDialog(AlertView.Builder builder)
         {
             return new AlertView(builder);
         }
 
-        private static <T extends WheelPicker> T setDefaultStyle(T picker) {
-            picker.setTextSize(22);
-            picker.setTopLineColor(Utils.Resource.getColor(R.color.black));
-            picker.setSubmitTextColor(Utils.Resource.getColor(R.color.google_blue));
-            picker.setCancelTextColor(Utils.Resource.getColor(R.color.grav_6));
-            picker.setDividerColor(Utils.Resource.getColor(R.color.split_main));
-
-            picker.setPressedTextColor(Utils.Resource.getColor(R.color.black));
-            return picker;
-        }
+//        private static <T extends WheelPicker> T setDefaultStyle(T picker) {
+//            picker.setTextSize(22);
+//            picker.setTopLineColor(Utils.Resource.getColor(R.color.black));
+//            picker.setSubmitTextColor(Utils.Resource.getColor(R.color.google_blue));
+//            picker.setCancelTextColor(Utils.Resource.getColor(R.color.grav_6));
+//            picker.setDividerColor(Utils.Resource.getColor(R.color.split_main));
+//
+//            picker.setPressedTextColor(Utils.Resource.getColor(R.color.black));
+//            return picker;
+//        }
 
 
         public static AlertView showDefaulStyleSelectPhotoMode( OnItemClickListener lis) {

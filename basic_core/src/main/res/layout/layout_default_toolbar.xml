@@ -21,7 +21,7 @@
         />
 
     <!-- 默认的BackVIew -->
-    <com.hxh.component.basicore.CommonConponet.DefaultBackButton
+    <com.hxh.component.basicore.Base.topbar.DefaultBackButton
         android:layout_width="wrap_content"
         android:visibility="gone"
         android:layout_marginLeft="20px"
@@ -35,7 +35,7 @@
         android:layout_height="match_parent">
 
 
-    </com.hxh.component.basicore.CommonConponet.DefaultBackButton>>
+    </com.hxh.component.basicore.Base.topbar.DefaultBackButton>>
 
     <!-- 默认的右边按钮 -->
     <Button

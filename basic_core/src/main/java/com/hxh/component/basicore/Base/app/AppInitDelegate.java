@@ -8,7 +8,6 @@ import android.util.ArrayMap;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.android.arouter.utils.TextUtils;
 import com.hxh.component.basicore.Config;
-import com.hxh.component.basicore.util.BugManager;
 import com.hxh.component.basicore.util.Utils;
 import com.hxh.component.basicore.util.aspj.util.AspjManager;
 import com.umeng.analytics.MobclickAgent;

@@ -1,8 +1,8 @@
 package com.hxh.component.basicore.util.aspj;
 
-import com.hxh.component.basicore.permissions.PermissionActivityActivity;
-import com.hxh.component.basicore.permissions.PermissionsChecker;
-import com.hxh.component.basicore.util.AppManager;
+import com.hxh.component.basicore.util.permissions.PermissionActivityActivity;
+import com.hxh.component.basicore.util.permissions.PermissionsChecker;
+import com.hxh.component.basicore.Base.app.AppManager;
 import com.hxh.component.basicore.util.aspj.annotation.PermissionCheck;
 
 import org.aspectj.lang.ProceedingJoinPoint;

@@ -3,11 +3,10 @@ package com.hxh.component.basicore.Base.delegate;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.text.TextUtils;
 
 import com.hxh.component.basicore.Base.delegate.interfaces.IIntentRelated;
 import com.hxh.component.basicore.Config;
-import com.hxh.component.basicore.util.AppManager;
+import com.hxh.component.basicore.Base.app.AppManager;
 
 import java.io.Serializable;
 import java.util.ArrayList;

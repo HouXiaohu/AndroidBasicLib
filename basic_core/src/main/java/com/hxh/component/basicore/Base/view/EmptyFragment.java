@@ -19,8 +19,8 @@ import com.hxh.component.basicore.Base.delegate.ViewRelatedDelegate;
 import com.hxh.component.basicore.Base.delegate.interfaces.IIntentRelated;
 import com.hxh.component.basicore.Base.delegate.interfaces.ILogRelated;
 import com.hxh.component.basicore.Base.delegate.interfaces.IViewRelated;
-import com.hxh.component.basicore.mvp.persenter.IPresenter;
-import com.hxh.component.basicore.mvp.view.IView;
+import com.hxh.component.basicore.component.mvp.persenter.IPresenter;
+import com.hxh.component.basicore.component.mvp.view.IView;
 
 import java.io.Serializable;
 import java.util.ArrayList;

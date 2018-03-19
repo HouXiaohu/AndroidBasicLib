@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.hxh.component.basicore.Base.view.AppCompartAutoLayoutActivity;
-import com.hxh.component.basicore.util.AppManager;
+import com.hxh.component.basicore.Base.app.AppManager;
 import com.hxh.component.basicore.util.aspj.annotationenum.ShowType;
 
 import java.lang.ref.WeakReference;

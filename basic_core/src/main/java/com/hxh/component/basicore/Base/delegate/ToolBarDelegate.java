@@ -1,5 +1,7 @@
 package com.hxh.component.basicore.Base.delegate;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -23,10 +25,10 @@ import android.widget.TextView;
 import com.hxh.component.basicore.Base.delegate.interfaces.IToolBarRelated;
 import com.hxh.component.basicore.Base.topbar.ActionBarConfig;
 import com.hxh.component.basicore.Base.topbar.ActionBarProvider;
-import com.hxh.component.basicore.CommonConponet.DefaultBackButton;
+import com.hxh.component.basicore.Base.topbar.DefaultBackButton;
 import com.hxh.component.basicore.CoreLib;
 import com.hxh.component.basicore.R;
-import com.hxh.component.basicore.util.AppManager;
+import com.hxh.component.basicore.Base.app.AppManager;
 import com.hxh.component.basicore.util.Utils;
 import com.hxh.component.basicore.util.aspj.annotation.Safe;
 import com.zhy.autolayout.AutoRelativeLayout;
@@ -103,6 +105,20 @@ public class ToolBarDelegate implements IToolBarRelated {
         toolbar.addView(layoutrootView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         toolbar.setVisibility(View.VISIBLE);
     }
+
+    public void fetchToView(View rootView, Context context) {
+        fetchToolBar(rootView);
+        if(context instanceof Activity)
+        {
+            ((AppCompatActivity)context).setSupportActionBar(toolbar);
+            ((AppCompatActivity) context).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }else
+        {
+            throw new IllegalArgumentException("context can't convert ActivityContext");
+        }
+    }
+
+
     //endregion
 
     public void init(ActionBarConfig config) {
