@@ -8,10 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hxh.newcomponent.core.mvp.model.BaseModel;
-import com.hxh.newcomponent.core.mvp.model.IModel;
-import com.hxh.newcomponent.core.mvp.view.IView;
-import com.hxh.newcomponent.core.util.AutoUtils;
+import com.hxh.component.basicore.component.mvp.newmvp.model.BaseModel;
+import com.hxh.component.basicore.component.mvp.newmvp.model.IModel;
+import com.hxh.component.basicore.component.mvp.newmvp.view.IView;
+import com.hxh.component.basicore.util.AutoUtils;
 
 import java.util.ArrayList;
 

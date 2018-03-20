@@ -9,11 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hxh.newcomponent.core.Base.delegate.IntentDelegate;
-import com.hxh.newcomponent.core.Base.delegate.interfaces.IIntentRelated;
-import com.hxh.newcomponent.core.Base.view.AppCompartAutoLayoutFragment;
-import com.hxh.newcomponent.core.mvp.model.BaseModel;
-import com.hxh.newcomponent.core.mvp.view.IView;
+import com.hxh.component.basicore.Base.delegate.IntentDelegate;
+import com.hxh.component.basicore.Base.delegate.interfaces.IIntentRelated;
+import com.hxh.component.basicore.Base.view.AppCompartAutoLayoutFragment;
+import com.hxh.component.basicore.component.mvp.newmvp.model.BaseModel;
+import com.hxh.component.basicore.component.mvp.newmvp.view.IView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,13 +29,15 @@ public abstract class BaseFragmentPresenter<V extends IView> extends AppCompartA
     private FragmentDelegate mFragmentDelegate;
 
     public BaseFragmentPresenter() {
+
         try {
             mView = getV().newInstance();
-        }  catch (IllegalAccessException e) {
+        } catch (java.lang.InstantiationException e) {
             e.printStackTrace();
-        } catch (InstantiationException e) {
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+
     }
 
 

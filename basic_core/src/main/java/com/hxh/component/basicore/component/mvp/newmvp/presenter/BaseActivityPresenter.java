@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
-import com.hxh.newcomponent.core.Base.delegate.IntentDelegate;
-import com.hxh.newcomponent.core.Base.delegate.interfaces.IIntentRelated;
-import com.hxh.newcomponent.core.Base.view.AppCompartAutoLayoutActivity;
-import com.hxh.newcomponent.core.mvp.model.BaseModel;
-import com.hxh.newcomponent.core.mvp.view.IView;
+import com.hxh.component.basicore.Base.delegate.IntentDelegate;
+import com.hxh.component.basicore.Base.delegate.interfaces.IIntentRelated;
+import com.hxh.component.basicore.Base.view.AppCompartAutoLayoutActivity;
+import com.hxh.component.basicore.component.mvp.newmvp.model.BaseModel;
+import com.hxh.component.basicore.component.mvp.newmvp.view.IView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
