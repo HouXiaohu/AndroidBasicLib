@@ -579,8 +579,12 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack {
 
     private List<D> checkIsEnableInterceptor(NetResultBean<D> datas) {
         if (null != mResInterceptor) {
-            mResInterceptor.setData(datas);
-            return datas.getItems();
+            NetResultBean<D> netResultBean = mResInterceptor.setData(datas);
+            if(null != netResultBean)
+            {
+                return netResultBean.getItems();
+            }
+            return null;
         } else if (null != mResInterceptorAsync) {
             mResInterceptorAsync
                     .setData(datas)
