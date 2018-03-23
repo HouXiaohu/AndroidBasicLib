@@ -1,6 +1,6 @@
 package daily_wagepro.xiaoai.com.daily_wagepro.test1;
 
-import com.hxh.component.basicore.ui.mrecycleview.AbsNetResultBean;
+import com.hxh.component.basicore.ui.mrecycleview.NetResultBean;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import java.util.List;
  * Created by hxh on 2018/2/27.
  */
 
-public class NewsDTO extends AbsNetResultBean<NewsDTO.ResultBean.DataBean> {
+public class NewsDTO extends NetResultBean<NewsDTO.ResultBean.DataBean> {
     public NewsDTO() {
     }
 

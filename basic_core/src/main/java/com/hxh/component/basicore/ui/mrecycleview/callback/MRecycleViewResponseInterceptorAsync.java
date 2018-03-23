@@ -1,6 +1,6 @@
 package com.hxh.component.basicore.ui.mrecycleview.callback;
 
-import com.hxh.component.basicore.ui.mrecycleview.AbsNetResultBean;
+import com.hxh.component.basicore.ui.mrecycleview.NetResultBean;
 
 import rx.Observable;
 
@@ -9,6 +9,6 @@ import rx.Observable;
  */
 
 public interface MRecycleViewResponseInterceptorAsync<D> {
-    Observable<AbsNetResultBean<D>> setData(AbsNetResultBean<D> datas);
+    Observable<NetResultBean<D>> setData(NetResultBean<D> datas);
 
 }

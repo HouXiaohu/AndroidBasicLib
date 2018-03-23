@@ -1,7 +1,7 @@
 package com.hxh.component.basicore.util.aspj;
 
 
-import com.hxh.component.basicore.ui.mrecycleview.AbsNetResultBean;
+import com.hxh.component.basicore.ui.mrecycleview.NetResultBean;
 import com.hxh.component.basicore.ui.mrecycleview.datasource.DataSource_DB;
 import com.hxh.component.basicore.ui.mrecycleview.datasource.DataSource_SP;
 import com.hxh.component.basicore.ui.mrecycleview.datasource.IDataSource;
@@ -42,8 +42,8 @@ public class DataSaveAspj {
             List beans = null;
             if (args instanceof List) {
                 beans = (List) args;
-            } else if (args instanceof AbsNetResultBean) {
-                beans = ((AbsNetResultBean) args).getItems();
+            } else if (args instanceof NetResultBean) {
+                beans = ((NetResultBean) args).getItems();
             }
             if(null != beans)
             {

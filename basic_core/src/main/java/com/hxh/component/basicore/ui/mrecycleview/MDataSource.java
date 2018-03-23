@@ -429,14 +429,14 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack {
 
             mNetRepository
                     .getData(this.mParams)
-                    .subscribe(new RESTFULProgressSubscribe<AbsNetResultBean<D>>(true) {
+                    .subscribe(new RESTFULProgressSubscribe<NetResultBean<D>>(true) {
                         @Override
                         public void _OnError(Throwable msg) {
                             getDbData(noDataType);
                         }
 
                         @Override
-                        public void _OnNet(AbsNetResultBean<D> o) {
+                        public void _OnNet(NetResultBean<D> o) {
                             if (null == o.getItems() || 0 == o.getItems().size()) {
                                 showViewWhenNoData(noDataType);
                             } else {
@@ -449,13 +449,14 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack {
                                     if (!isEnableInterceptor) {
                                         mView.setNetData(checkIsNeedTranFromData(checkFixedData(o.getItems())));
                                     } else {
-
-                                        List<D> result = checkIsNeedTranFromData(checkFixedData(o.getItems()));
-                                        if (null != result) {
-                                            mView.setNetData(result);
+                                        //有数据应该第一时间回调返回
+                                        List<D> result = checkIsEnableInterceptor(o);
+                                        if(null != result)
+                                        {
+                                            //如果用户是个异步的操作，那么这一步是不会进来，它必然会
+                                            //通过重新fetch(数据) 进行
+                                            mView.setNetData(checkIsNeedTranFromData(checkFixedData(result)));
                                         }
-                                        checkIsEnableInterceptor(o);
-
                                     }
                                 }
 
@@ -576,21 +577,21 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack {
         return datas;
     }
 
-    private List<D> checkIsEnableInterceptor(AbsNetResultBean<D> datas) {
+    private List<D> checkIsEnableInterceptor(NetResultBean<D> datas) {
         if (null != mResInterceptor) {
             mResInterceptor.setData(datas);
             return datas.getItems();
         } else if (null != mResInterceptorAsync) {
             mResInterceptorAsync
                     .setData(datas)
-                    .subscribe(new RESTFULProgressSubscribe<AbsNetResultBean<D>>() {
+                    .subscribe(new RESTFULProgressSubscribe<NetResultBean<D>>() {
                         @Override
                         public void _OnError(Throwable msg) {
 
                         }
 
                         @Override
-                        public void _OnNet(AbsNetResultBean<D> ds) {
+                        public void _OnNet(NetResultBean<D> ds) {
 
                         }
                     });
