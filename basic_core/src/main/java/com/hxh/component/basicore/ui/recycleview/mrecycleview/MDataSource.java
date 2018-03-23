@@ -449,12 +449,11 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack {
                                     if (!isEnableInterceptor) {
                                         mView.setNetData(checkIsNeedTranFromData(checkFixedData(o.getItems())));
                                     } else {
-
-                                        List<D> result = checkIsNeedTranFromData(checkFixedData(o.getItems()));
-                                        if (null != result) {
-                                            mView.setNetData(result);
+                                        List<D> result =  checkIsEnableInterceptor(o);
+                                        if(null != result)
+                                        {
+                                            mView.setNetData(checkIsNeedTranFromData(checkFixedData(result)));
                                         }
-                                        checkIsEnableInterceptor(o);
 
                                     }
                                 }
@@ -578,8 +577,12 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack {
 
     private List<D> checkIsEnableInterceptor(NetResultBean<D> datas) {
         if (null != mResInterceptor) {
-            mResInterceptor.setData(datas);
-            return datas.getItems();
+            NetResultBean<D> netResultBean = mResInterceptor.setData(datas);
+            if(null != netResultBean)
+            {
+                return netResultBean.getItems();
+            }
+            return null;
         } else if (null != mResInterceptorAsync) {
             mResInterceptorAsync
                     .setData(datas)
