@@ -92,18 +92,6 @@ public abstract class BaseActivityPresenter<V extends IView>
     }
 
 
-    @Override
-    public <B> void dispatchResponseEvent(final String tag, final B baseBean) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                onModelResponse(tag,baseBean);
-            }
-        });
-    }
-
-    public abstract <B>void onModelResponse(String tag,B bean);
-
     public abstract Class<V> getV();
 
     //region parceable支持

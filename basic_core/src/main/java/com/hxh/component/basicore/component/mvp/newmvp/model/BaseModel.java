@@ -4,7 +4,6 @@ package com.hxh.component.basicore.component.mvp.newmvp.model;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.hxh.component.basicore.component.mvp.newmvp.presenter.IPresenter;
 import com.hxh.component.basicore.component.net.IApiError;
 
 import java.util.List;
@@ -19,12 +18,23 @@ import rx.subscriptions.CompositeSubscription;
  * 作者: hxh
  * 日期: 2018/3/10 17:18
  * 描述: BaseModel
+ * 2018/04/03
+ * 问题1 :  Model为什么要必须依赖于一个Presenter？当前这么做，就把Model给限制死了，
+ * Model应该是单独公共的一层，对外提供方法，如果我的Utils中想用怎么办？View中也想用怎么办(简单的逻辑)
+ *
+ * 问题2:  目前下发结果的函数是dispatchResponseEvent(tag,bean)，按照理想的情况下,Model层由单独人员
+ * 编写，当编写完毕，提供给另一个开发人员整合，此时，另一个开发人员对于Model层的调用应该是轻松的，而
+ * 不是现在的这种，通过tag区分，而且，Model层返回的数据，可能有好几个，如果还是用这种方法，必然会增加
+ * 另一个开发者的难度。
+ *
+ * 问题3： 关于里氏替换原则，外部应该调用的是我的这个IModel接口，采用的应该是子类实现方式
+ *
  */
 public abstract class BaseModel
         implements IModel,
         IModelRelated
 {
-    private IPresenter mCurPresenters;
+
     protected CompositeSubscription mSubscription;//管理subscription
     protected String mCurrentRequestTag;
     protected BaseModelDelegate mDelegate;
@@ -33,26 +43,12 @@ public abstract class BaseModel
         this.mDelegate = new BaseModelDelegate();
     }
 
-    public void registerP(IPresenter p) {
-        mCurPresenters = p;
-    }
 
-    public <B> void dispatchResponseEvent(String tag, B baseBean) {
-        if (null != mCurPresenters) {
-
-            mCurPresenters.dispatchResponseEvent(tag, baseBean);
-        }
-    }
-
-    public <B> void dispatchResponseEvent(B baseBean) {
-        dispatchResponseEvent(mCurrentRequestTag, baseBean);
-    }
 
     @Override
     public void release() {
         unSubscription();
         mSubscription = null;
-        mCurPresenters = null;
         mCurrentRequestTag = null;
         mDelegate = null;
     }

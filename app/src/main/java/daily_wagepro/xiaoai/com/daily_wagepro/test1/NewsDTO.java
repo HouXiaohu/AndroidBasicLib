@@ -42,9 +42,11 @@ public class NewsDTO extends NetResultBean<NewsDTO.ResultBean.DataBean> {
     }
 
     @Override
-    public int getItemCount() {
+    public int getTotal_count() {
         return result.data.size();
     }
+
+
 
     @Override
     public List<NewsDTO.ResultBean.DataBean> getItems() {
