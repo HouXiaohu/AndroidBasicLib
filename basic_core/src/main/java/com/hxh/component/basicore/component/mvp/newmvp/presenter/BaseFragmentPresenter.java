@@ -64,11 +64,6 @@ public abstract class BaseFragmentPresenter<V extends IView> extends AppCompartA
         return mFragmentDelegate.onCrateView(inflater,container,savedInstanceState);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mFragmentDelegate.onActivityCreated(savedInstanceState);
-    }
 
     @Override
     public void onSupportVisible() {

@@ -39,9 +39,6 @@ public abstract class BaseView
     @Override
     public View onCreate(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = mBaseViewDelegate.onCreate(inflater,container,savedInstanceState,getLayoutId(),setActionBarConfig());
-
-        initView(savedInstanceState);
-
         return rootView;
     }
 
