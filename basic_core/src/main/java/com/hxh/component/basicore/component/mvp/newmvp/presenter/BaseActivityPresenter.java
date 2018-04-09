@@ -66,6 +66,7 @@ public abstract class BaseActivityPresenter<V extends IView>
     protected void onDestroy() {
         super.onDestroy();
         mDelegate.onDestroy();
+        mView.release();
         mDelegate = null;
         mView = null;
         mParceableDelegate = null;

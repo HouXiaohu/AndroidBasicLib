@@ -32,6 +32,7 @@ public abstract class BaseFragmentPresenter<V extends IView> extends AppCompartA
 
         try {
             mView = getV().newInstance();
+            mFragmentDelegate = new FragmentDelegate(mView);
         } catch (java.lang.InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -55,13 +56,19 @@ public abstract class BaseFragmentPresenter<V extends IView> extends AppCompartA
         mParceableDelegate = new IntentDelegate(getArguments());
     }
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mFragmentDelegate = new FragmentDelegate(mView);
+
         return mFragmentDelegate.onCrateView(inflater,container,savedInstanceState);
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mFragmentDelegate.onActivityCreated(savedInstanceState);
+    }
 
     @Override
     public void onSupportVisible() {

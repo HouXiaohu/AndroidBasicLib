@@ -30,7 +30,7 @@ public abstract class BaseView
 
 
     private BaseViewDelegate mBaseViewDelegate;
-
+    private View rootView;
 
     public BaseView() {
         mBaseViewDelegate = new BaseViewDelegate();
@@ -38,8 +38,15 @@ public abstract class BaseView
 
     @Override
     public View onCreate(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        
-        return mBaseViewDelegate.onCreate(inflater,container,savedInstanceState,getLayoutId(),setActionBarConfig());
+        rootView = mBaseViewDelegate.onCreate(inflater,container,savedInstanceState,getLayoutId(),setActionBarConfig());
+
+        initView(savedInstanceState);
+
+        return rootView;
+    }
+
+    public View getRootView() {
+        return rootView;
     }
 
     public abstract int getLayoutId();

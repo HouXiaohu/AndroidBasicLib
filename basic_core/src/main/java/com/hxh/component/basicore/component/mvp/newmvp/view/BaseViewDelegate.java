@@ -27,7 +27,8 @@ import java.util.List;
  * Created by hxh on 2018/3/16.
  */
 
-public class BaseViewDelegate  implements
+public class BaseViewDelegate
+        implements
         ILogRelated,
         IViewRelated,
         IToolBarRelated {

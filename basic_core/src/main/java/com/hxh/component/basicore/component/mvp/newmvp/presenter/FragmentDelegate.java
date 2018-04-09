@@ -129,7 +129,9 @@ public class FragmentDelegate<F extends Fragment> {
                 m.release();
             }
         }
+        mView.release();
         mView = null;
+
         rootView = null;
         context = null;
         if(null != mModels)mModels.clear();

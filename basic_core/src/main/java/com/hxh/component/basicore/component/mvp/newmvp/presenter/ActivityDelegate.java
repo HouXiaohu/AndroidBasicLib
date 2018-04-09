@@ -35,7 +35,9 @@ public class ActivityDelegate<A extends AppCompatActivity> {
         if(null != mActivity && null != mView)
         {
             mActivity.setContentView(mView.onCreate(mActivity.getLayoutInflater(),null,savedInstanceState));
+
             AutoUtils.auto(mActivity);
+
         }
     }
 
