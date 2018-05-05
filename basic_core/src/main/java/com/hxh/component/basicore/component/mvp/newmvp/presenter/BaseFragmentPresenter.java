@@ -22,7 +22,10 @@ import java.util.ArrayList;
  * Created by hxh on 2018/3/6.
  */
 
-public abstract class BaseFragmentPresenter<V extends IView> extends AppCompartAutoLayoutFragment implements IPresenter<V>,IIntentRelated {
+public abstract class BaseFragmentPresenter<V extends IView> extends AppCompartAutoLayoutFragment implements
+        IPresenter<V>
+        ,IIntentRelated
+        {
 
     protected V mView;
     private IntentDelegate mParceableDelegate;
@@ -93,7 +96,6 @@ public abstract class BaseFragmentPresenter<V extends IView> extends AppCompartA
     public void onDestroy() {
         super.onDestroy();
         mFragmentDelegate.onDestroy();
-
     }
 
 
@@ -267,5 +269,7 @@ public abstract class BaseFragmentPresenter<V extends IView> extends AppCompartA
         mParceableDelegate.startActivityForResult(classzz,data);
     }
     //endregion
+
+
 
 }

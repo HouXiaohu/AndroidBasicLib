@@ -1,7 +1,6 @@
 package com.hxh.component.basicore.Base.delegate.interfaces;
 
 import android.graphics.drawable.Drawable;
-import android.support.annotation.IdRes;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;

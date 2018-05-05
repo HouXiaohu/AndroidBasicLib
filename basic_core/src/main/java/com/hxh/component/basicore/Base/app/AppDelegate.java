@@ -10,6 +10,7 @@ import com.hxh.component.basicore.component.imageLoader.IImageLoader;
 import com.hxh.component.basicore.component.imageLoader.ImageFactory;
 import com.hxh.component.basicore.component.net.NetProvider;
 import com.hxh.component.basicore.component.net.RequestCallBackHandler;
+import com.hxh.component.basicore.ui.loading.ILoadingProgressDialog;
 
 /**
  * 标题: Application 委托类
@@ -58,6 +59,11 @@ public class AppDelegate  implements IApp{
             @Override
             public ActionBarProvider globalActionBarProvider() {
                 return actionBarProvider;
+            }
+
+            @Override
+            public UIProvider globalUIProvider() {
+                return corelib.getUIProvider();
             }
 
 

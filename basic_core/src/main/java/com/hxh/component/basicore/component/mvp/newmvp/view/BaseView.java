@@ -1,5 +1,6 @@
 package com.hxh.component.basicore.component.mvp.newmvp.view;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -65,6 +66,31 @@ public abstract class BaseView
         mBaseViewDelegate.setOnClickListener(clickListener,id);
     }
 
+    /**
+     * 隐约觉得这个方法会存在隐患
+     * @return
+     */
+    @Deprecated
+    public Context getContext()
+    {
+        return mBaseViewDelegate.getContext();
+    }
+
+    @Override
+    public void release() {
+        rootView = null;
+        mBaseViewDelegate.release();
+        mBaseViewDelegate = null;
+        onRelease();
+    }
+
+    /**
+     * 释放资源 等同于 onStop()
+     */
+    public void onRelease()
+    {
+
+    }
 
     //region 日志
     @Override

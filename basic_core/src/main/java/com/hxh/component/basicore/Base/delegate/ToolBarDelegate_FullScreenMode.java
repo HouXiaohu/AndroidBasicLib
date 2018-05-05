@@ -290,7 +290,7 @@ public class ToolBarDelegate_FullScreenMode implements IToolBarRelated {
         // 背景
         if (null == mActionbarconfig.getBackgroundDrawable() && 1234 == mActionbarconfig.getBackgroundColor()) {
             if (null != actionBarProvider) {
-                if (null == mActionbarconfig.getBackgroundDrawable()) {
+                if (null == actionBarProvider.getBackgroundDrawable()) {
                     int color = getColor( actionBarProvider.getBackgroundColor());
 
                     rootView.setBackgroundColor(color);

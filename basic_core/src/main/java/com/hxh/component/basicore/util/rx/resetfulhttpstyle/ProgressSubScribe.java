@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.hxh.component.basicore.Base.app.AppManager;
 import com.hxh.component.basicore.CoreLib;
-import com.hxh.component.basicore.ui.loading.CirCleLoadingDialog;
+import com.hxh.component.basicore.ui.loading.ILoadingProgressDialog;
 import com.hxh.component.basicore.util.Utils;
 
 import java.lang.ref.WeakReference;
@@ -14,41 +14,29 @@ import rx.Subscriber;
 
 
 /**
- * 创建者：hxh
- * 时间：  2017/8/4
- * 描述： 符合RestFul风格Http请求的Subscribe
- *
+ * 标题: ProgressSubScribe.java
+ * 作者: hxh
+ * 日期: 2018/4/24 10:14
+ * 描述: 带进度条的Subscribe
  */
-@Deprecated
-public abstract class RESTFULProgressSubscribe<T> extends Subscriber<T>  {
-
-
-    private CirCleLoadingDialog mDialog;
+public abstract class ProgressSubScribe<T> extends Subscriber<T> {
+    private ILoadingProgressDialog mDialog;
     private WeakReference<Context> mContext;
 
     private boolean isself; //是否自己处理异常
     private boolean isNoConnection; //是否有网络连接
-    public RESTFULProgressSubscribe()
-    {
+
+    public ProgressSubScribe() {
         this.mContext = new WeakReference<Context>(AppManager.getCurrentActivity());
         //mDialogHandler = new ProgressDialogHandler(mContext.get(),this);
-        mDialog = new CirCleLoadingDialog(mContext.get(),"");
+        mDialog = CoreLib.getInstance().getUIProvider().getLoadingDialog();
 
     }
 
-    public RESTFULProgressSubscribe(String msg)
-    {
-
-        this.mContext = new WeakReference<Context>(AppManager.getCurrentActivity());
-        // mDialogHandler = new ProgressDialogHandler(msg,mContext.get(),this);
-        mDialog = new CirCleLoadingDialog(mContext.get(),msg);
-    }
-
-    public RESTFULProgressSubscribe(boolean IsExceptionSelfCommand)
-    {
+    public ProgressSubScribe(boolean IsExceptionSelfCommand) {
         this.isself = IsExceptionSelfCommand;
         this.mContext = new WeakReference<Context>(AppManager.getCurrentActivity());
-        mDialog = new CirCleLoadingDialog(mContext.get(),"");
+        mDialog = CoreLib.getInstance().getUIProvider().getLoadingDialog();
     }
 
 
@@ -57,19 +45,17 @@ public abstract class RESTFULProgressSubscribe<T> extends Subscriber<T>  {
      * onStart()之所以不能展示Dialog主要原因是因为: onStart()的线程是由subscribe()时所处的线程，所以，
      * 万一subscribe()时所处的线程是 子线程，由于Android并不允许你在子线程中更新UI，所以会导致错误。
      * 但是本框架的写法不会导致这个情况的发生，本框架的M层由框架生成，P层肩负着一点M层的责任，后期会改
-     * @time 2017/11/27 10:27
      *
+     * @time 2017/11/27 10:27
      * @author
      */
     @Override
     public void onStart() {
         super.onStart();
         //检查网络
-        if(Utils.NetWork.isConnected())
-        {
+        if (Utils.NetWork.isConnected()) {
             showDialog();
-        }else
-        {
+        } else {
             //没有网络，直接结束
             isNoConnection = true;
 
@@ -77,15 +63,15 @@ public abstract class RESTFULProgressSubscribe<T> extends Subscriber<T>  {
         }
 
     }
+
     //
     @Override
     public void onError(Throwable e) {
         dissmisDialog();
         if (isself) {
             _OnError(e);
-            isself=false;
-        } else
-        {
+            isself = false;
+        } else {
             CoreLib.getInstance().getNetProvider().getApiErrorClasszz().handleApiError(e);
         }
     }
@@ -106,35 +92,30 @@ public abstract class RESTFULProgressSubscribe<T> extends Subscriber<T>  {
      * 调用时机是当Loading结束，如：  报错;执行完毕
      */
     public void onCancel() {
-        if(!this.isUnsubscribed())
-        {
+        if (!this.isUnsubscribed()) {
             this.unsubscribe();
         }
     }
-    public void _OnNoConnect(Throwable msg)
-    {
 
-    }
     public abstract void _OnError(Throwable msg);
+
     public abstract void _OnNet(T t);
 
     //关闭Loading
-    private void dissmisDialog()
-    {
+    private void dissmisDialog() {
+        if (null != mDialog) mDialog.close();
 
-        mDialog.close();
         onCancel();
-        if(null != mContext)
-        {
+        if (null != mContext) {
             mContext.clear();
         }
 
         mContext = null;
     }
-    //打开Loading
-    private void showDialog()
-    {
 
-        mDialog.show();
+    //打开Loading
+    private void showDialog() {
+        if (null != mDialog)
+            mDialog.show();
     }
 }

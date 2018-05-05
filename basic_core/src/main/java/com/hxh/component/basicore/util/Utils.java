@@ -52,6 +52,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -59,6 +60,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hxh.component.basicore.Base.app.AppManager;
 import com.hxh.component.basicore.Config;
@@ -134,6 +136,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static android.R.attr.gravity;
 
 /**
  * Created by hxh on 2017/4/12.
@@ -808,26 +812,67 @@ public class Utils {
         public static void toast(String message, int gravity) {
             show(message, android.widget.Toast.LENGTH_SHORT, gravity);
         }
+        public static void toast(String message, int gravity,int duration) {
+            show(message, duration, gravity);
+        }
 
 
         public static void toast_long(String message) {
             show(message, android.widget.Toast.LENGTH_LONG, -1);
         }
 
+        public static void toast(View view)
+        {
+            show(null, android.widget.Toast.LENGTH_SHORT,Gravity.CENTER,view,-1);
+        }
+
+        public static void toast(View view,int duration)
+        {
+            show(null,duration,Gravity.CENTER,view,-1);
+        }
+
+        public static void toast(View view, int textResId,String msg,int duration,int gravity)
+        {
+            show(msg,duration,gravity,view,textResId);
+        }
+
         private static void show(String message, int duration, int gravity) {
-            if (null == mToast) {
-                mToast = android.widget.Toast.makeText(Utils.getApplicationContext(), message, duration);
-            } else {
-                mToast.setText(message);
-                mToast.setDuration(duration);
+            show(message, duration,gravity,null,-1);
+        }
+
+        private static void show(String message, int duration, int gravity,View view,int resId) {
+            if(null != view)
+            {
+                if(null == mToast)
+                {
+                    mToast = new android.widget.Toast(Utils.getApplicationContext());
+                }
+                if(!TextUtils.isEmpty(message))
+                {
+                    ((TextView) view.findViewById(resId)).setText(message);
+                }
+                mToast.setView(view);
+            }else
+            {
+                if (null == mToast) {
+                    mToast = android.widget.Toast.makeText(Utils.getApplicationContext(), message, duration);
+                } else {
+                    if(!TextUtils.isEmpty(message))
+                    {
+                        mToast.setText(message);
+                    }
+
+                }
             }
 
+            mToast.setDuration(duration);
             if (-1 != gravity) {
                 mToast.setGravity(gravity, 0, 0);
             }
 
             mToast.show();
         }
+
     }
 
     public static class Text {

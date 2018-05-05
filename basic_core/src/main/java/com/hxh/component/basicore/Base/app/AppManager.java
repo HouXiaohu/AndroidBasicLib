@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
-import com.hxh.component.basicore.ui.loading.LoadingDialog;
+import com.hxh.component.basicore.ui.loading.CustomLoadingDialog;
 import com.hxh.component.basicore.util.Utils;
 
 import java.io.BufferedReader;
@@ -23,7 +23,7 @@ import java.util.Stack;
  */
 public class AppManager {
     private static Stack<Activity> mActivitys;
-    private static ArrayList<LoadingDialog> mLoadingDialogs;
+    private static ArrayList<CustomLoadingDialog> mLoadingDialogs;
 
     /**
      * 向Activity集合中添加一个Activity
@@ -209,7 +209,7 @@ public class AppManager {
     }
 
 
-    public static void addHttpLoadingDialog(LoadingDialog dialog)
+    public static void addHttpLoadingDialog(CustomLoadingDialog dialog)
     {
         if(null == mLoadingDialogs)
         {
@@ -222,7 +222,7 @@ public class AppManager {
     {
         if(null != mLoadingDialogs)
         {
-            for (LoadingDialog item : mLoadingDialogs) {
+            for (CustomLoadingDialog item : mLoadingDialogs) {
                 item.close();
             }
         }

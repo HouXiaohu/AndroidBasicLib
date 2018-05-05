@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 
-import com.hxh.component.basicore.ui.loading.LoadingDialog;
+import com.hxh.component.basicore.ui.loading.CirCleLoadingDialog;
 
 import java.lang.ref.WeakReference;
 
@@ -19,7 +19,7 @@ public class ProgressDialogHandler extends Handler {
     //隐藏
     public static final int HIDE_DIALOG = 2;
 
-    private LoadingDialog mDialog;
+    private CirCleLoadingDialog mDialog;
 
     private WeakReference<Context> mContext;
     private ProgressCancelListener mListener; //回调
@@ -56,7 +56,7 @@ public class ProgressDialogHandler extends Handler {
     {
         if(null == mDialog )
         {
-            mDialog = new LoadingDialog(mContext.get(),"",isCanable);
+            mDialog = new CirCleLoadingDialog(mContext.get(),"",isCanable);
         }
         //用户手动取消loading时候，结束事件链
         mDialog.show();

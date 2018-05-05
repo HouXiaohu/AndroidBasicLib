@@ -3,13 +3,15 @@ package com.hxh.component.basicore;
 import android.app.Application;
 import android.content.Context;
 import android.support.v4.util.ArrayMap;
-
+import android.view.LayoutInflater;
+import android.widget.TextView;
 
 import com.hxh.component.basicore.Base.app.AppComponent;
-import com.hxh.component.basicore.Base.topbar.ActionBarProvider;
+import com.hxh.component.basicore.Base.app.UIProvider;
 import com.hxh.component.basicore.component.net.BaseAPI;
 import com.hxh.component.basicore.component.net.NetProvider;
 import com.hxh.component.basicore.util.Log;
+import com.hxh.component.basicore.util.ToastUIType;
 import com.hxh.component.basicore.util.Utils;
 
 /**
@@ -50,7 +52,7 @@ public class CoreLib {
     private  String mLogTag; //配置Log的Tag名字
     private  NetProvider mNetProvider; //配置你的网络 提供者
     private AppComponent mAppComponent;//得到App组件类
-
+    private UIProvider mUIProvider;
     private boolean enableUMengUser,enableUMengAcoutn;
     private static CoreLib INSTANCE = null;
 
@@ -81,8 +83,7 @@ public class CoreLib {
         public Context appContext;
         public String logtag;
         public NetProvider mNetProvider;
-
-        public ActionBarProvider actionBarProvider;
+        public UIProvider mUiProvider;
 
         public Builder setContext(Context appContext)
         {
@@ -108,6 +109,12 @@ public class CoreLib {
         public Builder setNetProvider(NetProvider pro)
         {
             this.mNetProvider = pro;
+            return this;
+        }
+
+        public Builder setUIProvider(UIProvider uipro)
+        {
+            this.mUiProvider = uipro;
             return this;
         }
 
@@ -137,13 +144,11 @@ public class CoreLib {
             core.setAppcontext(appContext);
             core.setEnableUMengAcoutn(isEnableUMengAcountStatistics);
             core.setEnableUMengUser(isEnableUMengUserrecording);
+            core.setUIProvider(mUiProvider);
             return core;
         }
+
     }
-
-
-
-
 
     //region getter setter
 
@@ -227,6 +232,26 @@ public class CoreLib {
     {
         this.getNetProvider().configDynamicHttpUrls(urls);
     }
+
+    public UIProvider getUIProvider() {
+        return mUIProvider;
+    }
+
+    public void setUIProvider(UIProvider mUIProvider)
+    {
+        if(null != mUIProvider)
+        {
+            if(mUIProvider.getToastUIType() == ToastUIType.INSIDE)
+            {
+                TextView tv = (TextView) LayoutInflater.from(mApplication).inflate(R.layout.layout_default_toastview,null);
+                mUIProvider.setToastView(tv);
+                mUIProvider.setToastViewTextViewId(R.id.tv_default_toast);
+            }
+        }
+        this.mUIProvider = mUIProvider;
+    }
+
+
 
     //endregion
 

@@ -21,7 +21,7 @@ ext {
             //autoLayout
             autoLayout          : "1.4.5",
             //recycleview下拉刷新
-            xrecycleview        : "1.3.2",
+            xrecycleview        : "1.1",
             //greenDao
             greendao            : "3.2.2",
             greendao_generator  : "3.0.0",
@@ -92,7 +92,7 @@ ext {
 
             "aspectjrt" :"org.aspectj:aspectjrt:${android["aspectjjrt"]}",
             "joda-time"             : "joda-time:joda-time:${android["jodatimeVersion"]}",
-            "xrecycleview"          : "com.jcodecraeer:xrecyclerview:${android["xrecycleview"]}",
+            "xrecycleview"          : "com.hxh.component.ui:xrecyclerview:${android["xrecycleview"]}",
             "okhttputils"           : "com.zhy:okhttputils:${android["okhttputils"]}",
             "arouter"               : "com.alibaba:arouter-api:${android["arouter"]}"
     ]

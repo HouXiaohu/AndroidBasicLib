@@ -9,9 +9,19 @@
             android:id="@+id/toolbar"
        />
 
-   <com.hxh.component.basicore.ui.BannerImg
-       android:layout_width="match_parent"
-       android:layout_height="300px"
-       android:id="@+id/bannerimg"
-       ></com.hxh.component.basicore.ui.BannerImg>
+  <TextView
+      android:layout_width="match_parent"
+      android:layout_height="200dp"
+      android:text="普通toast"
+      android:id="@+id/tv_next"
+      />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:text="内置toast"
+        android:id="@+id/tv_next1"
+        />
+
 </LinearLayout>

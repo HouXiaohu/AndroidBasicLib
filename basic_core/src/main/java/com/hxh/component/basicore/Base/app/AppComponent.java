@@ -50,4 +50,6 @@ public interface AppComponent {
      * @return
      */
     ActionBarProvider globalActionBarProvider();
+
+    UIProvider globalUIProvider();
 }

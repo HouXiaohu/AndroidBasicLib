@@ -1,5 +1,6 @@
 package com.hxh.component.basicore.component.mvp.newmvp.view;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.SparseArray;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.hxh.component.basicore.Base.app.AppManager;
 import com.hxh.component.basicore.Base.delegate.LogDelegate;
 import com.hxh.component.basicore.Base.delegate.ToolBarDelegate;
 import com.hxh.component.basicore.Base.delegate.ToolBarDelegate_FullScreenMode;
@@ -93,6 +95,18 @@ public class BaseViewDelegate
         }
     }
 
+    public Context getContext()
+    {
+        return AppManager.getCurrentCompatActivity();
+    }
+
+    public void release()
+    {
+        mLogDelegate = null;
+        mToolBarDelegate = null;
+        mViewRelateDelegate = null;
+        mViews = null;
+    }
 
     //region 日志
     @Override
