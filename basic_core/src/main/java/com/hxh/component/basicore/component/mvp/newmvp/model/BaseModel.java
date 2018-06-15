@@ -39,6 +39,8 @@ public abstract class BaseModel
     protected String mCurrentRequestTag;
     protected BaseModelDelegate mDelegate;
 
+
+
     public BaseModel() {
         this.mDelegate = new BaseModelDelegate();
     }
@@ -149,8 +151,6 @@ public abstract class BaseModel
         return mDelegate.checkResponseBodyContainErrorBody(body);
     }
 
-
-
     @Override
     public String checkResponseBodyContainErrorBodyReturnErrorMessage(Response body) {
         return mDelegate.checkResponseBodyContainErrorBodyReturnErrorMessage(body);
@@ -165,8 +165,6 @@ public abstract class BaseModel
     public IApiError getApiError(Throwable e) {
         return mDelegate.getApiError(e);
     }
-
-
 
     //endregion
 

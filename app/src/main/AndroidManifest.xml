@@ -45,16 +45,20 @@
             android:value="1280">
         </meta-data>
 
-        <activity android:name=".MainActivity">
+
+        <activity android:name=".test3.NewsActivityPresenter">
 
         </activity>
-        <activity android:name=".test2.TestActivity">
+
+        <activity android:name=".test4.TestUMengActivityPresenter">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <meta-data android:value="5b2228f7b27b0a2b080000ae" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="YYB" android:name="UMENG_CHANNEL"/>
     </application>
 
 </manifest>

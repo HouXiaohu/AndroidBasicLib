@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.hxh.component.basicore.Base.delegate.interfaces.ILogRelated;
 import com.hxh.component.basicore.Base.delegate.interfaces.IToolBarRelated;
+import com.hxh.component.basicore.Base.delegate.interfaces.ICheckNullRelated;
 import com.hxh.component.basicore.Base.delegate.interfaces.IViewRelated;
 import com.hxh.component.basicore.Base.topbar.ActionBarConfig;
 
@@ -27,7 +28,8 @@ public abstract class BaseView
         IView,
         ILogRelated,
         IViewRelated,
-        IToolBarRelated {
+        IToolBarRelated,
+        ICheckNullRelated {
 
 
     private BaseViewDelegate mBaseViewDelegate;
@@ -40,11 +42,12 @@ public abstract class BaseView
     @Override
     public View onCreate(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = mBaseViewDelegate.onCreate(inflater,container,savedInstanceState,getLayoutId(),setActionBarConfig());
+
         return rootView;
     }
 
     public View getRootView() {
-        return rootView;
+        return mBaseViewDelegate.rootView;
     }
 
     public abstract int getLayoutId();
@@ -65,6 +68,9 @@ public abstract class BaseView
     public <L extends View.OnClickListener>void setOnClickListener(L clickListener,int... id) {
         mBaseViewDelegate.setOnClickListener(clickListener,id);
     }
+
+    public String getViewName(){return "";}
+
 
     /**
      * 隐约觉得这个方法会存在隐患

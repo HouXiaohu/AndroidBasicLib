@@ -7,14 +7,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hxh.component.basicore.Base.app.UIProvider;
+import com.hxh.component.basicore.Base.app.provider.UIProvider;
 import com.hxh.component.basicore.Base.delegate.interfaces.IViewRelated;
 import com.hxh.component.basicore.CoreLib;
-import com.hxh.component.basicore.util.ToastUIType;
+import com.hxh.component.basicore.ui.ToastUIType;
 import com.hxh.component.basicore.util.Utils;
 import com.hxh.component.basicore.util.aspj.annotation.Safe;
-
-import java.util.List;
 
 /**
  * Created by hxh on 2017/7/28.
@@ -128,7 +126,7 @@ public class ViewRelatedDelegate implements IViewRelated {
     @Safe
     @Override
     public String getText(EditText et) {
-        if (Utils.Text.isEmpty(et.getText())) {
+        if (isEmpty(et.getText().toString())) {
             return "";
         }
         return et.getText().toString();
@@ -137,7 +135,7 @@ public class ViewRelatedDelegate implements IViewRelated {
     @Safe
     @Override
     public String getText(TextView tv) {
-        if (Utils.Text.isEmpty(tv.getText())) {
+        if (isEmpty(tv.getText().toString())) {
             return "";
         }
         return tv.getText().toString();
@@ -146,25 +144,25 @@ public class ViewRelatedDelegate implements IViewRelated {
     @Safe
     @Override
     public String getText(EditText et, String defaulttext) {
-        return isEmpty(et.getText()) ? defaulttext : et.getText().toString();
+        return isEmpty(et.getText().toString()) ? defaulttext : et.getText().toString();
     }
 
     @Safe
     @Override
     public String getText(TextView tv, String defaulttext) {
-        return isEmpty(tv.getText()) ? defaulttext : tv.getText().toString();
+        return isEmpty(tv.getText().toString()) ? defaulttext : tv.getText().toString();
     }
 
     @Safe
     @Override
     public String getText(TextView tv, int defaulttextResId) {
-        return isEmpty(tv.getText()) ? getRES_String(defaulttextResId) : tv.getText().toString();
+        return isEmpty(tv.getText().toString()) ? getRES_String(defaulttextResId) : tv.getText().toString();
     }
 
     @Safe
     @Override
     public String getText(EditText et, int defaulttextResId) {
-        return isEmpty(et.getText()) ? getRES_String(defaulttextResId) : et.getText().toString();
+        return isEmpty(et.getText().toString()) ? getRES_String(defaulttextResId) : et.getText().toString();
     }
 
     @Safe
@@ -176,13 +174,13 @@ public class ViewRelatedDelegate implements IViewRelated {
     @Safe
     @Override
     public String getHint(EditText et, String defaulttext) {
-        return isEmpty(et.getHint()) ? defaulttext : et.getHint().toString();
+        return isEmpty(et.getHint().toString()) ? defaulttext : et.getHint().toString();
     }
 
     @Safe
     @Override
     public String getHint(EditText et, int defaulttextResId) {
-        return isEmpty(et.getHint()) ? getRES_String(defaulttextResId) : et.getHint().toString();
+        return isEmpty(et.getHint().toString()) ? getRES_String(defaulttextResId) : et.getHint().toString();
     }
 
     @Override
@@ -212,71 +210,16 @@ public class ViewRelatedDelegate implements IViewRelated {
     @Override
     public void loadimg(ImageView iv, String url, int errorId) {
         Utils.ImageLoadUtils.loadimg(iv, url, errorId);
-        //        if(null != url )
-        //        {
-        //            if(url.contains("file://") || url.contains("sdcard"))
-        //            {
-        //                IImageFactory.getLoader().loadFile(iv,new File(url),new IImageLoader.Options(errorId,errorId));
-        //            }else
-        //            {
-        //                IImageFactory.getLoader().loadFormNet(iv,url,new IImageLoader.Options(errorId,errorId));
-        //            }
-        //        }
     }
 
-    @Override
-    public boolean isEmpty(List list) {
-        return Utils.Text.isEmpty(list);
+
+    private boolean isEmpty(String s)
+    {
+        return Utils.Text.isEmpty(s);
     }
 
-    @Override
-    public boolean isEmpty(String msg) {
-        return Utils.Text.isEmpty(msg);
-    }
-
-    @Override
-    public boolean isEmpty(CharSequence str) {
-        return Utils.Text.isEmpty(str);
-    }
-
-    @Override
-    public boolean isEmpty(String... args) {
-        return Utils.Text.isEmpty(args);
-    }
-
-    @Override
-    public boolean isEmpty(EditText text) {
-        return Utils.Text.isEmpty(text);
-    }
-
-    @Override
-    public boolean isEmpty(TextView tv, String msg) {
-
-        return Utils.Text.isEmpty(tv, msg);
-    }
-
-    @Override
-    public boolean isEmpty(EditText text, String tipmsg) {
-        return Utils.Text.isEmpty(text, tipmsg);
-    }
-
-    @Override
-    public boolean isEmpty(TextView tv) {
-        return Utils.Text.isEmpty(tv);
-    }
-
-    @Override
-    public boolean isEmpty(Object obj) {
-        return null == obj;
-    }
-
-    private boolean isEmpty(View view) {
-        if (null != view) return false;
-        else return true;
-    }
-
-    private boolean isEmpty(View... view) {
-        if (null != view) return false;
-        else return true;
+    private boolean isEmpty(Object s)
+    {
+        return Utils.Text.isEmpty(s);
     }
 }

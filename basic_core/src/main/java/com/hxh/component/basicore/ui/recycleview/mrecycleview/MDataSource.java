@@ -1,6 +1,7 @@
 package com.hxh.component.basicore.ui.recycleview.mrecycleview;
 
 import com.hxh.component.basicore.component.mvp.Mapper;
+import com.hxh.component.basicore.util.rx.resetfulhttpstyle.ProgressSubScribe;
 import com.hxh.component.basicore.util.rx.resetfulhttpstyle.RESTFULProgressSubscribe;
 import com.hxh.component.basicore.ui.recycleview.mrecycleview.callback.EmpViewClickOtherPlaceRefreshCallBack;
 import com.hxh.component.basicore.ui.recycleview.mrecycleview.callback.MRecycleViewResponseInterceptor;
@@ -116,8 +117,9 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack {
      * @param <T>
      * @return
      */
-    public <T> MDataSource setNetRepository(NetRepository<T> mNetRepository) {
+    public <T extends NetResultBean> MDataSource setNetRepository(NetRepository<T> mNetRepository) {
         this.mNetRepository = mNetRepository;
+
         return this;
     }
 
@@ -429,14 +431,15 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack {
 
             mNetRepository
                     .getData(this.mParams)
-                    .subscribe(new RESTFULProgressSubscribe<NetResultBean<D>>(true) {
+                    .subscribe(new ProgressSubScribe<NetResultBean<D>>(true) {
                         @Override
                         public void _OnError(Throwable msg) {
                             getDbData(noDataType);
                         }
 
                         @Override
-                        public void _OnNet(NetResultBean<D> o) {
+                        public void _OnNet(NetResultBean<D> o)
+                        {
                             if (null == o.getItems() || 0 == o.getItems().size()) {
                                 showViewWhenNoData(noDataType);
                             } else {

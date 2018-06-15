@@ -6,8 +6,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
-
 /**
  * 所有关于界面 的操作，例如： 吐司，获取资源等
  */
@@ -113,15 +111,5 @@ public interface IViewRelated
     //endregion
 
 
-    //region 非空
-    boolean isEmpty(List list);
-    boolean isEmpty(String msg);
-    boolean isEmpty(CharSequence str);
-    boolean isEmpty(String... args) ;
-    boolean isEmpty(EditText text);
-    boolean isEmpty(EditText text,String tipmsg);
-    boolean isEmpty(TextView tv);
-    boolean isEmpty(TextView tv,String msg);
-    boolean isEmpty(Object obj);
-    //endregion
+
 }

@@ -46,13 +46,19 @@ public class NetProvider {
     private long configWriteTimeOut;
     private boolean isEnableErrorRetry=true;
     private int errorRetryCount;
+    /**
+     * 全局性质的请求拦截器
+     */
+    private RequestCallBackHandler mRequestCallBackHandler;
+
+
     public NetProvider(
             boolean isEnableCookie, long configReadTimeOut, long configConnectTimeOut,
             Authenticator configRESTFULTokenInterceptor, Interceptor configTokenInterceptor,
             RequestCallBackHandler configRequestCallBack, Converter.Factory configConverterFactory,
             String cachePath,long maxSize,Interceptor configLogTnterceptor
             , IApiError apiErrorClasszz,long configWriteTimeOut,boolean isEnableConnectTimeOut,
-            int errorRetryCount)
+            int errorRetryCount,RequestCallBackHandler requestCallBackHandler)
     {
         this.errorRetryCount = errorRetryCount;
         this.configReadTimeOut = configReadTimeOut;
@@ -70,6 +76,8 @@ public class NetProvider {
 
         this.configLogTnterceptor = configLogTnterceptor;
         this.mApiErrorClasszz = apiErrorClasszz;
+
+        this.mRequestCallBackHandler = requestCallBackHandler;
     }
 
     public static NetProvider defaultNetProvider()
@@ -100,6 +108,10 @@ public class NetProvider {
         private ArrayMap<Object,String> mFixedBaseUrls;
 
         private boolean isDynamisHttpUrl;
+
+        private RequestCallBackHandler mRequestCallBackHandler;
+
+
         /**
          * 配置读取超时时间(毫秒)
          *
@@ -295,6 +307,12 @@ public class NetProvider {
             return this;
         }
 
+        public Builder configRequestInterceptor(RequestCallBackHandler handle)
+        {
+            this.mRequestCallBackHandler = handle;
+            return this;
+        }
+
 
 
         public NetProvider build()
@@ -302,7 +320,7 @@ public class NetProvider {
             NetProvider provider =  new NetProvider(isEnableCookie,configReadTimeOut,configConnectTimeOut,
                     configRESTFULTokenInterceptor,configTokenInterceptor,configRequestCallBack,configConverterFactory,cachePath,cacheSize,configLogTnterceptor
                     ,mApiErrorClasszz
-            ,configWriteTimeOut,isEnableErrorRetry,errorRetryCount);
+            ,configWriteTimeOut,isEnableErrorRetry,errorRetryCount,mRequestCallBackHandler);
 
             provider.setBaseUrl(baseUrl);
             if (isDynamisHttpUrl) {

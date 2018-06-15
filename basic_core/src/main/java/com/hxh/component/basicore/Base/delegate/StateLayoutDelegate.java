@@ -1,15 +1,14 @@
 package com.hxh.component.basicore.Base.delegate;
 
 import com.hxh.component.basicore.Base.delegate.interfaces.IStateLayoutRelated;
-import com.hxh.component.basicore.component.mvp.persenter.BasePresenter;
 
 /**
  * Created by hxh on 2018/2/28.
  */
 
-public class StateLayoutDelegate<P extends BasePresenter> implements IStateLayoutRelated<P>{
+public class StateLayoutDelegate implements IStateLayoutRelated{
 
-    private P p;
+
     @Override
     public void operaErrorLayout(boolean isHide) {
 

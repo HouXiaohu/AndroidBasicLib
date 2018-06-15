@@ -9,17 +9,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hxh.component.basicore.Base.delegate.IAdapterDelegate;
+import com.hxh.component.basicore.Base.delegate.AdapterDelegate;
 import com.hxh.component.basicore.Base.delegate.interfaces.IAdapterRelated;
 import com.hxh.component.basicore.Base.onRecyItemClick;
 import com.hxh.component.basicore.Base.onRecyItemLongClick;
-import com.hxh.component.basicore.util.Log;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by hxh on 2017/4/6.
@@ -30,16 +25,16 @@ public abstract class AbsRecycleAdapter<T,H extends RecyclerView.ViewHolder>
 
     protected Context mContext;
 
-    private IAdapterDelegate<T,H> mAdapterDelegate;
+    private AdapterDelegate<T,H> mAdapterDelegate;
 
     public AbsRecycleAdapter(Context context)
     {
-        mAdapterDelegate = new IAdapterDelegate<T, H>(this);
+        mAdapterDelegate = new AdapterDelegate<T, H>(this);
         this.mContext = context;
     }
     public AbsRecycleAdapter(Context context,List<T> datas, onRecyItemClick<T, H> mItemClickCallBack)
     {
-        mAdapterDelegate = new IAdapterDelegate<T, H>(this);
+        mAdapterDelegate = new AdapterDelegate<T, H>(this);
         this.mContext = context;
         this.setDatas(datas);
         this.setmItemClickCallBack(mItemClickCallBack);
@@ -48,7 +43,7 @@ public abstract class AbsRecycleAdapter<T,H extends RecyclerView.ViewHolder>
 
     public AbsRecycleAdapter(Context context,onRecyItemClick<T, H> mItemClickCallBack)
     {
-        mAdapterDelegate = new IAdapterDelegate<T, H>(this);
+        mAdapterDelegate = new AdapterDelegate<T, H>(this);
         this.mContext = context;
         this.setmItemClickCallBack(mItemClickCallBack);
     }
@@ -114,6 +109,16 @@ public abstract class AbsRecycleAdapter<T,H extends RecyclerView.ViewHolder>
     @Override
     public void removeData(int position) {
         mAdapterDelegate.removeData(position);
+    }
+
+    @Override
+    public void removeData(T data, Object payload) {
+        mAdapterDelegate.removeData(data,payload);
+    }
+
+    @Override
+    public void removeData(int position, Object payload) {
+        mAdapterDelegate.removeData(position,payload);
     }
 
     @Override

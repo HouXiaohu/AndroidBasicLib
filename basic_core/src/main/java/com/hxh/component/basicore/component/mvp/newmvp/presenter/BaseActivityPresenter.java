@@ -4,8 +4,12 @@ package com.hxh.component.basicore.component.mvp.newmvp.presenter;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import com.hxh.component.basicore.Base.delegate.CheckNullDelegate;
 import com.hxh.component.basicore.Base.delegate.IntentDelegate;
+import com.hxh.component.basicore.Base.delegate.interfaces.ICheckNullRelated;
 import com.hxh.component.basicore.Base.delegate.interfaces.IIntentRelated;
 import com.hxh.component.basicore.Base.view.AppCompartAutoLayoutActivity;
 import com.hxh.component.basicore.component.mvp.newmvp.model.BaseModel;
@@ -13,6 +17,7 @@ import com.hxh.component.basicore.component.mvp.newmvp.view.IView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by hxh on 2018/3/6.
@@ -22,13 +27,14 @@ public abstract class BaseActivityPresenter<V extends IView>
         extends AppCompartAutoLayoutActivity
         implements
         IPresenter<V>
-        ,IIntentRelated {
+        ,IIntentRelated
+        ,ICheckNullRelated{
 
 
     protected V mView;
     private IntentDelegate mParceableDelegate;
     private ActivityDelegate mDelegate =null;
-
+    private CheckNullDelegate mCheckNullRelated;
 
     public BaseActivityPresenter() {
         try {
@@ -39,7 +45,6 @@ public abstract class BaseActivityPresenter<V extends IView>
             e.printStackTrace();
         }
 
-
     }
 
     @Override
@@ -48,6 +53,7 @@ public abstract class BaseActivityPresenter<V extends IView>
         mDelegate = new ActivityDelegate(mView,this);
         mDelegate.onCreate(savedInstanceState);
         mParceableDelegate = new IntentDelegate(getIntent().getExtras());
+        mCheckNullRelated = new CheckNullDelegate();
     }
 
     @Override
@@ -229,4 +235,53 @@ public abstract class BaseActivityPresenter<V extends IView>
     }
     //endregion
 
+
+    //region 非空
+
+    @Override
+    public boolean isEmpty(List list) {
+        return mCheckNullRelated.isEmpty(list);
+    }
+
+    @Override
+    public boolean isEmpty(String msg) {
+        return mCheckNullRelated.isEmpty(msg);
+    }
+
+    @Override
+    public boolean isEmpty(CharSequence str) {
+        return mCheckNullRelated.isEmpty(str);
+    }
+
+    @Override
+    public boolean isEmpty(String... args) {
+        return mCheckNullRelated.isEmpty(args);
+    }
+
+    @Override
+    public boolean isEmpty(EditText text) {
+        return mCheckNullRelated.isEmpty(text);
+    }
+
+    @Override
+    public boolean isEmpty(TextView tv, String msg) {
+        return mCheckNullRelated.isEmpty(tv, msg);
+    }
+
+    @Override
+    public boolean isEmpty(EditText text, String tipmsg) {
+        return mCheckNullRelated.isEmpty(text, tipmsg);
+    }
+
+    @Override
+    public boolean isEmpty(TextView tv) {
+        return mCheckNullRelated.isEmpty(tv);
+    }
+
+    @Override
+    public boolean isEmpty(Object obj) {
+        return mCheckNullRelated.isEmpty(obj);
+    }
+
+    //endregion
 }

@@ -1,6 +1,6 @@
 package com.hxh.component.basicore.Base.app;
 
-import android.app.Application;
+import com.hxh.component.basicore.Base.app.provider.AppProvider;
 
 /**
  * 标题: IApp.java
@@ -10,6 +10,6 @@ import android.app.Application;
  *
  */
 public interface IApp {
-    AppComponent getAppComponent();
-    Application getApplication();
+    AppProvider getAppComponent();
+
 }

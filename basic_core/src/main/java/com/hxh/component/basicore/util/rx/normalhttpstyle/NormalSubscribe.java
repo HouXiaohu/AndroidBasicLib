@@ -10,7 +10,7 @@ import rx.Subscriber;
 /**
  * Created by hxh on 2017/5/5.
  */
-@Deprecated
+
 public abstract class NormalSubscribe<T> extends Subscriber<T> {
 
 

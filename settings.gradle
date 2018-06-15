@@ -1,1 +1,1 @@
-include ':app', ':basic_core',  ':model1'
+include ':app', ':basic_core', ':model1'

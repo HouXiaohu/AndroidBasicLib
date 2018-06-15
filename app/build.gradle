@@ -75,10 +75,10 @@ configurations.all {
 dependencies {
 
     compile project(':basic_core')
-
+    annotationProcessor "com.alibaba:arouter-compiler:1.1.2"
     //pagebottomtab
-    compile 'com.hxh.component:apiFactory-annotation:1.0.3'
-    annotationProcessor 'com.hxh.component:apiFactory-compile:1.0.3'
+    compile 'com.hxh.component:apiFactory-annotation:1.1'
+    annotationProcessor 'com.hxh.component:apiFactory-compile:1.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.12'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'

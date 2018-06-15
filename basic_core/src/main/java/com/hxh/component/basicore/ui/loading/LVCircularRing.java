@@ -12,8 +12,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
-import com.hxh.component.basicore.util.Log;
-
 /**
  * Created by hxh on 2017/3/31.
  */

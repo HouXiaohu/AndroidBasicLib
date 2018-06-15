@@ -2,7 +2,6 @@ package com.hxh.component.basicore.util.rx;
 
 
 import com.hxh.component.basicore.util.rx.normalhttpstyle.ExceptionHandle;
-import com.hxh.component.basicore.util.Log;
 
 import java.util.concurrent.TimeUnit;
 
@@ -75,7 +74,7 @@ public class RxUtils {
                         public Observable<?> call(Throwable throwable) {
                             if(++currentRetryCount<=retrycount)
                             {
-                                Log.d("正在重试");
+
                                 return Observable.timer(retryTime, TimeUnit.MILLISECONDS);
                             }
                             return Observable.error(ExceptionHandle.handleException(throwable));

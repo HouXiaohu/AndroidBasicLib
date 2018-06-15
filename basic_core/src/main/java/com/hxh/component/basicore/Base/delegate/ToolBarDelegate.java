@@ -153,7 +153,7 @@ public class ToolBarDelegate implements IToolBarRelated {
             return;
         }
         clicklistener = new OnToolbarClickListener();
-        ActionBarProvider actionBarProvider = CoreLib.getInstance().getAppComponent().globalActionBarProvider();
+        ActionBarProvider actionBarProvider = CoreLib.getInstance().getAppComponent().globalUIProvider().getActionBarProvider();
         //region 左边布局
         if (mActionbarconfig.isEnable_backview()) {
             //region 使用用户自定义的Backview

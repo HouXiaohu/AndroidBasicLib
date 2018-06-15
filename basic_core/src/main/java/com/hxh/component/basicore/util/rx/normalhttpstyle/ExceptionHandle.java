@@ -13,7 +13,7 @@ import retrofit2.adapter.rxjava.HttpException;
 /**
  * Created by hxh on 2017/3/1.
  */
-@Deprecated
+
 public class ExceptionHandle {
 
     private static final int UNAUTHORIZED = 401;

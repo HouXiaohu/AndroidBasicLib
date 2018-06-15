@@ -13,10 +13,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hxh.component.basicore.Base.app.AppManager;
+import com.hxh.component.basicore.Base.delegate.CheckNullDelegate;
 import com.hxh.component.basicore.Base.delegate.LogDelegate;
 import com.hxh.component.basicore.Base.delegate.ToolBarDelegate;
 import com.hxh.component.basicore.Base.delegate.ToolBarDelegate_FullScreenMode;
 import com.hxh.component.basicore.Base.delegate.ViewRelatedDelegate;
+import com.hxh.component.basicore.Base.delegate.interfaces.ICheckNullRelated;
 import com.hxh.component.basicore.Base.delegate.interfaces.ILogRelated;
 import com.hxh.component.basicore.Base.delegate.interfaces.IToolBarRelated;
 import com.hxh.component.basicore.Base.delegate.interfaces.IViewRelated;
@@ -33,27 +35,28 @@ public class BaseViewDelegate
         implements
         ILogRelated,
         IViewRelated,
-        IToolBarRelated {
+        IToolBarRelated,
+        ICheckNullRelated {
 
     //相关支持
     private LogDelegate mLogDelegate;
     private ViewRelatedDelegate mViewRelateDelegate;
     private IToolBarRelated mToolBarDelegate;
-    private View rootView;
+    private CheckNullDelegate mCheckNullDelegate;
+    protected View rootView;
     private SparseArray<View> mViews; //View的缓存类
 
-    public BaseViewDelegate()
-    {
+    public BaseViewDelegate() {
         mLogDelegate = new LogDelegate();
         mViewRelateDelegate = new ViewRelatedDelegate();
         mViews = new SparseArray<>();
+        mCheckNullDelegate = new CheckNullDelegate();
     }
 
-    public View onCreate(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState,int layourId,ActionBarConfig config) {
+    public View onCreate(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState, int layourId, ActionBarConfig config) {
         rootView = inflater.inflate(layourId, container, false);
 
-        if(null != config)
-        {
+        if (null != config) {
             openToolBar(config);
         }
 
@@ -61,15 +64,14 @@ public class BaseViewDelegate
     }
 
     private void openToolBar(ActionBarConfig config) {
-        if (CoreLib.getInstance().getAppComponent().globalActionBarProvider().isEnableImmeriveMode()) {
+        if (CoreLib.getInstance().getAppComponent().globalUIProvider().getActionBarProvider().isEnableImmeriveMode()) {
             this.mToolBarDelegate = new ToolBarDelegate_FullScreenMode(config);
             ((ToolBarDelegate_FullScreenMode) this.mToolBarDelegate).init();
-            ((ToolBarDelegate_FullScreenMode) this.mToolBarDelegate).fetchToView(rootView,rootView.getContext());
-        }else
-        {
+            ((ToolBarDelegate_FullScreenMode) this.mToolBarDelegate).fetchToView(rootView, rootView.getContext());
+        } else {
             this.mToolBarDelegate = new ToolBarDelegate(config);
             ((ToolBarDelegate) this.mToolBarDelegate).init();
-            ((ToolBarDelegate) this.mToolBarDelegate).fetchToView(rootView,rootView.getContext());
+            ((ToolBarDelegate) this.mToolBarDelegate).fetchToView(rootView, rootView.getContext());
         }
     }
 
@@ -83,7 +85,7 @@ public class BaseViewDelegate
         return (V) view;
     }
 
-    public <L extends View.OnClickListener>void setOnClickListener(L clickListener,int... id) {
+    public <L extends View.OnClickListener> void setOnClickListener(L clickListener, int... id) {
         if (null == id) {
             throw new IllegalArgumentException("id can't is null");
         }
@@ -95,13 +97,14 @@ public class BaseViewDelegate
         }
     }
 
-    public Context getContext()
-    {
+    public Context getContext() {
+        if (null != rootView) {
+            return rootView.getContext();
+        }
         return AppManager.getCurrentCompatActivity();
     }
 
-    public void release()
-    {
+    public void release() {
         mLogDelegate = null;
         mToolBarDelegate = null;
         mViewRelateDelegate = null;
@@ -285,47 +288,47 @@ public class BaseViewDelegate
 
     @Override
     public boolean isEmpty(List list) {
-        return mViewRelateDelegate.isEmpty(list);
+        return mCheckNullDelegate.isEmpty(list);
     }
 
     @Override
     public boolean isEmpty(String msg) {
-        return mViewRelateDelegate.isEmpty(msg);
+        return mCheckNullDelegate.isEmpty(msg);
     }
 
     @Override
     public boolean isEmpty(CharSequence str) {
-        return mViewRelateDelegate.isEmpty(str);
+        return mCheckNullDelegate.isEmpty(str);
     }
 
     @Override
     public boolean isEmpty(String... args) {
-        return mViewRelateDelegate.isEmpty(args);
+        return mCheckNullDelegate.isEmpty(args);
     }
 
     @Override
     public boolean isEmpty(EditText text) {
-        return mViewRelateDelegate.isEmpty(text);
+        return mCheckNullDelegate.isEmpty(text);
     }
 
     @Override
     public boolean isEmpty(TextView tv, String msg) {
-        return mViewRelateDelegate.isEmpty(tv, msg);
+        return mCheckNullDelegate.isEmpty(tv, msg);
     }
 
     @Override
     public boolean isEmpty(EditText text, String tipmsg) {
-        return mViewRelateDelegate.isEmpty(text, tipmsg);
+        return mCheckNullDelegate.isEmpty(text, tipmsg);
     }
 
     @Override
     public boolean isEmpty(TextView tv) {
-        return mViewRelateDelegate.isEmpty(tv);
+        return mCheckNullDelegate.isEmpty(tv);
     }
 
     @Override
     public boolean isEmpty(Object obj) {
-        return mViewRelateDelegate.isEmpty(obj);
+        return mCheckNullDelegate.isEmpty(obj);
     }
 
     @Override
@@ -348,7 +351,10 @@ public class BaseViewDelegate
 
     @Override
     public void setActionBarConfig(ActionBarConfig config) {
-        mToolBarDelegate.setActionBarConfig(config);
+        if (null == mToolBarDelegate)
+            openToolBar(config);
+        else
+            mToolBarDelegate.setActionBarConfig(config);
     }
 
     @Override
@@ -387,6 +393,7 @@ public class BaseViewDelegate
     public View getActionbar_rightView() {
         return mToolBarDelegate.getActionbar_rightView();
     }
+
     @Override
     public void setActionBar_Title(String title) {
         mToolBarDelegate.setActionBar_Title(title);

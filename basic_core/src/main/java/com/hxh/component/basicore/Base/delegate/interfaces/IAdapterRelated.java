@@ -5,15 +5,13 @@ import android.widget.ImageView;
 import com.hxh.component.basicore.Base.onRecyItemClick;
 import com.hxh.component.basicore.Base.onRecyItemLongClick;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by hxh on 2017/10/19.
  */
 
-public interface IAdapterRelated<T,H> extends IViewRelated{
+public interface IAdapterRelated<T,H> extends IViewRelated,ICheckNullRelated{
     void loadimg(ImageView iv,String url);
     void loadimg(ImageView iv,String url,int errorImg);
     void loadimg(ImageView iv,String ossStr,Class<?> classzz);
@@ -34,6 +32,9 @@ public interface IAdapterRelated<T,H> extends IViewRelated{
     public void removeData(T data);
 
     public void removeData(int position);
+
+    void removeData(T data,Object payload);
+    void removeData(int position,Object payload);
 
     public void addData(T data);
 

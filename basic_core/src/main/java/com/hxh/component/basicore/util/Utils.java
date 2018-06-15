@@ -60,7 +60,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hxh.component.basicore.Base.app.AppManager;
 import com.hxh.component.basicore.Config;
@@ -136,8 +135,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static android.R.attr.gravity;
 
 /**
  * Created by hxh on 2017/4/12.
@@ -631,6 +628,7 @@ public class Utils {
 
         public static boolean createOrExistsFile(String filepath) {
             File file = new File(filepath);
+
             if (file == null) return false;
             // 如果存在，是文件则返回true，是目录则返回false
             if (file.exists()) return file.isFile();
@@ -660,6 +658,20 @@ public class Utils {
             return mContext.getApplicationInfo().packageName + ".fileprovider";
         }
 
+        public static boolean exist(String path)
+        {
+           return Text.isEmpty(path)? false: new File(path).exists();
+        }
+
+        /**
+         *
+         * @param savePath
+         * @return file 返回true dir 是false
+         */
+        public static boolean isDirOrFile(String savePath)
+        {
+            return new File(savePath).isFile();
+        }
     }
 
     /**
@@ -3668,10 +3680,11 @@ public class Utils {
         @Safe
         public static void loadimg(ImageView iv, String url) {
             if (null != url) {
-                if (url.contains("file://") || url.contains("sdcard")) {
-                    ImageFactory.getGlideLoader().loadFile(iv, new File(url), IImageLoader.Options.defaultOptions());
-                } else {
+                if (url.contains("http") || url.contains("https")) {
                     ImageFactory.getGlideLoader().loadFormNet(iv, url, IImageLoader.Options.defaultOptions());
+
+                } else {
+                    ImageFactory.getGlideLoader().loadFile(iv, new File(url), IImageLoader.Options.defaultOptions());
                 }
             }
         }

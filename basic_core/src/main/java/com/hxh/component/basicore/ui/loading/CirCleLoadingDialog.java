@@ -56,9 +56,8 @@ public class CirCleLoadingDialog implements ILoadingProgressDialog{
     public void show() {
         if(null == mLoadingDialog)
         {
-
             // 创建自定义样式的Dialog
-            mLoadingDialog = new Dialog(AppManager.getCurrentActivity(), R.style.loading_dialog);
+            mLoadingDialog = new Dialog(AppManager.getCurrentActivity(), R.style.dialog_style_nodarken);
             // 设置返回键无效
             mLoadingDialog.setCancelable(false);
             mLoadingDialog.setContentView(main_view, new LinearLayout.LayoutParams(
@@ -67,8 +66,8 @@ public class CirCleLoadingDialog implements ILoadingProgressDialog{
         }
 
         if (!mLoadingDialog.isShowing()) {
-            mLoadingDialog.show();
             mLoadingView.startAnim();
+            mLoadingDialog.show();
 
         }
     }

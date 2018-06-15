@@ -9,12 +9,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.hxh.component.basicore.Base.view.AppCompartAutoLayoutActivity;
 import com.hxh.component.basicore.Base.app.AppManager;
+import com.hxh.component.basicore.Base.view.AppCompartAutoLayoutActivity;
+import com.hxh.component.basicore.util.Utils;
 import com.hxh.component.basicore.util.aspj.annotationenum.ShowType;
+import com.hxh.component.ui.alertview.AlertView;
+import com.hxh.component.ui.alertview.OnItemClickListener;
 
 import java.lang.ref.WeakReference;
 
@@ -56,8 +58,7 @@ public class AspjManager {
             }
             return singleton;
         }
-     
-        
+
 
         private WeakReference<Fragment> v4Fragment;
         private WeakReference<android.app.Fragment> v7Fragment;
@@ -81,32 +82,58 @@ public class AspjManager {
         public void showLoginview(ShowType type) {
             switch (type) {
                 case DIALOG:
-                    buildLoginDialog().show();
+                    if (!Utils.Text.isEmpty(this.mTipDialog)) {
+                        addTipDialogListener();
+                        this.mTipDialog.show();
+                    } else
+                        buildLoginDialog().show();
                     break;
                 case DIALOG_AND_NORMAL:
-                    buildLoginDialog().setNegativeButton("取消", null)
-                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    navigationToLogin();
-                                }
-                            })
-                            .create()
-                            .show();
+                    if (!Utils.Text.isEmpty(this.mTipDialog)) {
+                        addTipDialogListener();
+                        this.mTipDialog.show();
+                    } else
+                    {
+                        buildLoginDialog().setNegativeButton("取消", null)
+                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        addTipDialogListener();
+                                    }
+                                })
+                                .create()
+                                .show();
+
+                    }
+
+
+
                     break;
                 case NORMAL://展示Activity或者Fragment
                     navigationToLogin();
                     break;
                 case TOAST:
-                    Toast.makeText(AppManager.getCurrentActivity(), "您尚未登录", Toast.LENGTH_LONG).show();
+                    Utils.Toast.toast("您尚未登录");
+
                     break;
             }
+        }
+
+        private void addTipDialogListener() {
+            this.mTipDialog.addOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(String item, int position) {
+                    if(-1 != position)
+                        navigationToLogin();
+                }
+            });
         }
 
         private void navigationToLogin() {
             if (null != mRouterPath && !"".equals(mRouterPath)) {
                 switch (mRouterType) {
                     case MODE_ACTIVTY:
+
                         ARouter.getInstance().build(mRouterPath).navigation();
                         break;
                     case MODE_FRAGMENT:
@@ -115,7 +142,6 @@ public class AspjManager {
                         //obj instanceof I ? ((I) obj) : null;
                         BottomSheetDialogFragment ins = obj instanceof BottomSheetDialogFragment ? ((BottomSheetDialogFragment) obj) : null;
                         if (null != ins) {
-
                             ins.show(AppManager.getCurrentCompatActivity().getSupportFragmentManager(), "");
                             if (null != mOnDissmissListener) {
                                 ins.getDialog().setOnDismissListener(mOnDissmissListener);
@@ -125,8 +151,7 @@ public class AspjManager {
                             FragmentTransaction tr = AppManager.getCurrentCompatActivity().getSupportFragmentManager().beginTransaction();
                             tr.add(fragment, "");
                             tr.commit();
-                            //AspjUtils.App.getCurrentActivit().getFragmentManager
-                            //tr.re
+
                         }
 
                         break;
@@ -141,8 +166,7 @@ public class AspjManager {
 
                 AppManager.getCurrentActivity().startActivity(new Intent(AppManager.getCurrentActivity(), v4Activity.get().getClass()));
             } else if (null != v4Fragment) {
-                if(AppManager.getCurrentCompatActivity() instanceof ISupportActivity)
-                {
+                if (AppManager.getCurrentCompatActivity() instanceof ISupportActivity) {
                     AppCompartAutoLayoutActivity support = (AppCompartAutoLayoutActivity) AppManager.getCurrentCompatActivity();
                     if (null != support && v4Fragment instanceof ISupportFragment) {
                         support.start(((ISupportFragment) v4Fragment));
@@ -151,8 +175,7 @@ public class AspjManager {
             } else if (null != v7Activity) {
                 AppManager.getCurrentActivity().startActivity(new Intent(AppManager.getCurrentActivity(), v7Activity.get().getClass()));
             } else if (null != v7Fragment) {
-                if(AppManager.getCurrentCompatActivity() instanceof ISupportActivity)
-                {
+                if (AppManager.getCurrentCompatActivity() instanceof ISupportActivity) {
                     AppCompartAutoLayoutActivity support = (AppCompartAutoLayoutActivity) AppManager.getCurrentCompatActivity();
                     if (null != support && v7Fragment instanceof ISupportFragment) {
                         support.start(((ISupportFragment) v7Fragment));
@@ -166,14 +189,14 @@ public class AspjManager {
 
             if (null == v4Fragment)
                 mRouterPath = null;
-                this.v4Fragment = new WeakReference<Fragment>(fragment);
+            this.v4Fragment = new WeakReference<Fragment>(fragment);
         }
 
         @Deprecated
         public void registerLoginView(android.app.Fragment fragment) {
             if (null == v7Fragment)
                 mRouterPath = null;
-                this.v7Fragment = new WeakReference<android.app.Fragment>(fragment);
+            this.v7Fragment = new WeakReference<android.app.Fragment>(fragment);
         }
 
         @Deprecated
@@ -192,6 +215,7 @@ public class AspjManager {
         public static final int MODE_ACTIVTY = 0x1;
         public static final int MODE_FRAGMENT = 0x2;
         private int mRouterType;
+        private AlertView mTipDialog;
 
         public void registerLoginView(String routerPath, int routerTargerType) {
             this.mRouterPath = routerPath;
@@ -200,6 +224,10 @@ public class AspjManager {
             this.v7Fragment = null;
             this.v4Activity = null;
             this.v7Activity = null;
+        }
+
+        public void registerLoginViewTipDialog(AlertView dialog) {
+            this.mTipDialog = dialog;
         }
 
         private AlertDialog.Builder buildLoginDialog() {

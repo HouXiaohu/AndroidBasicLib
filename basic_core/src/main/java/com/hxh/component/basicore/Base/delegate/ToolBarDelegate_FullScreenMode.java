@@ -170,7 +170,7 @@ public class ToolBarDelegate_FullScreenMode implements IToolBarRelated {
         }
         clicklistener = new OnToolbarClickListener();
         //获取全局的ActionBar
-        ActionBarProvider actionBarProvider = CoreLib.getInstance().getAppComponent().globalActionBarProvider();
+        ActionBarProvider actionBarProvider = CoreLib.getInstance().getAppComponent().globalUIProvider().getActionBarProvider();
         
         //region 左边布局
         if (mActionbarconfig.isEnable_backview()) {

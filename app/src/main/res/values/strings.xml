@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">daily_wagepro</string>
+    <string name="app_name">android基础Lib测试</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"

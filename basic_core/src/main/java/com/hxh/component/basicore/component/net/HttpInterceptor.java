@@ -1,6 +1,6 @@
 package com.hxh.component.basicore.component.net;
 
-import com.hxh.component.basicore.util.Log;
+import com.hxh.component.basicore.Base.delegate.LogDelegate;
 import com.hxh.component.basicore.util.Utils;
 
 import java.io.IOException;
@@ -14,20 +14,23 @@ import okhttp3.Response;
  * Created by hxh on 2017/7/8.
  */
 public class HttpInterceptor {
-    private static String TAG = "corelib";
 
-
-    public static Interceptor buildTokenInterceptor(final String tokenFieldName,final TokenCallBack callback)
+    private LogDelegate mLog;
+    public HttpInterceptor()    
     {
+        mLog = new LogDelegate();
+    }
+
+    public  Interceptor buildTokenInterceptor(final String tokenFieldName, final TokenCallBack callback) {
         return new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request request = chain.request();
                 if (!Utils.Text.isEmpty(callback.getToken())) {
-                    Log.d("植入token--->" + callback.getToken());
+                    mLog.d("植入token--->" + callback.getToken());
                     Request authorised = request.newBuilder()
                             .removeHeader(tokenFieldName)
-                            .header(tokenFieldName,callback.getToken())
+                            .header(tokenFieldName, callback.getToken())
                             .build();
                     return chain.proceed(authorised);
                 }
@@ -36,8 +39,7 @@ public class HttpInterceptor {
         };
     }
 
-    public static Interceptor buildDefaultLogInterceptor()
-    {
+    public  Interceptor buildDefaultLogInterceptor() {
         return new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
@@ -45,15 +47,15 @@ public class HttpInterceptor {
                 long startTime = System.currentTimeMillis();
                 okhttp3.Response response = chain.proceed(chain.request());
                 long endTime = System.currentTimeMillis();
-                long duration=endTime-startTime;
+                long duration = endTime - startTime;
                 okhttp3.MediaType mediaType = response.body().contentType();
                 String content = response.body().string();
-                Log.d("/n");
-                Log.d("----------Start----------------");
-                Log.d("| "+request.toString());
-                String method=request.method();
+                mLog.d("/n");
+                mLog.d("----------Start----------------");
+                mLog.d("| " + request.toString());
+                String method = request.method();
 
-                if("POST".equals(method)){
+                if ("POST".equals(method)) {
                     StringBuilder sb = new StringBuilder();
                     if (request.body() instanceof FormBody) {
                         FormBody body = (FormBody) request.body();
@@ -61,11 +63,11 @@ public class HttpInterceptor {
                             sb.append(body.encodedName(i) + "=" + body.encodedValue(i) + ",");
                         }
                         sb.delete(sb.length() - 1, sb.length());
-                        Log.d( "| RequestParams:{"+sb.toString()+"}");
+                        mLog.d("| RequestParams:{" + sb.toString() + "}");
                     }
                 }
-                Log.d( "| Response:" + content);
-                Log.d("----------End:"+duration+"毫秒----------");
+                mLog.d("| Response:" + content);
+                mLog.d("----------End:" + duration + "毫秒----------");
                 return response.newBuilder()
                         .body(okhttp3.ResponseBody.create(mediaType, content))
                         .build();
@@ -73,8 +75,7 @@ public class HttpInterceptor {
         };
     }
 
-    public static Interceptor buildLogInterceptor()
-    {
+    public  Interceptor buildLogInterceptor() {
         return new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
@@ -82,15 +83,16 @@ public class HttpInterceptor {
                 long startTime = System.currentTimeMillis();
                 okhttp3.Response response = chain.proceed(chain.request());
                 long endTime = System.currentTimeMillis();
-                long duration=endTime-startTime;
+                long duration = endTime - startTime;
                 okhttp3.MediaType mediaType = response.body().contentType();
                 String content = response.body().string();
-                 Log.d("/n");
-                 Log.d("----------Start----------------");
-                 Log.d( "| "+request.toString());
-                String method=request.method();
 
-                if("POST".equals(method)){
+                mLog.d("/n");
+                mLog.d("----------Start----------------");
+                mLog.d("| " + request.toString());
+                String method = request.method();
+
+                if ("POST".equals(method)) {
                     StringBuilder sb = new StringBuilder();
 
                     if (request.body() instanceof FormBody) {
@@ -99,12 +101,12 @@ public class HttpInterceptor {
                             sb.append(body.encodedName(i) + "=" + body.encodedValue(i) + ",");
                         }
                         sb.delete(sb.length() - 1, sb.length());
-                         Log.d( "| RequestParams:{"+sb.toString()+"}");
+                        mLog.d("| RequestParams:{" + sb.toString() + "}");
                     }
                 }
 
-                 Log.d( "| Response:" + content);
-                 Log.d("----------End:"+duration+"毫秒----------");
+                mLog.d("| Response:" + content);
+                mLog.d("----------End:" + duration + "毫秒----------");
                 return response.newBuilder()
                         .body(okhttp3.ResponseBody.create(mediaType, content))
                         .build();
@@ -112,16 +114,15 @@ public class HttpInterceptor {
         };
     }
 
-    static  int retrynum = 0;
-    public static Interceptor buildErrorRetryInterceptor(final int maxNum)
-    {
+     int retrynum = 0;
+
+    public  Interceptor buildErrorRetryInterceptor(final int maxNum) {
         return new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
-                Request request =chain.request();
+                Request request = chain.request();
                 Response response = chain.proceed(request);
-                while (!response.isSuccessful() && retrynum < maxNum)
-                {
+                while (!response.isSuccessful() && retrynum < maxNum) {
                     ++retrynum;
                     response = chain.proceed(request);
                 }
@@ -132,8 +133,7 @@ public class HttpInterceptor {
     }
 
 
-    public interface TokenCallBack
-    {
+    public interface TokenCallBack {
         String getToken();
     }
 

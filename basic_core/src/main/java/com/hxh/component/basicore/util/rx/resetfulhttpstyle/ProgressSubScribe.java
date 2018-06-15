@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.hxh.component.basicore.Base.app.AppManager;
 import com.hxh.component.basicore.CoreLib;
+import com.hxh.component.basicore.ui.loading.CustomLoadingDialog;
 import com.hxh.component.basicore.ui.loading.ILoadingProgressDialog;
 import com.hxh.component.basicore.util.Utils;
 
@@ -28,15 +29,15 @@ public abstract class ProgressSubScribe<T> extends Subscriber<T> {
 
     public ProgressSubScribe() {
         this.mContext = new WeakReference<Context>(AppManager.getCurrentActivity());
-        //mDialogHandler = new ProgressDialogHandler(mContext.get(),this);
-        mDialog = CoreLib.getInstance().getUIProvider().getLoadingDialog();
+
+        mDialog = new CustomLoadingDialog(mContext.get(),CoreLib.getInstance().getUIProvider().getLoadingDialogViewLayoutId(),CoreLib.getInstance().getUIProvider().isLoadingDialogViewisCancelable());
 
     }
 
     public ProgressSubScribe(boolean IsExceptionSelfCommand) {
         this.isself = IsExceptionSelfCommand;
         this.mContext = new WeakReference<Context>(AppManager.getCurrentActivity());
-        mDialog = CoreLib.getInstance().getUIProvider().getLoadingDialog();
+        mDialog = new CustomLoadingDialog(mContext.get(),CoreLib.getInstance().getUIProvider().getLoadingDialogViewLayoutId(),CoreLib.getInstance().getUIProvider().isLoadingDialogViewisCancelable());
     }
 
 
@@ -76,6 +77,8 @@ public abstract class ProgressSubScribe<T> extends Subscriber<T> {
         }
     }
 
+
+
     @Override
     public void onCompleted() {
         dissmisDialog();
@@ -111,11 +114,17 @@ public abstract class ProgressSubScribe<T> extends Subscriber<T> {
         }
 
         mContext = null;
+        AppManager.clearLoadingDialog();
+
     }
 
     //打开Loading
     private void showDialog() {
         if (null != mDialog)
             mDialog.show();
+        AppManager.addHttpLoadingDialog(mDialog);
     }
+
+
+
 }

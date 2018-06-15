@@ -20,6 +20,7 @@ import rx.subscriptions.CompositeSubscription;
 
 public class BaseModelDelegate implements IModelRelated{
     protected CompositeSubscription mSubscription;//管理subscription
+
     //region 管理sub
     /**
      * 当你每次调用 subscribe(observer...)时候，此方法会返回给你一个Subscribtion,你可以调用此方法收集它

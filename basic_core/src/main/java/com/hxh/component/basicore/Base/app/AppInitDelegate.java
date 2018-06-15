@@ -7,10 +7,7 @@ import android.util.ArrayMap;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.android.arouter.utils.TextUtils;
-import com.hxh.component.basicore.Config;
 import com.hxh.component.basicore.util.Utils;
-import com.hxh.component.basicore.util.aspj.util.AspjManager;
-import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 
@@ -23,38 +20,28 @@ import me.yokeyword.fragmentation.Fragmentation;
  * 描述: 初始化相关组件
  */
 public abstract class AppInitDelegate {
-    public AppInitDelegate(AppDelegate appDelegate, Application app) {
-        this.appDelegate = appDelegate;
+    public AppInitDelegate( Application app) {
         this.mApplication = app;
-        init();
+        initDelegate();
     }
 
-    protected AppDelegate appDelegate;
+
     protected Application mApplication;
     protected String mDatasDir;
     protected String mImagesDir;
-    protected BugManager mBugManager;
     protected ArrayMap<String, String> mSaveData; //SaveData可以看做一个小型数据存储库
 
 
-    protected final BugManager getBugManager() {
-        return mBugManager;
-    }
 
     //region -----------------------你必须要实现的a方法-----------------------
 
 
+    public abstract void init();
     /**
-     * 初始化Bug管理器
+     * 初始化
      */
-    private void initBugManager() {
-        mBugManager = A_initBugManager();
-        if (null != mBugManager) {
-            appDelegate.registerBugManager(mBugManager);
-        }
-    }
+    public abstract void A_initCoreLib();
 
-    public abstract BugManager A_initBugManager();
 
     //endregion
 
@@ -94,20 +81,19 @@ public abstract class AppInitDelegate {
     //endregion
 
     //region -----------------------系统必须初始化的，无需干预-----------------------
-    private void init() {
+    private void initDelegate() {
 
         // Utils.init(mApplication);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             mSaveData = new ArrayMap<>();
         }
+        A_initCoreLib();
         getAppCacheDir();
         getAppImgCacheDir();
-        initBugManager();
         initArouter();
         initSharpe();
-        initCheckLoginAspj();
+
         initFragmention();
-        initUMeng();
 
     }
 
@@ -118,20 +104,7 @@ public abstract class AppInitDelegate {
                 .install();
     }
 
-    /**
-     * 初始化友盟
-     * 
-     * @time 2017/12/14 11:57
-     * 
-     * @author 
-     */
-    private void initUMeng()
-    {
 
-        MobclickAgent.setScenarioType(mApplication, MobclickAgent.EScenarioType.E_UM_NORMAL);
-        MobclickAgent.setSessionContinueMillis(60*100000);
-    }
-    
     /**
      * 初始化Arouter
      */
@@ -144,12 +117,7 @@ public abstract class AppInitDelegate {
         ARouter.init(mApplication);
     }
 
-    /**
-     * 初始化自动登录的织入点
-     */
-    private void initCheckLoginAspj() {
-        AspjManager.CheckLoginManager.getInstance().registerLoginView(Config.RouterPath_DefalutLoginView, AspjManager.CheckLoginManager.MODE_ACTIVTY);
-    }
+
 
 
     //endregion

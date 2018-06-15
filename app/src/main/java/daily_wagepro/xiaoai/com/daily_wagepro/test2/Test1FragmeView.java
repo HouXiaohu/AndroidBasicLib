@@ -5,10 +5,12 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.hxh.component.basicore.Base.app.UIProvider;
+import com.hxh.component.basicore.Base.app.provider.UIProvider;
 import com.hxh.component.basicore.CoreLib;
 import com.hxh.component.basicore.component.mvp.newmvp.view.BaseView;
-import com.hxh.component.basicore.util.ToastUIType;
+import com.hxh.component.basicore.ui.ToastUIType;
+import com.hxh.component.basicore.util.aspj.annotation.CheckLogin;
+import com.hxh.component.basicore.util.aspj.annotationenum.ShowType;
 
 import daily_wagepro.xiaoai.com.daily_wagepro.R;
 
@@ -34,17 +36,17 @@ public class Test1FragmeView extends BaseView {
             public void onClick(View v) {
                 UIProvider ui = CoreLib.getInstance().getUIProvider();
                 ui.setToastUIType(ToastUIType.INSIDE);
-                CoreLib.getInstance().setUIProvider(
-                        ui
-                );
+                CoreLib.getInstance().getAppComponent().globalUIProvider(ui);
                 showLoading1();
             }
         });
 
     }
 
+
+    @CheckLogin(type = ShowType.TOAST)
     private void showLoading() {
-        toastShort("你好啊");
+       // toastShort("你好啊");
     }
 
     private void showLoading1() {

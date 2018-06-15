@@ -9,7 +9,7 @@ apply plugin: 'com.jfrog.bintray'
 
 //暂时新的版本
 //增加了Toast自定义功，以及ProgressBarSubScribe的自定义
-version = "1.2.1"
+version = "2.0.5"
 
 //version = "1.0.9.12"//定义版本标识
 
@@ -90,7 +90,8 @@ dependencies {
 
     compile rootProject.ext.requiredDependencies["aspectjrt"]
 
-    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.umeng.sdk:common:latest.integration'
+    compile 'com.umeng.sdk:analytics:latest.integration'
     //greendao
 
 
