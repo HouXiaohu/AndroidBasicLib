@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'android-aspectjx'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
-version = "1.0.11"//定义版本标识
+version = "1.0.13.2"//定义版本标识
 
 //version = "1.0.9.12"//定义版本标识
 
@@ -30,15 +30,15 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    api fileTree(include: ['*.jar'], dir: 'libs')
 
 
     //谁用了butterknife 谁去写这句代码，一般来说，butterknife应该写在主 module 中
-    compile rootProject.ext.requiredDependencies["butterknife"]
+    api rootProject.ext.requiredDependencies["butterknife"]
 
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:support-v4:25.3.1'
+    api 'com.android.support:recyclerview-v7:25.3.1'
+    api 'com.android.support:appcompat-v7:25.3.1'
+    api 'com.android.support:support-v4:25.3.1'
 
     //开始引入基础包
 //    compile rootProject.ext.requiredDependencies["appcompat_v7"]
@@ -46,44 +46,44 @@ dependencies {
 //    compile rootProject.ext.requiredDependencies["recyclerview_v7"]
 
     //需要引入的
-    compile rootProject.ext.requiredDependencies["okhttp"]
-    compile rootProject.ext.requiredDependencies["okio"]
-    compile rootProject.ext.requiredDependencies["retrofit"]
-    compile rootProject.ext.requiredDependencies["retrofitConvertGson"]
-    compile rootProject.ext.requiredDependencies["retrofitConvertJackson"]
-    compile rootProject.ext.requiredDependencies["retrofitConvertString"]
-    compile rootProject.ext.requiredDependencies["okhttpInterceptro"]
-    compile rootProject.ext.requiredDependencies["rxjava"]
-    compile rootProject.ext.requiredDependencies["rxandroid"]
-    compile rootProject.ext.requiredDependencies["rxjavaRetrofiAdapter"]
-    compile rootProject.ext.requiredDependencies["glide"]
-    compile rootProject.ext.requiredDependencies["autoLayout"]
-    compile rootProject.ext.requiredDependencies["fragmention"]
-    compile rootProject.ext.requiredDependencies["fragmenton_swipeback"]
-    compile rootProject.ext.requiredDependencies["design"]
+    api rootProject.ext.requiredDependencies["okhttp"]
+    api rootProject.ext.requiredDependencies["okio"]
+    api rootProject.ext.requiredDependencies["retrofit"]
+    api rootProject.ext.requiredDependencies["retrofitConvertGson"]
+    api rootProject.ext.requiredDependencies["retrofitConvertJackson"]
+    api rootProject.ext.requiredDependencies["retrofitConvertString"]
+    api rootProject.ext.requiredDependencies["okhttpInterceptro"]
+    api rootProject.ext.requiredDependencies["rxjava"]
+    api rootProject.ext.requiredDependencies["rxandroid"]
+    api rootProject.ext.requiredDependencies["rxjavaRetrofiAdapter"]
+    api rootProject.ext.requiredDependencies["glide"]
+    api rootProject.ext.requiredDependencies["autoLayout"]
+    api rootProject.ext.requiredDependencies["fragmention"]
+    api rootProject.ext.requiredDependencies["fragmenton_swipeback"]
+    api rootProject.ext.requiredDependencies["design"]
     //仿Ios的 Alert
-    compile rootProject.ext.requiredDependencies["alertview"]
-    compile rootProject.ext.requiredDependencies["gson"]
-    compile rootProject.ext.requiredDependencies["imageloader"]
+    api rootProject.ext.requiredDependencies["alertview"]
+    api rootProject.ext.requiredDependencies["gson"]
+    api rootProject.ext.requiredDependencies["imageloader"]
     //fastjson
-    compile rootProject.ext.requiredDependencies["fastjson"]
-    compile rootProject.ext.requiredDependencies["photoView"]
-    compile rootProject.ext.requiredDependencies["pdf_viewer"]
+    api rootProject.ext.requiredDependencies["fastjson"]
+    api rootProject.ext.requiredDependencies["photoView"]
+    api rootProject.ext.requiredDependencies["pdf_viewer"]
     //MRecyeclview基础
-    compile rootProject.ext.requiredDependencies["xrecycleview"]
+    api rootProject.ext.requiredDependencies["xrecycleview"]
     //对时间的封装
-    compile rootProject.ext.requiredDependencies["joda-time"]
+    api rootProject.ext.requiredDependencies["joda-time"]
     //对OKHttp的封装
-    compile rootProject.ext.requiredDependencies["okhttputils"]
+    api rootProject.ext.requiredDependencies["okhttputils"]
     //ARouter
-    compile rootProject.ext.requiredDependencies["arouter"]
+    api rootProject.ext.requiredDependencies["arouter"]
 
-    compile rootProject.ext.requiredDependencies["aspectjrt"]
+    api rootProject.ext.requiredDependencies["aspectjrt"]
 
-    compile 'com.umeng.analytics:analytics:latest.integration'
+    api 'com.umeng.analytics:analytics:latest.integration'
     //greendao
 
-    compile ('com.github.gzu-liyujiang.AndroidPicker:WheelPicker:1.5.5') {
+    api ('com.github.gzu-liyujiang.AndroidPicker:WheelPicker:1.5.5') {
         //不引用如下包
         exclude module: 'support-v4'
     }

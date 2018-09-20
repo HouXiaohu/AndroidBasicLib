@@ -476,6 +476,18 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack {
 
 
     private void showViewWhenNoData(int noDataType) {
+        if(mView.isLoadMore())
+        {
+            if(mPaginBuilder.pageIndex>0)
+            {
+                mPaginBuilder.pageIndex = --mPaginBuilder.pageIndex;
+                if(mPaginBuilder.pageIndex < 0)
+                {
+                    mPaginBuilder.pageIndex = 0;
+                }
+            }
+
+        }
         if (mNodataTypeWhenRequest == EMPTY_WHENNODATA) {
             mView.clearData();
         } else if (mNodataTypeWhenRequest == EMPTYVIEW_WHENNODATA) {
@@ -493,6 +505,8 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack {
             mView.setEmpty(emptyViewConfig);
             if (null != mNoDataCallback) mNoDataCallback.onNoData();
         }
+
+
     }
 
     /**
@@ -627,28 +641,26 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack {
                 if (null == mPaginBuilder) {
                     throw new IllegalStateException("you open recycleview's refresh and loadmore,but you not setter refresh param!");
                 } else {
+
                     if (!this.mParams.containsKey(mPaginBuilder.getPageIndexFieldName())) {
                         this.mParams.put(mPaginBuilder.getPageIndexFieldName(), mPaginBuilder.getPageIndex());
-                        isShouDongConfigPaginBuilder = true;
+
                     }
                     if (!this.mParams.containsKey(mPaginBuilder.getPageSizeFieldName())) {
                         this.mParams.put(mPaginBuilder.getPageSizeFieldName(), mPaginBuilder.getPageSize());
-                        isShouDongConfigPaginBuilder = true;
+                    }
+
+                    if (mView.isRefresh()) {
+                        this.mParams.remove(PaginationBuilder.PAGEKEY);
+                        this.mParams.put(PaginationBuilder.PAGEKEY, initPageIndex);
+                    } else if (mView.isLoadMore() ) {
+                        this.mParams.remove(PaginationBuilder.PAGEKEY);
+                        this.mParams.put(PaginationBuilder.PAGEKEY, (mPaginBuilder.pageIndex = ++mPaginBuilder.pageIndex) * mPaginBuilder.pageSize);
                     }
                 }
             }
-            if (null != mPaginBuilder) {
-                if (mView.isRefresh()) {
-                    this.mParams.remove(PaginationBuilder.PAGEKEY);
-                    this.mParams.put(PaginationBuilder.PAGEKEY, initPageIndex);
-                } else if (mView.isLoadMore() && isShouDongConfigPaginBuilder) {
-                    this.mParams.remove(PaginationBuilder.PAGEKEY);
-                    this.mParams.put(PaginationBuilder.PAGEKEY, (++mPaginBuilder.pageIndex) * mPaginBuilder.pageSize);
-                }
-            }
-
             //最后来个校验
-            checkPagingBuildParam();
+//            checkPagingBuildParam();
         }
 
 
