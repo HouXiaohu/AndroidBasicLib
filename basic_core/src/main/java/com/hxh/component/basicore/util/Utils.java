@@ -43,6 +43,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IntDef;
+import android.support.annotation.LayoutRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -53,6 +54,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -63,6 +65,7 @@ import android.widget.TextView;
 
 import com.hxh.component.basicore.Base.app.AppManager;
 import com.hxh.component.basicore.Config;
+import com.hxh.component.basicore.R;
 import com.hxh.component.basicore.component.imageLoader.IImageLoader;
 import com.hxh.component.basicore.component.imageLoader.ImageFactory;
 import com.hxh.component.basicore.util.aspj.annotation.Safe;
@@ -143,6 +146,7 @@ public class Utils {
     private static Context mContext;
     private static DateTime dateTime;
     private static Boolean isDebug = null;
+    private static LayoutInflater mLayoutInflater;
 
     private Utils() {
         throw new IllegalStateException("you can't instance me");
@@ -168,6 +172,14 @@ public class Utils {
         if (null == isDebug) {
             isDebug = context.getApplicationInfo() != null && (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
         }
+    }
+
+    public static LayoutInflater getLayoutInflater() {
+        if(null == mContext)throw new IllegalStateException("请先初始化Utils,使用Utils.init(xxx....)");
+        if(null == mLayoutInflater){
+            mLayoutInflater = LayoutInflater.from(mContext);
+        }
+        return mLayoutInflater;
     }
 
     public static class SystemUtil {
@@ -202,8 +214,7 @@ public class Utils {
         public static void enableImmersiveMode(AppCompatActivity activity) {
             if (Build.VERSION.SDK_INT >= 21) {
                 Window window = activity.getWindow();
-                if(!isEMUI3_1())
-                {
+                if (!isEMUI3_1()) {
                     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 }
                 window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -223,8 +234,7 @@ public class Utils {
         public static void enableImmersiveMode(Activity activity) {
             if (Build.VERSION.SDK_INT >= 21) {
                 Window window = activity.getWindow();
-                if(!isEMUI3_1())
-                {
+                if (!isEMUI3_1()) {
                     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 }
                 window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -241,17 +251,16 @@ public class Utils {
             return false;
         }
 
-        private static String getEmuiVersion(){
+        private static String getEmuiVersion() {
             Class<?> classType = null;
             try {
                 classType = Class.forName("android.os.SystemProperties");
                 Method getMethod = classType.getDeclaredMethod("get", String.class);
-                return (String)getMethod.invoke(classType, "ro.build.version.emui");
-            } catch (Exception e){
+                return (String) getMethod.invoke(classType, "ro.build.version.emui");
+            } catch (Exception e) {
             }
             return "";
         }
-
 
 
         /**
@@ -530,9 +539,9 @@ public class Utils {
          * @return File path
          * @throws IOException
          */
-        public static File saveBitmap(Context context, Bitmap bitmap,String path) throws IOException {
+        public static File saveBitmap(Context context, Bitmap bitmap, String path) throws IOException {
             String destinationDirectoryPath = generatePictureName() + ".jpeg";
-            File file = new File(path+File.separator+destinationDirectoryPath);
+            File file = new File(path + File.separator + destinationDirectoryPath);
 
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
@@ -658,18 +667,15 @@ public class Utils {
             return mContext.getApplicationInfo().packageName + ".fileprovider";
         }
 
-        public static boolean exist(String path)
-        {
-           return Text.isEmpty(path)? false: new File(path).exists();
+        public static boolean exist(String path) {
+            return Text.isEmpty(path) ? false : new File(path).exists();
         }
 
         /**
-         *
          * @param savePath
          * @return file 返回true dir 是false
          */
-        public static boolean isDirOrFile(String savePath)
-        {
+        public static boolean isDirOrFile(String savePath) {
             return new File(savePath).isFile();
         }
     }
@@ -733,7 +739,7 @@ public class Utils {
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 uri = FileProvider.getUriForFile(mContext, fileProviderAuthorities, file);
-                i.setDataAndType(uri,  Config.INSTALL_APP_SCHEMA);
+                i.setDataAndType(uri, Config.INSTALL_APP_SCHEMA);
             } else {
                 uri = Uri.fromFile(file);
                 i.setDataAndType(uri, Config.INSTALL_APP_SCHEMA);
@@ -824,7 +830,8 @@ public class Utils {
         public static void toast(String message, int gravity) {
             show(message, android.widget.Toast.LENGTH_SHORT, gravity);
         }
-        public static void toast(String message, int gravity,int duration) {
+
+        public static void toast(String message, int gravity, int duration) {
             show(message, duration, gravity);
         }
 
@@ -833,44 +840,36 @@ public class Utils {
             show(message, android.widget.Toast.LENGTH_LONG, -1);
         }
 
-        public static void toast(View view)
-        {
-            show(null, android.widget.Toast.LENGTH_SHORT,Gravity.CENTER,view,-1);
+        public static void toast(View view) {
+            show(null, android.widget.Toast.LENGTH_SHORT, Gravity.CENTER, view, -1);
         }
 
-        public static void toast(View view,int duration)
-        {
-            show(null,duration,Gravity.CENTER,view,-1);
+        public static void toast(View view, int duration) {
+            show(null, duration, Gravity.CENTER, view, -1);
         }
 
-        public static void toast(View view, int textResId,String msg,int duration,int gravity)
-        {
-            show(msg,duration,gravity,view,textResId);
+        public static void toast(View view, int textResId, String msg, int duration, int gravity) {
+            show(msg, duration, gravity, view, textResId);
         }
 
         private static void show(String message, int duration, int gravity) {
-            show(message, duration,gravity,null,-1);
+            show(message, duration, gravity, null, -1);
         }
 
-        private static void show(String message, int duration, int gravity,View view,int resId) {
-            if(null != view)
-            {
-                if(null == mToast)
-                {
+        private static void show(String message, int duration, int gravity, View view, int resId) {
+            if (null != view) {
+                if (null == mToast) {
                     mToast = new android.widget.Toast(Utils.getApplicationContext());
                 }
-                if(!TextUtils.isEmpty(message))
-                {
+                if (!TextUtils.isEmpty(message)) {
                     ((TextView) view.findViewById(resId)).setText(message);
                 }
                 mToast.setView(view);
-            }else
-            {
+            } else {
                 if (null == mToast) {
                     mToast = android.widget.Toast.makeText(Utils.getApplicationContext(), message, duration);
                 } else {
-                    if(!TextUtils.isEmpty(message))
-                    {
+                    if (!TextUtils.isEmpty(message)) {
                         mToast.setText(message);
                     }
 
@@ -907,7 +906,7 @@ public class Utils {
         }
 
         public static boolean isEmpty(java.lang.String str) {
-            if (null == str || "".equals(str) || 0==str.length()) {
+            if (null == str || "".equals(str) || 0 == str.length()) {
                 return true;
             }
 
@@ -1019,22 +1018,20 @@ public class Utils {
          */
         public static boolean putString(String key, String value) {
 
-            SharedPreferences.Editor editor =  editor();
+            SharedPreferences.Editor editor = editor();
             editor.putString(key, value);
             return editor.commit();
         }
 
-        public static boolean updateString(String key,String value)
-        {
-            SharedPreferences.Editor editor =  editor();
+        public static boolean updateString(String key, String value) {
+            SharedPreferences.Editor editor = editor();
             editor.remove(key);
             editor.putString(key, value);
             return editor.commit();
         }
 
-        public static boolean remove(String key)
-        {
-            SharedPreferences.Editor editor =  editor();
+        public static boolean remove(String key) {
+            SharedPreferences.Editor editor = editor();
             editor.remove(key);
             return editor.commit();
         }
@@ -1581,9 +1578,8 @@ public class Utils {
             return mContext.getResources().getString(resid);
         }
 
-        public static String getString(String resName)
-        {
-            int id = mContext.getResources().getIdentifier(resName,"string",mContext.getPackageName());
+        public static String getString(String resName) {
+            int id = mContext.getResources().getIdentifier(resName, "string", mContext.getPackageName());
             return mContext.getResources().getString(id);
         }
 
@@ -1618,6 +1614,16 @@ public class Utils {
             return "";
         }
 
+        public static View getView(@LayoutRes int layoutId) {
+            return getView(null, layoutId);
+        }
+        public static View getView(Context context,@LayoutRes int layoutId) {
+            if(null == mLayoutInflater){
+                if(null == mContext)mContext = context;
+                getLayoutInflater();
+            }
+            return mLayoutInflater.inflate(layoutId, null);
+        }
     }
 
     public static class Time {
@@ -3152,7 +3158,6 @@ public class Utils {
     }
 
 
-
     /**
      * 软键盘
      */
@@ -3416,8 +3421,7 @@ public class Utils {
 //            return picker;
 //        }
 
-        public static AlertView showCustomStyleDialog(AlertView.Builder builder)
-        {
+        public static AlertView showCustomStyleDialog(AlertView.Builder builder) {
             return new AlertView(builder);
         }
 
@@ -3433,14 +3437,12 @@ public class Utils {
 //        }
 
 
-        public static AlertView showDefaulStyleSelectPhotoMode( OnItemClickListener lis) {
+        public static AlertView showDefaulStyleSelectPhotoMode(OnItemClickListener lis) {
 
-            return showDefaulStyleDialog(new String[]{"拍摄", "从手机相册选择"},lis);
+            return showDefaulStyleDialog(new String[]{"拍摄", "从手机相册选择"}, lis);
         }
 
     }
-
-
 
 
     public static class LocationUtil {
@@ -3530,7 +3532,6 @@ public class Utils {
             pro[1] = la1.latitude;
             return pro;
         }
-
 
 
         /**
@@ -3698,7 +3699,6 @@ public class Utils {
         public static void loadimg(ImageView iv, String url, int errorResId) {
             ImageFactory.getGlideLoader().loadFormNet(iv, url, new IImageLoader.Options(errorResId));
         }
-
 
 
     }

@@ -27,6 +27,8 @@ public class ActivityLifecycle implements Application.ActivityLifecycleCallbacks
     }
 
 
+
+
     @Override
     public void onActivityStarted(Activity activity) {
 

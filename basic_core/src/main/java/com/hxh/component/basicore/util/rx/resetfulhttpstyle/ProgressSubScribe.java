@@ -59,7 +59,7 @@ public abstract class ProgressSubScribe<T> extends Subscriber<T> {
         } else {
             //没有网络，直接结束
             isNoConnection = true;
-
+            CoreLib.getInstance().getNetProvider().getRequestState().onNoNet();
             onError(new ConnectException("当前没有网络"));
         }
 
@@ -69,6 +69,7 @@ public abstract class ProgressSubScribe<T> extends Subscriber<T> {
     @Override
     public void onError(Throwable e) {
         dissmisDialog();
+        CoreLib.getInstance().getNetProvider().getRequestState().onError(e);
         if (isself) {
             _OnError(e);
             isself = false;
@@ -82,11 +83,12 @@ public abstract class ProgressSubScribe<T> extends Subscriber<T> {
     @Override
     public void onCompleted() {
         dissmisDialog();
+
     }
 
     @Override
     public void onNext(T t) {
-
+        CoreLib.getInstance().getNetProvider().getRequestState().onHaveData(t);
         dissmisDialog();
         _OnNet(t);
     }

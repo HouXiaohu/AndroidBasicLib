@@ -6,6 +6,7 @@ import android.support.v4.util.ArrayMap;
 
 import com.hxh.component.basicore.component.net.baseurl.DynamicMutilHttpBaseUrl;
 import com.hxh.component.basicore.component.net.baseurl.FixedMutilHttpBaseUrl;
+import com.hxh.component.basicore.ui.stateview.IRequestState;
 import com.hxh.component.basicore.util.rx.resetfulhttpstyle.DefaultApiError;
 import com.hxh.component.basicore.util.Utils;
 
@@ -50,7 +51,7 @@ public class NetProvider {
      * 全局性质的请求拦截器
      */
     private RequestCallBackHandler mRequestCallBackHandler;
-
+    private IRequestState mRequestState;
 
     public NetProvider(
             boolean isEnableCookie, long configReadTimeOut, long configConnectTimeOut,
@@ -58,7 +59,7 @@ public class NetProvider {
             RequestCallBackHandler configRequestCallBack, Converter.Factory configConverterFactory,
             String cachePath,long maxSize,Interceptor configLogTnterceptor
             , IApiError apiErrorClasszz,long configWriteTimeOut,boolean isEnableConnectTimeOut,
-            int errorRetryCount,RequestCallBackHandler requestCallBackHandler)
+            int errorRetryCount,RequestCallBackHandler requestCallBackHandler,IRequestState state)
     {
         this.errorRetryCount = errorRetryCount;
         this.configReadTimeOut = configReadTimeOut;
@@ -78,6 +79,7 @@ public class NetProvider {
         this.mApiErrorClasszz = apiErrorClasszz;
 
         this.mRequestCallBackHandler = requestCallBackHandler;
+        this.mRequestState = state;
     }
 
     public static NetProvider defaultNetProvider()
@@ -108,7 +110,7 @@ public class NetProvider {
         private ArrayMap<Object,String> mFixedBaseUrls;
 
         private boolean isDynamisHttpUrl;
-
+        private IRequestState mRequestState;
         private RequestCallBackHandler mRequestCallBackHandler;
 
 
@@ -313,6 +315,10 @@ public class NetProvider {
             return this;
         }
 
+        public Builder configRequestStateListener(IRequestState state){
+            this.mRequestState = state;
+            return this;
+        }
 
 
         public NetProvider build()
@@ -320,7 +326,7 @@ public class NetProvider {
             NetProvider provider =  new NetProvider(isEnableCookie,configReadTimeOut,configConnectTimeOut,
                     configRESTFULTokenInterceptor,configTokenInterceptor,configRequestCallBack,configConverterFactory,cachePath,cacheSize,configLogTnterceptor
                     ,mApiErrorClasszz
-            ,configWriteTimeOut,isEnableErrorRetry,errorRetryCount,mRequestCallBackHandler);
+            ,configWriteTimeOut,isEnableErrorRetry,errorRetryCount,mRequestCallBackHandler,mRequestState);
 
             provider.setBaseUrl(baseUrl);
             if (isDynamisHttpUrl) {
@@ -540,6 +546,41 @@ public class NetProvider {
     public DynamicMutilHttpBaseUrl getDynamicHttpUrls()
     {
         return mDynamicMutilHttpBaseUrl;
+    }
+
+    public void setRequestState(IRequestState mRequestState) {
+        this.mRequestState = mRequestState;
+    }
+
+    public IRequestState getRequestState() {
+        return generateDefaultRequestSstate();
+    }
+
+    private IRequestState generateDefaultRequestSstate(){
+        if(null == mRequestState){
+            return mRequestState = new IRequestState() {
+                @Override
+                public void _onNoNet() {
+
+                }
+
+                @Override
+                public void _onError(Throwable throwable) {
+
+                }
+
+                @Override
+                public void _onEmptyData() {
+
+                }
+
+                @Override
+                public void _onHaveData(Object o) {
+
+                }
+            };
+        }
+        return mRequestState;
     }
     //endregion
 

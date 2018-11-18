@@ -429,7 +429,7 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack {
             getParam();
             fetchPagingBuild();
 
-            mNetRepository
+             mNetRepository
                     .getData(this.mParams)
                     .subscribe(new ProgressSubScribe<NetResultBean<D>>(true) {
                         @Override

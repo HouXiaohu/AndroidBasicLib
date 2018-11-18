@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.hxh.component.basicore.Base.topbar.ActionBarProvider;
 import com.hxh.component.basicore.R;
 import com.hxh.component.basicore.ui.ToastUIType;
+import com.hxh.component.basicore.ui.stateview.StateView;
 import com.hxh.component.basicore.util.Utils;
 
 /**
@@ -40,7 +41,7 @@ public class UIProvider {
     private View mToastView;
     private int mToastViewTextViewId;
     private int mToastGravity;
-
+    private StateView mStateView;
 
     /**
      * 全局性ActionBar
@@ -58,7 +59,7 @@ public class UIProvider {
         private int mToastViewTextViewId;
         private ActionBarProvider mActionBarProvider;
         private int mLoadingDialogViewLayoutId;
-
+        private StateView mStateView;
 
         public Builder configLoadingDialogUI(int resid)
         {
@@ -114,6 +115,11 @@ public class UIProvider {
             return this;
         }
 
+        public Builder configStateView(StateView provider)
+        {
+            this.mStateView = provider;
+            return this;
+        }
 
         public UIProvider build()
         {
@@ -123,6 +129,7 @@ public class UIProvider {
             ui.mToastUIType = mToastUIType;
             ui.mToastView = mToastView;
             ui.mToastViewTextViewId = mToastViewTextViewId;
+            ui.mStateView = mStateView;
             return ui;
         }
 
@@ -183,5 +190,9 @@ public class UIProvider {
 
     public void setToastGravity(int mToastGravity) {
         this.mToastGravity = mToastGravity;
+    }
+
+    public StateView getStateView() {
+        return mStateView;
     }
 }
