@@ -1,4 +1,4 @@
-package com.hxh.component.basicore.component.mvp.newmvp.model;
+package com.hxh.component.basicore.component.newmvp.model;
 
 
 /**

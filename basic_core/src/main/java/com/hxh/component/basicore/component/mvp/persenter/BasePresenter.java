@@ -1,64 +1,38 @@
-package com.hxh.component.basicore.component.mvp.newmvp.model;
-
+package com.hxh.component.basicore.component.mvp.persenter;
 
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.hxh.component.basicore.component.mvp.persenter.delegate.BasePresenterRelated;
+import com.hxh.component.basicore.component.mvp.persenter.delegate.IPresenterRelated;
+import com.hxh.component.basicore.component.mvp.view.IView;
 import com.hxh.component.basicore.component.net.IApiError;
 
 import java.util.List;
 
 import retrofit2.Response;
 import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
-
 
 /**
- * 标题: BaseModel.java
- * 作者: hxh
- * 日期: 2018/3/10 17:18
- * 描述: BaseModel
- * 2018/04/03
- * 问题1 :  Model为什么要必须依赖于一个Presenter？当前这么做，就把Model给限制死了，
- * Model应该是单独公共的一层，对外提供方法，如果我的Utils中想用怎么办？View中也想用怎么办(简单的逻辑)
- *
- * 问题2:  目前下发结果的函数是dispatchResponseEvent(tag,bean)，按照理想的情况下,Model层由单独人员
- * 编写，当编写完毕，提供给另一个开发人员整合，此时，另一个开发人员对于Model层的调用应该是轻松的，而
- * 不是现在的这种，通过tag区分，而且，Model层返回的数据，可能有好几个，如果还是用这种方法，必然会增加
- * 另一个开发者的难度。
- *
- * 问题3： 关于里氏替换原则，外部应该调用的是我的这个IModel接口，采用的应该是子类实现方式
- *
+ * Created by hxh on 2017/4/11.
  */
-public abstract class BaseModel
-        implements IModel,
-        IModelRelated
-{
-
-    protected CompositeSubscription mSubscription;//管理subscription
-    protected String mCurrentRequestTag;
-    protected BaseModelDelegate mDelegate;
-
-
-
-    public BaseModel() {
-        this.mDelegate = new BaseModelDelegate();
-    }
-
-
-
+public abstract class BasePresenter<V extends IView> implements IPresenter<V>,IPresenterRelated {
+    protected V mView; //当前view
+    protected BasePresenterRelated mDelegate = new BasePresenterRelated();//管理subscription
     @Override
-    public void release() {
-        unSubscription();
-        mSubscription = null;
-        mCurrentRequestTag = null;
-        mDelegate = null;
+    public V getView()
+    {
+        if(null == mView)
+        {
+            throw new IllegalStateException("v can not null");
+        }
+        return mView;
     }
-
 
     @Override
     public void addSubscription(Subscription sub)
     {
+
         mDelegate.addSubscription(sub);
     }
 
@@ -75,9 +49,22 @@ public abstract class BaseModel
         mDelegate.newCompositeSubscription();
     }
 
+    @Override
+    public void AttachView(V view) {
+        if(null == view)
+        {
+            throw new IllegalStateException("v can not be null");
+        }
+        this.mView = view;
+    }
+
+    @Override
+    public void DetachView() {
+        mView = null;
+    }
 
 
-    //region model辅助方法
+    //region Presenter辅助方法
     @Override
     public boolean isEmpty(List list) {
         return mDelegate.isEmpty(list);
@@ -151,6 +138,8 @@ public abstract class BaseModel
         return mDelegate.checkResponseBodyContainErrorBody(body);
     }
 
+
+
     @Override
     public String checkResponseBodyContainErrorBodyReturnErrorMessage(Response body) {
         return mDelegate.checkResponseBodyContainErrorBodyReturnErrorMessage(body);
@@ -166,6 +155,7 @@ public abstract class BaseModel
         return mDelegate.getApiError(e);
     }
 
-    //endregion
 
+
+    //endregion
 }

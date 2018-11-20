@@ -1,7 +1,8 @@
-package com.hxh.component.basicore.component.mvp.newmvp.model;
+package com.hxh.component.basicore.component.mvp.persenter.delegate;
 
 import android.widget.EditText;
 import android.widget.TextView;
+
 
 import com.hxh.component.basicore.component.net.IApiError;
 
@@ -13,7 +14,7 @@ import rx.Subscription;
 /**
  * Presenter 相关辅助方法
  */
-public interface IModelRelated {
+public interface IPresenterRelated {
     //region 管理订阅(sub) 进入
     void unSubscription();
     void addSubscription(Subscription sub);

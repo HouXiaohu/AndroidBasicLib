@@ -1,23 +1,19 @@
-package com.hxh.component.basicore.component.mvp.newmvp.presenter;
+package com.hxh.component.basicore.component.newmvp.presenter;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.hxh.component.basicore.Base.delegate.CheckNullDelegate;
 import com.hxh.component.basicore.Base.delegate.IntentDelegate;
-import com.hxh.component.basicore.Base.delegate.interfaces.IIntentRelated;
 import com.hxh.component.basicore.Base.delegate.interfaces.ICheckNullRelated;
-import com.hxh.component.basicore.Base.view.AppCompartAutoLayoutFragment;
-import com.hxh.component.basicore.component.mvp.newmvp.model.BaseModel;
-import com.hxh.component.basicore.component.mvp.newmvp.view.IView;
+import com.hxh.component.basicore.Base.delegate.interfaces.IIntentRelated;
+import com.hxh.component.basicore.Base.view.AppCompartAutoLayoutActivity;
+import com.hxh.component.basicore.component.newmvp.model.BaseModel;
+import com.hxh.component.basicore.component.newmvp.view.IView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,23 +23,23 @@ import java.util.List;
  * Created by hxh on 2018/3/6.
  */
 
-public abstract class BaseFragmentPresenter<V extends IView> extends AppCompartAutoLayoutFragment implements
+public abstract class BaseActivityPresenter<V extends IView>
+        extends AppCompartAutoLayoutActivity
+        implements
         IPresenter<V>
-        , IIntentRelated
-        , ICheckNullRelated {
+        ,IIntentRelated
+        ,ICheckNullRelated{
+
 
     protected V mView;
     private IntentDelegate mParceableDelegate;
-    private FragmentDelegate mFragmentDelegate;
+    private ActivityDelegate mDelegate =null;
     private CheckNullDelegate mCheckNullRelated;
-    
-    public BaseFragmentPresenter() {
 
+    public BaseActivityPresenter() {
         try {
             mView = getV().newInstance();
-            mFragmentDelegate = new FragmentDelegate(mView);
-         
-        } catch (java.lang.InstantiationException e) {
+        } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -51,101 +47,62 @@ public abstract class BaseFragmentPresenter<V extends IView> extends AppCompartA
 
     }
 
-
-
-    //region 生命周期
-
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mFragmentDelegate.onAttach(context);
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mParceableDelegate = new IntentDelegate(getArguments());
+        mDelegate = new ActivityDelegate(mView,this);
+        mDelegate.onCreate(savedInstanceState);
+        mParceableDelegate = new IntentDelegate(getIntent().getExtras());
         mCheckNullRelated = new CheckNullDelegate();
     }
 
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        return mFragmentDelegate.onCrateView(inflater, container, savedInstanceState);
-    }
-
-
-    @Override
-    public void onSupportVisible() {
-        super.onSupportVisible();
-        mFragmentDelegate.onVisible();
-        mFragmentDelegate.setEnableLazyLoad(isLazyLoad());
-        mFragmentDelegate.onSupportVisible();
+    protected void onResume() {
+        super.onResume();
+        mDelegate.onResume();
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mFragmentDelegate.onDetach();
-        mFragmentDelegate = null;
+    protected void onPause() {
+        super.onPause();
+        mDelegate.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDelegate.onDestroy();
+        mView.release();
+        mDelegate = null;
         mView = null;
         mParceableDelegate = null;
     }
 
-
-    @Override
-    public void onSupportInvisible() {
-        super.onSupportInvisible();
-        mFragmentDelegate.onInVisible();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mFragmentDelegate.onDestroy();
-    }
-
-
-    @Nullable
-    @Override
-    public View getView() {
-        return mFragmentDelegate.rootView;
-    }
-
-    public Context getmContext() {
-        return mFragmentDelegate.getmContext();
-    }
-
-    private void registerModel(BaseModel model) {
-        mFragmentDelegate.registerModel(model);
+    /**
+     * 注册一个数据源
+     * @param model
+     */
+    private void registerModel(BaseModel model)
+    {
+        mDelegate.registerModel(model);
     }
 
     /**
      * 创建一个Model,这个Model需是IModel的子类
-     *
      * @param classzz
      * @param <M>
      * @return
      */
-    protected <M> M createModel(Class<M> classzz) {
-        return (M) mFragmentDelegate.createModel(classzz);
+    protected <M> M createModel(Class<M> classzz)
+    {
+        return (M) mDelegate.createModel(classzz);
     }
 
-    /**
-     * 是否开启懒加载
-     */
-    private boolean isOpenLazy = true;
-
-    public boolean isLazyLoad() {
-        return this.isOpenLazy;
-    }
-    //endregion
 
     public abstract Class<V> getV();
 
     //region parceable支持
+
     @Override
     public Parcelable getExtra_Parceable(String key) {
         return mParceableDelegate.getExtra_Parceable(key);
@@ -158,22 +115,22 @@ public abstract class BaseFragmentPresenter<V extends IView> extends AppCompartA
 
     @Override
     public Integer getExtra_Int(String key, int defaultvalue) {
-        return mParceableDelegate.getExtra_Int(key, defaultvalue);
+        return mParceableDelegate.getExtra_Int(key,defaultvalue);
     }
 
     @Override
     public Boolean getExtra_Boolean(String key, boolean defaultvalue) {
-        return mParceableDelegate.getExtra_Boolean(key, defaultvalue);
+        return mParceableDelegate.getExtra_Boolean(key,defaultvalue);
     }
 
     @Override
     public Double getExtra_Double(String key, double defaultvalue) {
-        return mParceableDelegate.getExtra_Double(key, defaultvalue);
+        return mParceableDelegate.getExtra_Double(key,defaultvalue);
     }
 
     @Override
     public Float getExtra_Float(String key, float defaultvalue) {
-        return mParceableDelegate.getExtra_Float(key, defaultvalue);
+        return mParceableDelegate.getExtra_Float(key,defaultvalue);
     }
 
     @Override
@@ -223,12 +180,12 @@ public abstract class BaseFragmentPresenter<V extends IView> extends AppCompartA
 
     @Override
     public Parcelable getExtra_Parceable(String key, Parcelable defaultvalue) {
-        return mParceableDelegate.getExtra_Parceable(key, defaultvalue);
+        return mParceableDelegate.getExtra_Parceable(key,defaultvalue);
     }
 
     @Override
     public String getExtra_String(String key, String defaultvalue) {
-        return mParceableDelegate.getExtra_String(key, defaultvalue);
+        return mParceableDelegate.getExtra_String(key,defaultvalue);
     }
 
     @Override
@@ -259,7 +216,7 @@ public abstract class BaseFragmentPresenter<V extends IView> extends AppCompartA
 
     @Override
     public void startActivity(Class classzz, String key, String value) {
-        mParceableDelegate.startActivity(classzz, key, value);
+        mParceableDelegate.startActivity(classzz,key,value);
     }
 
     @Override
@@ -269,14 +226,15 @@ public abstract class BaseFragmentPresenter<V extends IView> extends AppCompartA
 
     @Override
     public void startActivity(Class classzz, Bundle data) {
-        mParceableDelegate.startActivity(classzz, data);
+        mParceableDelegate.startActivity(classzz,data);
     }
 
     @Override
     public void startActivityForResult(Class classzz, Bundle data) {
-        mParceableDelegate.startActivityForResult(classzz, data);
+        mParceableDelegate.startActivityForResult(classzz,data);
     }
     //endregion
+
 
     //region 非空
 
@@ -324,11 +282,6 @@ public abstract class BaseFragmentPresenter<V extends IView> extends AppCompartA
     public boolean isEmpty(Object obj) {
         return mCheckNullRelated.isEmpty(obj);
     }
-    
-    //endregion 
-    
-    
-    
-    
-    
+
+    //endregion
 }

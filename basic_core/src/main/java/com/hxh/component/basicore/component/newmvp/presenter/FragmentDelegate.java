@@ -1,4 +1,4 @@
-package com.hxh.component.basicore.component.mvp.newmvp.presenter;
+package com.hxh.component.basicore.component.newmvp.presenter;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hxh.component.basicore.component.mvp.newmvp.model.BaseModel;
-import com.hxh.component.basicore.component.mvp.newmvp.model.IModel;
-import com.hxh.component.basicore.component.mvp.newmvp.view.IView;
+import com.hxh.component.basicore.component.newmvp.model.BaseModel;
+import com.hxh.component.basicore.component.newmvp.model.IModel;
+import com.hxh.component.basicore.component.newmvp.view.IView;
 import com.hxh.component.basicore.util.AutoUtils;
 
 import java.util.ArrayList;

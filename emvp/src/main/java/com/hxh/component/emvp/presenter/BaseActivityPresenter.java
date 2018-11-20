@@ -12,8 +12,8 @@ import com.hxh.component.basicore.Base.delegate.IntentDelegate;
 import com.hxh.component.basicore.Base.delegate.interfaces.ICheckNullRelated;
 import com.hxh.component.basicore.Base.delegate.interfaces.IIntentRelated;
 import com.hxh.component.basicore.Base.view.AppCompartAutoLayoutActivity;
-import com.hxh.component.basicore.component.mvp.newmvp.model.BaseModel;
-import com.hxh.component.basicore.component.mvp.newmvp.view.IView;
+import com.hxh.component.basicore.component.newmvp.model.BaseModel;
+import com.hxh.component.basicore.component.newmvp.view.IView;
 
 import java.io.Serializable;
 import java.util.ArrayList;

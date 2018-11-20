@@ -1,4 +1,4 @@
-package com.hxh.component.emvp.presenter;
+package com.hxh.component.basicore.component.newmvp.presenter;
 
 
 import com.hxh.component.basicore.component.newmvp.view.IView;

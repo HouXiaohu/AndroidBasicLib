@@ -1,4 +1,4 @@
-package com.hxh.component.basicore.component.mvp.newmvp.view;
+package com.hxh.component.basicore.component.newmvp.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -1,11 +1,12 @@
-package com.hxh.component.basicore.component.mvp.newmvp.model;
+package com.hxh.component.basicore.component.mvp.persenter.delegate;
 
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.hxh.component.basicore.CoreLib;
-import com.hxh.component.basicore.component.net.IApiError;
 import com.hxh.component.basicore.Base.app.AppManager;
+import com.hxh.component.basicore.CoreLib;
+
+import com.hxh.component.basicore.component.net.IApiError;
 import com.hxh.component.basicore.util.Utils;
 
 import java.util.List;
@@ -15,12 +16,10 @@ import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
 /**
- * Created by hxh on 2018/3/15.
+ * Created by hxh on 2017/8/2.
  */
-
-public class BaseModelDelegate implements IModelRelated{
+public class BasePresenterRelated implements  IPresenterRelated{
     protected CompositeSubscription mSubscription;//管理subscription
-
     //region 管理sub
     /**
      * 当你每次调用 subscribe(observer...)时候，此方法会返回给你一个Subscribtion,你可以调用此方法收集它
@@ -45,7 +44,7 @@ public class BaseModelDelegate implements IModelRelated{
         {
             if(mSubscription.hasSubscriptions())
                 mSubscription.unsubscribe();
-            //mSubscription.clear();
+                //mSubscription.clear();
             AppManager.clearLoadingDialog();
         }
 

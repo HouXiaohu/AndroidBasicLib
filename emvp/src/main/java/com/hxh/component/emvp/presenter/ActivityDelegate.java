@@ -3,9 +3,9 @@ package com.hxh.component.emvp.presenter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.hxh.component.basicore.component.mvp.newmvp.model.BaseModel;
-import com.hxh.component.basicore.component.mvp.newmvp.model.IModel;
-import com.hxh.component.basicore.component.mvp.newmvp.view.IView;
+import com.hxh.component.basicore.component.newmvp.model.BaseModel;
+import com.hxh.component.basicore.component.newmvp.model.IModel;
+import com.hxh.component.basicore.component.newmvp.view.IView;
 import com.hxh.component.basicore.util.AutoUtils;
 
 import java.util.ArrayList;
