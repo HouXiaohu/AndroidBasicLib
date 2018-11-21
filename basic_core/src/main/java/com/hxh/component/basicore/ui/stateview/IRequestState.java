@@ -29,7 +29,7 @@ public abstract class IRequestState<T> {
                 return;
             }
         } else if (t instanceof NetResultBean) {
-            if (((NetResultBean) t).getItemSize() == 0) {
+            if (((NetResultBean) t).getItems().size() == 0) {
                 _onEmptyData();
                 return;
             }
