@@ -12,10 +12,13 @@ import com.hxh.component.basicore.component.net.factory.FastJsonConverterFactory
 import com.hxh.component.basicore.util.Utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Response;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -308,12 +311,8 @@ public class RetrofitBaseApiImpl implements IRetrofitBaseApi {
             }
         }
 
-
-
         //是否配置有 请求拦截器
-        if (null != provider.getConfigRequestCallBack())
-            builder.addInterceptor(new RequestInterceptor(provider.getConfigRequestCallBack()));
-
+        builder.addInterceptor(new RequestInterceptor(provider.getConfigRequestCallBack()));
         if (provider.getCacheSize() > 0) {
             if (!Utils.Text.isEmpty(provider.getCachePath())) {
 

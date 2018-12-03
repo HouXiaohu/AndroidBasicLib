@@ -2,7 +2,6 @@ package com.hxh.component.basicore.ui.recycleview.mrecycleview;
 
 import com.hxh.component.basicore.component.mvp.Mapper;
 import com.hxh.component.basicore.util.rx.resetfulhttpstyle.ProgressSubScribe;
-import com.hxh.component.basicore.util.rx.resetfulhttpstyle.RESTFULProgressSubscribe;
 import com.hxh.component.basicore.ui.recycleview.mrecycleview.callback.EmpViewClickOtherPlaceRefreshCallBack;
 import com.hxh.component.basicore.ui.recycleview.mrecycleview.callback.MRecycleViewResponseInterceptor;
 import com.hxh.component.basicore.ui.recycleview.mrecycleview.callback.MRecycleViewResponseInterceptorAsync;
@@ -603,7 +602,7 @@ public class MDataSource<D> implements EmpViewClickOtherPlaceRefreshCallBack {
         } else if (null != mResInterceptorAsync) {
             mResInterceptorAsync
                     .setData(datas)
-                    .subscribe(new RESTFULProgressSubscribe<NetResultBean<D>>() {
+                    .subscribe(new ProgressSubScribe<NetResultBean<D>>() {
                         @Override
                         public void _OnError(Throwable msg) {
 

@@ -6,6 +6,7 @@ import com.hxh.component.basicore.Base.app.AppManager;
 import com.hxh.component.basicore.CoreLib;
 import com.hxh.component.basicore.ui.loading.CustomLoadingDialog;
 import com.hxh.component.basicore.ui.loading.ILoadingProgressDialog;
+import com.hxh.component.basicore.ui.stateview.IRequestState;
 import com.hxh.component.basicore.util.Utils;
 
 import java.lang.ref.WeakReference;
@@ -59,7 +60,7 @@ public abstract class ProgressSubScribe<T> extends Subscriber<T> {
         } else {
             //没有网络，直接结束
             isNoConnection = true;
-            CoreLib.getInstance().getNetProvider().getRequestState().onNoNet();
+            CoreLib.getInstance().getNetProvider().getRequestState().sendState(IRequestState.onNoNet);
             onError(new ConnectException("当前没有网络"));
         }
 
@@ -69,7 +70,7 @@ public abstract class ProgressSubScribe<T> extends Subscriber<T> {
     @Override
     public void onError(Throwable e) {
         dissmisDialog();
-        CoreLib.getInstance().getNetProvider().getRequestState().onError(e);
+        CoreLib.getInstance().getNetProvider().getRequestState().sendState(IRequestState.onError,e);
         if (isself) {
             _OnError(e);
             isself = false;
@@ -88,7 +89,6 @@ public abstract class ProgressSubScribe<T> extends Subscriber<T> {
 
     @Override
     public void onNext(T t) {
-        CoreLib.getInstance().getNetProvider().getRequestState().onHaveData(t);
         dissmisDialog();
         _OnNet(t);
     }

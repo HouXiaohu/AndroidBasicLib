@@ -2,6 +2,9 @@ package com.hxh.component.basicore.component.net;
 
 
 
+import com.hxh.component.basicore.CoreLib;
+import com.hxh.component.basicore.ui.stateview.IRequestState;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -28,11 +31,14 @@ public class RequestInterceptor implements Interceptor {
         {
             request = handler.onBeforeRequest(request,chain);
         }
+        CoreLib.getInstance().getNetProvider();
         Response response = chain.proceed(request);
+        String respinseStr= response.body().string();
         if(handler != null)
         {
-            response = handler.onAfterRequest(response,response.body().string(),chain);
+            response = handler.onAfterRequest(response,respinseStr,chain);
         }
+        CoreLib.getInstance().getNetProvider().getRequestState().sendState(IRequestState.onHaveData,respinseStr);
         return response;
     }
 

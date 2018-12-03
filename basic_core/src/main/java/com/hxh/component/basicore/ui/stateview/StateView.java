@@ -14,6 +14,7 @@ import com.hxh.component.basicore.util.Utils;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -27,23 +28,33 @@ public class StateView  {
     private Animation inAnim;
     private ViewGroup decorView;//activity的根View,我要把我的RootView放入进去
     private List<EventHook> mEventHooks;
-    private FrameLayout.LayoutParams decorViewLayoutParam;
+    private ViewGroup.MarginLayoutParams decorViewLayoutParam;
     private View mCurrentView;
     private boolean isShowing;
     private int mCurrentStateType;
-    private boolean isInit;
+    private HashMap<String,ViewGroup> mStoreViews;
     public StateView(List<Pair<Integer, View>> states) {
         this.mStates = states;
     }
 
     private void init()
     {
-        if(null == mActivity){
-            this.mActivity = new WeakReference<>(AppManager.getCurrentActivity());
+        if(null == mStoreViews){
+            mStoreViews = new HashMap<>();
         }
-        decorView = (ViewGroup) ((Activity) mActivity.get()).getWindow().getDecorView().findViewById(android.R.id.content);
-        decorViewLayoutParam = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        decorViewLayoutParam.topMargin = Utils.Dimens.dpToPxInt(66);
+        this.mActivity = new WeakReference<>(AppManager.getCurrentActivity());
+        if(mStoreViews.containsKey(getActivityName(mActivity.get()))){
+            decorView = mStoreViews.get(getActivityName(mActivity.get()));
+        }else{
+            decorView = (ViewGroup) ((Activity) mActivity.get()).getWindow().getDecorView().findViewById(android.R.id.content);
+            mStoreViews.put(getActivityName(this.mActivity.get()),decorView);
+        }
+
+        setLimitHeight(66);
+    }
+
+    private String getActivityName(Activity ac){
+        return ac.getComponentName().getClassName();
     }
 
     private void showState(int type){
@@ -51,10 +62,8 @@ public class StateView  {
     }
 
     public void showState(int type,boolean isAnim){
-        if(!isInit){
-            init();
-            isInit = true;
-        }
+        init();
+
         this.mCurrentStateType = type;
         this.mCurrentView = getViewForType(type);
         if(null == mCurrentView){
@@ -66,8 +75,7 @@ public class StateView  {
             }
         }
 
-
-        mCurrentView.setLayoutParams(decorViewLayoutParam);
+        decorView.removeView(mCurrentView);
         decorView.addView(mCurrentView);
         if(null != inAnim){
             mCurrentView.startAnimation(inAnim);
@@ -114,13 +122,15 @@ public class StateView  {
         return null;
     }
 
-
     public void setLimitHeight(int heightDp){
         if(null == decorViewLayoutParam){
-            decorViewLayoutParam = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            if(null != decorView){
+                decorViewLayoutParam = (ViewGroup.MarginLayoutParams) decorView.getLayoutParams();
+            }else{
+                decorViewLayoutParam = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            }
         }
         decorViewLayoutParam.topMargin =  Utils.Dimens.dpToPxInt(heightDp);
-        //shezhi
     }
 
     public void registerEventHook(EventHook hook)

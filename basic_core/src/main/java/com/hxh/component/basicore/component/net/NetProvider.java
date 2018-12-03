@@ -3,6 +3,7 @@ package com.hxh.component.basicore.component.net;
 
 
 import android.support.v4.util.ArrayMap;
+import android.support.v4.util.Pair;
 
 import com.hxh.component.basicore.component.net.baseurl.DynamicMutilHttpBaseUrl;
 import com.hxh.component.basicore.component.net.baseurl.FixedMutilHttpBaseUrl;
@@ -14,6 +15,7 @@ import java.io.File;
 
 import okhttp3.Authenticator;
 import okhttp3.Interceptor;
+import okhttp3.Request;
 import retrofit2.Converter;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -50,9 +52,9 @@ public class NetProvider {
     /**
      * 全局性质的请求拦截器
      */
-    private RequestCallBackHandler mRequestCallBackHandler;
     private IRequestState mRequestState;
 
+    private Pair<Request, Interceptor.Chain> mRequests;
     public NetProvider(
             boolean isEnableCookie, long configReadTimeOut, long configConnectTimeOut,
             Authenticator configRESTFULTokenInterceptor, Interceptor configTokenInterceptor,
@@ -78,8 +80,8 @@ public class NetProvider {
         this.configLogTnterceptor = configLogTnterceptor;
         this.mApiErrorClasszz = apiErrorClasszz;
 
-        this.mRequestCallBackHandler = requestCallBackHandler;
         this.mRequestState = state;
+
     }
 
     public static NetProvider defaultNetProvider()
@@ -309,12 +311,6 @@ public class NetProvider {
             return this;
         }
 
-        public Builder configRequestInterceptor(RequestCallBackHandler handle)
-        {
-            this.mRequestCallBackHandler = handle;
-            return this;
-        }
-
         public Builder configRequestStateListener(IRequestState state){
             this.mRequestState = state;
             return this;
@@ -344,7 +340,6 @@ public class NetProvider {
 
 
     //region getter setter
-
 
     public int getErrorRetryCount() {
         return errorRetryCount;
